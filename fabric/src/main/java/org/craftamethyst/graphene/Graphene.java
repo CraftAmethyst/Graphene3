@@ -1,6 +1,7 @@
-package org.craftamethyst.graphene3;
+package org.craftamethyst.graphene;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 
 public class Graphene implements ModInitializer {
     
@@ -14,5 +15,9 @@ public class Graphene implements ModInitializer {
         // Use Fabric to bootstrap the Common mod.
         Constants.LOG.info("Hello Fabric world!");
         CommonClass.init();
+        
+        // Some code like events require special initialization from the
+        // loader specific code.
+        ItemTooltipCallback.EVENT.register(CommonClass::onItemTooltip);
     }
 }

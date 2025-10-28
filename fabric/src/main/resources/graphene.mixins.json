@@ -1,15 +1,12 @@
 {
     "required": true,
     "minVersion": "0.8",
-    "package": "org.craftamethyst.graphene3.mixin",
-    "refmap": "${mod_id}.refmap.json",
+    "package": "org.craftamethyst.graphene.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
     ],
     "client": [
-      "org.craftamethyst.graphene3.mixin.MixinTitleScreen"
-    ],
-    "server": [
+      "org.craftamethyst.graphene.mixin.ExampleMixin"
     ],
     "injectors": {
       "defaultRequire": 1

@@ -1,36 +1,41 @@
 {
     "schemaVersion": 1,
-    "id": "mod_id",
+    "id": "graphene",
     "version": "${version}",
-    "name": "${mod_name}",
-    "description": "${description}",
+  
+    "name": "Graphene",
+    "description": "An all-in-one optimization module dedicated to optimizing client-side rendering and server-side stability and fluency.",
     "authors": [
-        "${mod_author}"
+      "QianMo_ProMax",
+      "ZCRAFT",
+      "KSmc_brigade"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+      "homepage": "https://github.com/CraftAmethyst/Graphene3",
+      "sources": "https://github.com/CraftAmethyst/Graphene3"
     },
-    "license": "${license}",
-    "icon": "assets/modid/${mod_id}.png",
+  
+    "license": "MIT",
+    "icon": "assets/graphene/icon.png",
+  
     "environment": "*",
     "entrypoints": {
-        "main": [
-          "org.craftamethyst.graphene3.Graphene"
-        ]
+      "main": [
+        "org.craftamethyst.graphene.Graphene"
+      ]
     },
     "mixins": [
-        "${mod_id}.mixins.json",
-        "${mod_id}.fabric.mixins.json"
+      "graphene.mixins.json"
     ],
+  
     "depends": {
-        "fabricloader": ">=0.14",
-        "fabric": "*",
-        "minecraft": "${minecraft_version}",
-        "java": ">=17"
+      "fabricloader": ">=0.14",
+      "fabric": "*",
+      "minecraft": "1.19.x",
+      "java": ">=17"
     },
     "suggests": {
-        "another-mod": "*"
+      "another-mod": "*"
     }
-}
+  }
   

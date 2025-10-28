@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.craftamethyst.graphene3"
+      "org.craftamethyst.graphene.graphene"
     ]
   },
   "mixins": [

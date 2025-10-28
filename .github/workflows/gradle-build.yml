@@ -3,7 +3,7 @@ name: Gradle Build
 on:
   push:
     branches:
-      - "1.19"
+      - "bukkit"
   pull_request:
 
 jobs:
@@ -37,10 +37,4 @@ jobs:
           name: graphene3-artifacts-${{ github.sha }}
           if-no-files-found: warn
           retention-days: 14
-          path: |
-            common/build/libs/*.jar
-            fabric/build/libs/*.jar
-            forge/build/libs/*.jar
-            !**/*-sources.jar
-            !**/*-javadoc.jar
-            !**/*-dev.jar
+          path: build/libs/*.jar

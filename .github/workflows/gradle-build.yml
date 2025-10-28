@@ -3,7 +3,7 @@ name: Gradle Build
 on:
   push:
     branches:
-      - neo/1.21
+      - 1.21
   pull_request:
 
 jobs:

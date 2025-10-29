@@ -1,6 +1,6 @@
-package org.craftamethyst.graphene.platform;
+package org.craftamethyst.tritium.platform;
 
-import org.craftamethyst.graphene.platform.services.IPlatformHelper;
+import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricPlatformHelper implements IPlatformHelper {

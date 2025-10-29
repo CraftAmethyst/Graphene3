@@ -1,4 +1,4 @@
-package org.craftamethyst.graphene;
+package org.craftamethyst.tritium;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

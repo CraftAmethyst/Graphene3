@@ -1,9 +1,9 @@
-package org.craftamethyst.graphene;
+package org.craftamethyst.tritium;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 
-public class Graphene implements ModInitializer {
+public class tritium implements ModInitializer {
     
     @Override
     public void onInitialize() {

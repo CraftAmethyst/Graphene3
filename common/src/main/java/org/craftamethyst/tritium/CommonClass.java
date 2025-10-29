@@ -1,6 +1,6 @@
-package org.craftamethyst.graphene;
+package org.craftamethyst.tritium;
 
-import org.craftamethyst.graphene.platform.Services;
+import org.craftamethyst.tritium.platform.Services;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.food.FoodProperties;

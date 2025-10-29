@@ -1,12 +1,12 @@
 {
     "required": true,
     "minVersion": "0.8",
-    "package": "org.craftamethyst.graphene.mixin",
+    "package": "org.craftamethyst.tritium.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
     ],
     "client": [
-      "org.craftamethyst.graphene.mixin.ExampleMixin"
+      "org.craftamethyst.tritium.mixin.ExampleMixin"
     ],
     "injectors": {
       "defaultRequire": 1

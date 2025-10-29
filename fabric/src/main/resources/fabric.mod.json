@@ -1,9 +1,9 @@
 {
     "schemaVersion": 1,
-    "id": "graphene",
+    "id": "tritium",
     "version": "${version}",
   
-    "name": "Graphene",
+    "name": "Tritium",
     "description": "An all-in-one optimization module dedicated to optimizing client-side rendering and server-side stability and fluency.",
     "authors": [
       "QianMo_ProMax",
@@ -11,21 +11,21 @@
       "KSmc_brigade"
     ],
     "contact": {
-      "homepage": "https://github.com/CraftAmethyst/Graphene3",
-      "sources": "https://github.com/CraftAmethyst/Graphene3"
+      "homepage": "https://github.com/CraftAmethyst/Tritium3",
+      "sources": "https://github.com/CraftAmethyst/Tritium3"
     },
   
     "license": "MIT",
-    "icon": "assets/graphene/icon.png",
+    "icon": "assets/tritium/icon.png",
   
     "environment": "*",
     "entrypoints": {
       "main": [
-        "org.craftamethyst.graphene.Graphene"
+        "org.craftamethyst.tritium.tritium"
       ]
     },
     "mixins": [
-      "graphene.mixins.json"
+      "tritium.mixins.json"
     ],
   
     "depends": {

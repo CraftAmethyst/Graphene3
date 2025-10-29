@@ -1,6 +1,6 @@
-package org.craftamethyst.graphene.mixin;
+package org.craftamethyst.tritium.mixin;
 
-import org.craftamethyst.graphene.Constants;
+import org.craftamethyst.tritium.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;

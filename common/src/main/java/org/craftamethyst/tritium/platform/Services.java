@@ -1,7 +1,7 @@
-package org.craftamethyst.graphene3.platform;
+package org.craftamethyst.tritium.platform;
 
-import org.craftamethyst.graphene3.Constants;
-import org.craftamethyst.graphene3.platform.services.IPlatformHelper;
+import org.craftamethyst.tritium.Constants;
+import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
 

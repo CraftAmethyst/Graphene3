@@ -1,6 +1,6 @@
-package org.craftamethyst.graphene3;
+package org.craftamethyst.tritium;
 
-import org.craftamethyst.graphene3.platform.Services;
+import org.craftamethyst.tritium.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 

@@ -1,8 +1,8 @@
-package org.craftamethyst.graphene3;
+package org.craftamethyst.tritium;
 
 import net.fabricmc.api.ModInitializer;
 
-public class Graphene implements ModInitializer {
+public class tritium implements ModInitializer {
     
     @Override
     public void onInitialize() {

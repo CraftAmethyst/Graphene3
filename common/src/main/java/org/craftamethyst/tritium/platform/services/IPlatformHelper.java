@@ -1,4 +1,4 @@
-package org.craftamethyst.graphene3.platform.services;
+package org.craftamethyst.tritium.platform.services;
 
 public interface IPlatformHelper {
 

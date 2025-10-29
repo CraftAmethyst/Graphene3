@@ -1,6 +1,6 @@
-package org.craftamethyst.graphene;
+package org.craftamethyst.tritium;
 
-import org.craftamethyst.graphene.platform.Services;
+import org.craftamethyst.tritium.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 
@@ -22,8 +22,8 @@ public class CommonClass {
         // your own abstraction layer. You can learn more about this in our provided services class. In this example
         // we have an interface in the common code and use a loader specific implementation to delegate our call to
         // the platform specific approach.
-        if (Services.PLATFORM.isModLoaded("graphene")) {
-            Constants.LOG.info("Hello to graphene");
+        if (Services.PLATFORM.isModLoaded("tritium")) {
+            Constants.LOG.info("Hello to tritium");
         }
     }
 }

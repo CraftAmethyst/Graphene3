@@ -1,14 +1,14 @@
-package org.craftamethyst.graphene.platform;
+package org.craftamethyst.tritium.platform;
 
-import org.craftamethyst.graphene.platform.services.IPlatformHelper;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLLoader;
+import org.craftamethyst.tritium.platform.services.IPlatformHelper;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLLoader;
 
-public class NeoForgePlatformHelper implements IPlatformHelper {
+public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public String getPlatformName() {
-        return "NeoForge";
+        return "Forge";
     }
 
     @Override

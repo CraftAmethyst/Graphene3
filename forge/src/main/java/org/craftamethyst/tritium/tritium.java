@@ -1,11 +1,11 @@
-package org.craftamethyst.graphene;
+package org.craftamethyst.tritium;
 
 import net.minecraftforge.fml.common.Mod;
 
 @Mod(Constants.MOD_ID)
-public class graphene {
+public class tritium {
 
-    public graphene() {
+    public tritium() {
         // This method is invoked by the Forge mod loader when it is ready
         // to load your mod. You can access Forge and Common code in this
         // project.

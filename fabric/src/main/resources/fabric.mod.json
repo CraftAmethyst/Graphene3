@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "id": "mod_id",
+    "id": "tritium",
     "version": "${version}",
     "name": "${mod_name}",
     "description": "${description}",
@@ -14,9 +14,9 @@
     "license": "${license}",
     "icon": "assets/modid/${mod_id}.png",
     "environment": "*",
-    "entrypoints": {
+  "entrypoints": {
         "main": [
-          "org.craftamethyst.graphene3.Graphene"
+          "org.craftamethyst.tritium.tritium"
         ]
     },
     "mixins": [

@@ -42,6 +42,16 @@ repositories {
         name = 'BlameJared'
         url = 'https://maven.blamejared.com'
     }
+    // Cloth Config + AutoConfig
+    maven {
+        name = 'Shedaniel'
+        url = 'https://maven.shedaniel.me/'
+    }
+    // TerraformersMC (e.g. Mod Menu)
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/releases/'
+    }
 }
 
 // Declare capabilities on the outgoing configurations.

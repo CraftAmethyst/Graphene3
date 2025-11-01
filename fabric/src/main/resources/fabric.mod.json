@@ -9,14 +9,14 @@
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/CraftAmethyst/Tritium"
   },
   "license": "${license}",
   "icon": "${mod_id}.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.craftamethyst.graphene.graphene"
+      "org.craftamethyst.tritium.tritium"
     ]
   },
   "mixins": [

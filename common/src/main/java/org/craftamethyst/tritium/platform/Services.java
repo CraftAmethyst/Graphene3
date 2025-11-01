@@ -2,6 +2,7 @@ package org.craftamethyst.tritium.platform;
 
 import org.craftamethyst.tritium.Constants;
 import org.craftamethyst.tritium.platform.services.IPlatformHelper;
+import org.craftamethyst.tritium.platform.services.IConfigService;
 
 import java.util.ServiceLoader;
 
@@ -14,6 +15,9 @@ public class Services {
     // For example this can be used to check if the code is running on Forge vs Fabric, or to ask the modloader if another
     // mod is loaded.
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
+
+    // Config service to bridge loader-specific config initialization and access.
+    public static final IConfigService CONFIG = load(IConfigService.class);
 
     // This code is used to load a service for the current environment. Your implementation of the service must be defined
     // manually by including a text file in META-INF/services named with the fully qualified class name of the service.

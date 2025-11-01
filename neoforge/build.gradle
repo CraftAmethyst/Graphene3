@@ -3,6 +3,12 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+repositories {
+    mavenCentral()
+    maven { name = 'Shedaniel'; url = 'https://maven.shedaniel.me/' }
+    maven { name = 'TerraformersMC'; url = 'https://maven.terraformersmc.com/releases/' }
+}
+
 neoForge {
     version = neoforge_version
     // Automatically enable neoforge AccessTransformers if the file exists
@@ -34,6 +40,11 @@ neoForge {
             sourceSet sourceSets.main
         }
     }
+}
+
+dependencies {
+    // Config UI + AutoConfig (NeoForge)
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }

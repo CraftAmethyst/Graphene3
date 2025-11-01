@@ -6,7 +6,7 @@
   "compatibilityLevel": "JAVA_18",
   "mixins": [],
   "client": [
-    "org.craftamethyst.graphene.mixin.MixinMinecraft"
+    "org.craftamethyst.tritium.mixin.MixinMinecraft"
   ],
   "server": [],
   "injectors": {

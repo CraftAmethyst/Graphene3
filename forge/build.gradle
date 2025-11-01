@@ -73,6 +73,9 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
+
+    // Config UI + AutoConfig (Forge)
+    implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
 }
 
 tasks.withType(JavaCompile) {

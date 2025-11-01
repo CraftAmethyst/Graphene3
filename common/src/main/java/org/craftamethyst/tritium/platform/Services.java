@@ -2,12 +2,14 @@ package org.craftamethyst.tritium.platform;
 
 import org.craftamethyst.tritium.Constants;
 import org.craftamethyst.tritium.platform.services.IPlatformHelper;
+import org.craftamethyst.tritium.platform.services.IConfigService;
 
 import java.util.ServiceLoader;
 
 public class Services {
 
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
+    public static final IConfigService CONFIG = load(IConfigService.class);
 
     public static <T> T load(Class<T> clazz) {
 

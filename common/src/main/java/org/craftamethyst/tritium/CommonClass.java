@@ -19,6 +19,14 @@ public class CommonClass {
 
         Constants.LOG.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.isDevelopmentEnvironment() ? "development" : "production");
         Constants.LOG.info("Diamond Item >> {}", Registry.ITEM.getKey(Items.DIAMOND));
+
+        // 初始化配置
+        try {
+            Services.CONFIG.init();
+            Constants.LOG.info("Config initialized: {}", Services.CONFIG.get());
+        } catch (Throwable t) {
+            Constants.LOG.warn("Failed to initialize config service: {}", t.toString());
+        }
     }
 
     // This method serves as a hook to modify item tooltips. The vanilla game

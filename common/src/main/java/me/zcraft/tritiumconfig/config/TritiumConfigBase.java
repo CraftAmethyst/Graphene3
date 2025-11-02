@@ -1,20 +1,24 @@
-package org.craftamethyst.tritium.config;
+package me.zcraft.tritiumconfig.config;
+
+import me.zcraft.tritiumconfig.annotation.ClientOnly;
 
 public class TritiumConfigBase {
     public Performance performance = new Performance();
-    public Rendering rendering = new Rendering();
-    public Network network = new Network();
 
+    @ClientOnly
+    public Rendering rendering = new Rendering();
+
+    public Network network = new Network();
     public Entities entities = new Entities();
     public TechOptimizations techOptimizations = new TechOptimizations();
     public Fixes fixes = new Fixes();
     public ServerPerformance serverPerformance = new ServerPerformance();
 
     public static class Performance {
-
-
+        public boolean bambooLight = true;
     }
 
+    @ClientOnly
     public static class Rendering {
 
     }
@@ -24,15 +28,17 @@ public class TritiumConfigBase {
     }
 
     public static class Entities {
+
     }
 
     public static class TechOptimizations {
 
     }
 
+    @ClientOnly
     public static class Fixes {
-        public boolean buttonfix = true;
-        public boolean noglog = true;
+        public boolean buttonFix = true;
+        public boolean noGLog = true;
     }
 
     public static class ServerPerformance {

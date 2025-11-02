@@ -12,7 +12,7 @@
     "sources": "https://github.com/CraftAmethyst/Tritium"
   },
   "license": "${license}",
-  "icon": "${mod_id}.png",
+  "icon": "assets/logo/logo.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -20,8 +20,8 @@
     ]
   },
   "mixins": [
-    "${mod_id}.mixins.json",
-    "${mod_id}.fabric.mixins.json"
+    "tritium.mixins.json",
+    "tritium.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",

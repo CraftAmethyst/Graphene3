@@ -1,8 +1,8 @@
 package org.craftamethyst.tritium.platform;
 
-import org.craftamethyst.tritium.Constants;
-import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
+import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
@@ -24,7 +24,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public String getModVersion() {
         return FabricLoader.getInstance()
-                .getModContainer(Constants.MOD_ID)
+                .getModContainer(TritiumCommon.MOD_ID)
                 .map(container -> container.getMetadata().getVersion().getFriendlyString())
                 .orElse("Unknown");
     }

@@ -3,7 +3,7 @@ package org.craftamethyst.tritium.mixin.client.lang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.craftamethyst.tritium.Constants;
+import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.util.LanguageLoadOptimizer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +29,7 @@ public abstract class LanguageManagerMixin {
         tritium$previousLanguage = this.currentCode;
         
         if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
-            Constants.LOG.info("Optimizing language switch from {} to {}",
+            TritiumCommon.LOG.info("Optimizing language switch from {} to {}",
                 tritium$previousLanguage, languageCode);
             LanguageLoadOptimizer.setLanguageChanging(true);
         }
@@ -38,15 +38,15 @@ public abstract class LanguageManagerMixin {
     @Inject(method = "setSelected", at = @At("TAIL"))
     private void onSetLanguageTail(String languageCode, CallbackInfo ci) {
         if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
-            Constants.LOG.info("Manually reloading language resources for: {}", languageCode);
+            TritiumCommon.LOG.info("Manually reloading language resources for: {}", languageCode);
 
             Minecraft minecraft = Minecraft.getInstance();
             if (minecraft != null && minecraft.getResourceManager() != null) {
                 try {
                     this.onResourceManagerReload(minecraft.getResourceManager());
-                    Constants.LOG.info("Language resources successfully reloaded");
+                    TritiumCommon.LOG.info("Language resources successfully reloaded");
                 } catch (Exception e) {
-                    Constants.LOG.error("Failed to reload language resources", e);
+                    TritiumCommon.LOG.error("Failed to reload language resources", e);
                     LanguageLoadOptimizer.reset();
                 }
             }

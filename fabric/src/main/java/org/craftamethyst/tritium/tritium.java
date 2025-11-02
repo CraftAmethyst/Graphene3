@@ -12,7 +12,7 @@ public class tritium implements ModInitializer {
         // project.
 
         // Use Fabric to bootstrap the Common mod.
-        Constants.LOG.info("Fabric Ready");
-        CommonClass.init();
+        TritiumCommon.LOG.info("Fabric Ready");
+        TritiumCommon.init();
     }
 }

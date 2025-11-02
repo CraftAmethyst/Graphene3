@@ -1,12 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.craftamethyst.mixin",
+  "package": "org.craftamethyst.tritium.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
   "mixins": [],
   "client": [
-    "org.craftamethyst.tritium.mixin.MixinMinecraft"
+    "MixinMinecraft"
   ],
   "server": [],
   "injectors": {

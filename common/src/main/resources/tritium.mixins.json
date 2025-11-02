@@ -13,6 +13,7 @@
     "client.lang.MinecraftClientMixin"
   ],
   "server": [
+    "server.AsyncWorldSaveMixin"
   ],
   "injectors": {
     "defaultRequire": 1

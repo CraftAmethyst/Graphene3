@@ -25,5 +25,20 @@
 
   "config.tritium.category.serverPerformance": "服务器性能",
   "config.tritium.serverPerformance.noiseSamplingCache": "噪声采样缓存",
-  "config.tritium.serverPerformance.noiseSamplingCache.tooltip": "缓存噪声采样以提高服务器性能"
+  "config.tritium.serverPerformance.noiseSamplingCache.tooltip": "缓存噪声采样以提高服务器性能",
+
+  "config.tritium.entities.optimizeEntities": "启用实体刻优化",
+  "config.tritium.entities.optimizeEntities.tooltip": "优化实体刻处理以提升性能",
+
+  "config.tritium.entities.tickRaidersInRaid": "袭击期间持续处理袭击者",
+  "config.tritium.entities.tickRaidersInRaid.tooltip": "在袭击期间保持袭击者的刻处理，防止袭击进度异常",
+
+  "config.tritium.entities.horizontalRange": "水平检测范围",
+  "config.tritium.entities.horizontalRange.tooltip": "实体刻优化的水平检测范围（1-256格）",
+
+  "config.tritium.entities.verticalRange": "垂直检测范围",
+  "config.tritium.entities.verticalRange.tooltip": "实体刻优化的垂直检测范围（1-256格）",
+
+  "config.tritium.entities.entityWhitelist": "实体白名单",
+  "config.tritium.entities.entityWhitelist.tooltip": "永不进行优化（始终保持刻处理）的实体列表"
 }

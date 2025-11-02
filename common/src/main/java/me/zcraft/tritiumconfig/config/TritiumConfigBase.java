@@ -1,6 +1,10 @@
 package me.zcraft.tritiumconfig.config;
 
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
+import me.zcraft.tritiumconfig.annotation.Range;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class TritiumConfigBase {
     public Performance performance = new Performance();
@@ -39,7 +43,16 @@ public class TritiumConfigBase {
     }
 
     public static class Entities {
-        // Future entity optimizations will be added here
+        public boolean optimizeEntities = true;
+        public boolean tickRaidersInRaid = true;
+
+        @Range(min = 1, max = 256)
+        public int horizontalRange = 64;
+
+        @Range(min = 1, max = 256)
+        public int verticalRange = 32;
+
+        public List<String> entityWhitelist = Arrays.asList("minecraft:ender_dragon");
     }
 
     public static class TechOptimizations {

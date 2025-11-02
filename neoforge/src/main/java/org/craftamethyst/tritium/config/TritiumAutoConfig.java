@@ -3,7 +3,6 @@ package org.craftamethyst.tritium.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.zcraft.tritiumconfig.annotation.ClientOnly;
 import me.zcraft.tritiumconfig.annotation.Range;
 import me.zcraft.tritiumconfig.config.TritiumConfig;
 import me.zcraft.tritiumconfig.config.TritiumConfigBase;
@@ -12,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import org.craftamethyst.tritium.TritiumCommon;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class TritiumAutoConfig {
@@ -29,12 +29,8 @@ public class TritiumAutoConfig {
             TritiumConfigBase config = me.zcraft.tritiumconfig.config.TritiumConfig.get();
             for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {
                 sectionField.setAccessible(true);
-
-                // Include ClientOnly sections in client environment (this is a client config screen)
                 Object section = sectionField.get(config);
                 String sectionName = sectionField.getName();
-
-                // Only create category if section has fields
                 if (section != null && hasConfigurableFields(section)) {
                     ConfigCategory category = builder.getOrCreateCategory(
                             Component.translatable("config.tritium.category." + sectionName)
@@ -59,8 +55,7 @@ public class TritiumAutoConfig {
         try {
             for (Field field : section.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                
-                // Include ClientOnly fields in client config screen
+
                 String fieldName = field.getName();
                 Class<?> fieldType = field.getType();
                 Object currentValue = field.get(section);
@@ -85,13 +80,13 @@ public class TritiumAutoConfig {
                             .setDefaultValue(getDefaultIntValue(field))
                             .setTooltip(Component.translatable(translationKey + ".tooltip"))
                             .setSaveConsumer(createIntSaveConsumer(sectionName, fieldName));
-                    
+
                     // Apply range constraints if present
                     Range range = field.getAnnotation(Range.class);
                     if (range != null) {
                         intField.setMin((int) range.min()).setMax((int) range.max());
                     }
-                    
+
                     category.addEntry(intField.build());
 
                 } else if (fieldType == double.class || fieldType == Double.class) {
@@ -102,13 +97,13 @@ public class TritiumAutoConfig {
                             .setDefaultValue(getDefaultDoubleValue(field))
                             .setTooltip(Component.translatable(translationKey + ".tooltip"))
                             .setSaveConsumer(createDoubleSaveConsumer(sectionName, fieldName));
-                    
+
                     // Apply range constraints if present
                     Range range = field.getAnnotation(Range.class);
                     if (range != null) {
                         doubleField.setMin(range.min()).setMax(range.max());
                     }
-                    
+
                     category.addEntry(doubleField.build());
 
                 } else if (fieldType == String.class) {
@@ -119,6 +114,20 @@ public class TritiumAutoConfig {
                             .setDefaultValue(getDefaultStringValue(field))
                             .setTooltip(Component.translatable(translationKey + ".tooltip"))
                             .setSaveConsumer(createStringSaveConsumer(sectionName, fieldName))
+                            .build());
+
+                } else if (List.class.isAssignableFrom(fieldType) && isStringList(field)) {
+                    // Handle List<String> type for entity whitelist and other string lists
+                    @SuppressWarnings("unchecked")
+                    List<String> currentList = (List<String>) currentValue;
+
+                    category.addEntry(entryBuilder.startStrList(
+                                    Component.translatable(translationKey),
+                                    currentList
+                            )
+                            .setDefaultValue(getDefaultStringListValue(field))
+                            .setTooltip(Component.translatable(translationKey + ".tooltip"))
+                            .setSaveConsumer(createStringListSaveConsumer(sectionName, fieldName))
                             .build());
                 }
             }
@@ -145,6 +154,10 @@ public class TritiumAutoConfig {
     }
 
     private static Consumer<String> createStringSaveConsumer(String section, String key) {
+        return value -> updateConfigValue(section, key, value);
+    }
+
+    private static Consumer<List<String>> createStringListSaveConsumer(String section, String key) {
         return value -> updateConfigValue(section, key, value);
     }
 
@@ -202,12 +215,24 @@ public class TritiumAutoConfig {
         }
     }
 
-    /**
-     * Check if a section has any configurable fields (non-comment fields)
-     */
+    @SuppressWarnings("unchecked")
+    private static List<String> getDefaultStringListValue(Field field) {
+        try {
+            Object defaultSection = field.getDeclaringClass().newInstance();
+            return (List<String>) field.get(defaultSection);
+        } catch (Exception e) {
+            return List.of();
+        }
+    }
+
+    private static boolean isStringList(Field field) {
+        // This is a simplified check - in practice you might want more robust type checking
+        return List.class.isAssignableFrom(field.getType());
+    }
+
     private static boolean hasConfigurableFields(Object section) {
         if (section == null) return false;
-        
+
         try {
             for (Field field : section.getClass().getDeclaredFields()) {
                 // Check if field is a configuration field (not synthetic, not static)
@@ -218,7 +243,7 @@ public class TritiumAutoConfig {
         } catch (Exception e) {
             return false;
         }
-        
+
         return false;
     }
 }

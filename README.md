@@ -64,3 +64,8 @@ If you encounter a bug/behavior inconsistency while using this module, please pr
 If you have a better idea for a project, you are always welcome. Every developer is also welcome to submit a PR
 
 If you think this project is helpful to you, please click Star for this project, which is especially important to us.
+
+## Contributors
+<a href="https://2git.xyz/CraftAmethyst/Tritium/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=CraftAmethyst/Tritium" />
+</a>

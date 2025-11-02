@@ -12,6 +12,7 @@ public class TritiumConfigBase {
 
     public static class Performance {
 
+
     }
 
     public static class Rendering {
@@ -31,7 +32,8 @@ public class TritiumConfigBase {
     }
 
     public static class Fixes {
-
+        public boolean buttonfix = true;
+        public boolean noglog = true;
     }
 
     public static class ServerPerformance {

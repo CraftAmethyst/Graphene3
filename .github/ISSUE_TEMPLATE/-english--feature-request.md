@@ -11,7 +11,7 @@ assignees: ''
 <!-- Clearly describe the feature you'd like to be added -->
 
 ## Why This Feature Would Be Useful
-<!-- Explain how this feature would improve Graphene -->
+<!-- Explain how this feature would improve Tritium -->
 
 ## Implementation Suggestions
 <!-- If you have any suggestions on how to implement this feature -->

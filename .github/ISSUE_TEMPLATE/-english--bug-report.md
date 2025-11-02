@@ -33,7 +33,7 @@ assignees: ''
 - [ ] Bukkit
 - [ ] Forge
 
-### Graphene Version
+### Tritium Version
 <!-- Example: v1.2.0 -->
 
 ### Related Mods
@@ -52,6 +52,6 @@ assignees: ''
 
 ---
 <!-- Please confirm the following before submitting -->
-- [ ] I've confirmed I'm using the latest version of Graphene
+- [ ] I've confirmed I'm using the latest version of Tritium
 - [ ] I've tried reproducing the issue without other mods
 - [ ] I've searched existing Issues and haven't found the same problem

@@ -13,7 +13,7 @@ public class MixinTitleScreen {
 
     @Inject(at = @At("HEAD"), method = "init()V")
     private void init(CallbackInfo info) {
-        Constants.LOG.info("This line is printed by the Graphene3 mixin from Fabric!");
+        Constants.LOG.info("This line is printed by the Tritium mixin from Fabric!");
         Constants.LOG.info("MC Version: {}", Minecraft.getInstance().getVersionType());
     }
 }

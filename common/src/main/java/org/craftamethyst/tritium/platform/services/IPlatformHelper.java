@@ -33,4 +33,11 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    /**
+     * Gets the version of the mod.
+     *
+     * @return The mod version.
+     */
+    String getModVersion();
 }

@@ -14,9 +14,17 @@ public class CommonClass {
     // write the majority of your code here and load it from your loader specific projects. This example has some
     // code that gets invoked by the entry point of the loader specific projects.
     public static void init() {
-
-        Constants.LOG.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
-        Constants.LOG.info("The ID for diamonds is {}", BuiltInRegistries.ITEM.getKey(Items.DIAMOND));
+        Constants.LOG.info("Loading...\n" +
+                "\n" +
+                "  ______       _  __   _                 \n" +
+                " /_  __/_____ (_)/ /_ (_)__  __ ____ ___ \n" +
+                "  / /  / ___// // __// // / / // __ `__ \\\n" +
+                " / /  / /   / // /_ / // /_/ // / / / / /\n" +
+                "/_/  /_/   /_/ \\__//_/ \\__,_//_/ /_/ /_/ \n" +
+                "                                         \n" +
+                "Version: {} | Platform: {} | Environment: {}\n" +
+                "\n",
+                Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
 
         // Initialize config via loader-specific service
         try {
@@ -31,9 +39,8 @@ public class CommonClass {
         // your own abstraction layer. You can learn more about this in our provided services class. In this example
         // we have an interface in the common code and use a loader specific implementation to delegate our call to
         // the platform specific approach.
-        if (Services.PLATFORM.isModLoaded("examplemod")) {
-
-            Constants.LOG.info("Hello to examplemod");
+        if (Services.PLATFORM.isModLoaded("tritium")) {
+            Constants.LOG.info("Loading completed!");
         }
     }
 }

@@ -7,7 +7,9 @@
     "mixins": [
     ],
     "client": [
-      "org.craftamethyst.tritium.mixin.MixinMinecraft"
+      "MinecraftMixin",
+      "LanguageManagerMixin",
+      "MinecraftClientMixin"
     ],
     "server": [
     ],

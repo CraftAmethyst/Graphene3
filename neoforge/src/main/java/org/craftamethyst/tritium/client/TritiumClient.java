@@ -1,25 +1,13 @@
-package org.craftamethyst.tritium;
+package org.craftamethyst.tritium.client;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigScreenFactory;
 
-@Mod(TritiumCommon.MOD_ID)
-public class tritium {
-
-    public tritium(IEventBus eventBus) {
-        TritiumCommon.LOG.info("NeoForge Ready");
-        TritiumCommon.init();
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            registerConfigScreen();
-        }
-    }
-    private static void registerConfigScreen() {
+public class TritiumClient {
+    public static void registerConfigScreen() {
         try {
             ModList.get().getModContainerById(TritiumCommon.MOD_ID).ifPresent(container -> {
                 if (isClothConfigAvailable()) {

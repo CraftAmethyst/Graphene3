@@ -6,7 +6,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigScreenFactory;
 
-public class TritiumClient {
+public class TritiumConfigScreenReg {
     public static void registerConfigScreen() {
         try {
             ModList.get().getModContainerById(TritiumCommon.MOD_ID).ifPresent(container -> {

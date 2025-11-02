@@ -13,7 +13,15 @@
   "client": [
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
-    "client.lang.MinecraftClientMixin"
+    "client.lang.MinecraftClientMixin",
+    "client.renderer.culling.BlockEntityMixin",
+    "client.renderer.culling.BlockEntityRenderDispatcherMixin",
+    "client.renderer.culling.EntityMixin",
+    "client.renderer.culling.EntityRenderDispatcherMixin",
+    "client.renderer.culling.EntityRendererMixin",
+    "client.renderer.culling.LeafRenderMixin",
+    "client.renderer.culling.LevelRendererMixin",
+    "client.renderer.culling.LevelTKMixin"
   ],
   "server": [],
   "injectors": {

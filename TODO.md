@@ -2,7 +2,7 @@
 
 - [ ] Asynchronous events (Forge only)
 - [ ] Entity culling
-- [ ] Fast language loading
+- [x] Fast language loading
 - [ ] Leaf culling
 - [ ] Optimization of entity stacking (drops/experience balls/similar entities)
 - [ ] Box optimization

@@ -1,7 +1,7 @@
 package org.craftamethyst.tritium.mixin.client.gl;
 
 import com.mojang.blaze3d.platform.Window;
-import org.craftamethyst.tritium.platform.Services;
+import me.zcraft.tritiumconfig.config.TritiumConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +17,7 @@ public class NoErrorMixin {
             cancellable = true
     )
     private void graphene$noerror(int error, long description, CallbackInfo ci) {
-        if (Services.CONFIG.get().fixes.noglog) {
+        if (TritiumConfig.get().fixes.noGLog) {
             ci.cancel();
         }
     }

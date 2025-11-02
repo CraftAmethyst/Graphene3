@@ -1,0 +1,45 @@
+{
+  "config.tritium.title": "⚙ Tritium Config",
+
+  "config.tritium.category.performance": "Performance",
+  "config.tritium.performance.bambooLight": "Bamboo Lighting Optimization",
+  "config.tritium.performance.bambooLight.tooltip": "Skip lighting calculations for bamboo to improve performance",
+
+  "config.tritium.category.rendering": "Rendering",
+
+  "config.tritium.category.clientOptimizations": "Client Optimizations",
+  "config.tritium.clientOptimizations.fastLanguageSwitch": "Fast Language Switch",
+  "config.tritium.clientOptimizations.fastLanguageSwitch.tooltip": "Optimize language switching by skipping full resource pack reload",
+
+  "config.tritium.category.network": "Network",
+
+  "config.tritium.category.entities": "Entities",
+  "config.tritium.entities.optimizeEntities": "Enable Entity Tick Optimization",
+  "config.tritium.entities.optimizeEntities.tooltip": "Optimize entity ticking to improve performance",
+  "config.tritium.entities.tickRaidersInRaid": "Tick Raiders During Raids",
+  "config.tritium.entities.tickRaidersInRaid.tooltip": "Keep raiders ticking during raids to prevent raid issues",
+  "config.tritium.entities.horizontalRange": "Horizontal Detection Range",
+  "config.tritium.entities.horizontalRange.tooltip": "Horizontal range in blocks for entity tick optimization (1-256)",
+  "config.tritium.entities.verticalRange": "Vertical Detection Range",
+  "config.tritium.entities.verticalRange.tooltip": "Vertical range in blocks for entity tick optimization (1-256)",
+  "config.tritium.entities.entityWhitelist": "Entity Whitelist",
+  "config.tritium.entities.entityWhitelist.tooltip": "Entities that will never be optimized (always ticked)",
+
+  "config.tritium.category.techOptimizations": "Tech Optimizations",
+  "config.tritium.techOptimizations.lambdaEventListeners": "Lambda Event Listeners",
+  "config.tritium.techOptimizations.lambdaEventListeners.tooltip": "Optimize event listeners using lambda expressions for better performance",
+
+  "config.tritium.category.fixes": "Fixes",
+  "config.tritium.fixes.buttonFix": "Button Fix",
+  "config.tritium.fixes.buttonFix.tooltip": "Fix button related rendering issues",
+  "config.tritium.fixes.noGLog": "No GL Log",
+  "config.tritium.fixes.noGLog.tooltip": "Reduce unnecessary log output",
+
+  "config.tritium.category.serverPerformance": "Server Performance",
+  "config.tritium.serverPerformance.noiseSamplingCache": "Noise Sampling Cache",
+  "config.tritium.serverPerformance.noiseSamplingCache.tooltip": "Cache noise sampling to improve server performance",
+  "config.tritium.serverPerformance.asyncWorldSave": "Async World Save",
+  "config.tritium.serverPerformance.asyncWorldSave.tooltip": "Enable asynchronous world saving to reduce server lag",
+  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds": "Async Save Timeout",
+  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "Timeout in seconds for asynchronous world save"
+}

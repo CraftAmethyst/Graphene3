@@ -1,8 +1,8 @@
 package org.craftamethyst.tritium.event;
 
+import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraftforge.eventbus.api.Event;
-import org.craftamethyst.tritium.Constants;
-import org.craftamethyst.tritium.platform.Services;
+import org.craftamethyst.tritium.TritiumCommon;
 
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
@@ -57,7 +57,7 @@ public class LambdaEventListenerFactory {
     }
     
     public static IEventListener createListener(Object instance, Method method) {
-        if (!Services.CONFIG.get().techOptimizations.lambdaEventListeners) {
+        if (!TritiumConfig.get().techOptimizations.lambdaEventListeners) {
             return new ReflectionFallbackListener(instance, method);
         }
         
@@ -71,7 +71,7 @@ public class LambdaEventListenerFactory {
                 return createInstanceListener(instance, method);
             }
         } catch (Throwable t) {
-            Constants.LOG.error("Failed to create lambda event listener for method: {}", method, t);
+            TritiumCommon.LOG.error("Failed to create lambda event listener for method: {}", method, t);
             return new ReflectionFallbackListener(instance, method);
         }
     }
@@ -91,7 +91,7 @@ public class LambdaEventListenerFactory {
             try {
                 method.invoke(instance, event);
             } catch (Exception e) {
-                Constants.LOG.error("Error invoking event listener: {}", method, e);
+                TritiumCommon.LOG.error("Error invoking event listener: {}", method, e);
             }
         }
     }

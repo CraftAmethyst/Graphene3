@@ -6,11 +6,14 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
+    "light.FastBamboo",
+    "tickstop.EntityTypeMixin",
+    "tickstop.LevelMixin",
     "server.AsyncWorldSaveMixin"
   ],
   "client": [
-    "client.lang.LanguageManagerMixin",
     "client.gl.NoErrorMixin",
+    "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin"
   ],
   "server": [],
@@ -18,4 +21,3 @@
     "defaultRequire": 1
   }
 }
-

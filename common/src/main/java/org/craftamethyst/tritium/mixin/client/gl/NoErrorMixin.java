@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(value = Window.class)
-public class NoError {
+public class NoErrorMixin {
 
     @Inject(
             method = "defaultErrorCallback",

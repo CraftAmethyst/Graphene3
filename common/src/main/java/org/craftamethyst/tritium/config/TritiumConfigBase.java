@@ -35,6 +35,6 @@ public class TritiumConfigBase {
     }
 
     public static class ServerPerformance {
-
+        public boolean noiseSamplingCache = true;
     }
 }

@@ -1,7 +1,7 @@
 # Tritium TODO
 
 - [X]  **[Full version]** Fast Language: Dramatically speed up language switching by intercepting resource bundle reloading when switching languages
-- [ ]  **[Forge only]** Fast Event: Replaced generated classes with construction lambdas to speed up construction event listening
+- [ ]  **[Except NeoForge]** Fast Event: Replaced generated classes with construction lambdas to speed up construction event listening
 - [ ]  **[Full version]** Leaf Culling: Ported Optifine smart foliage options
 - [ ]  **[Full version]** Optimization of entity stacking: Similar to Spigot's stacking optimization of entities (referring to dropped items and experience balls), if entities in an area are too dense, then these dropped items will be merged directly
 - [ ]  **[Full version]** Chest rendering optimization: Removed dynamic models of chests, leaving them rendered as static block geometry (at the expense of no animation when chests open)

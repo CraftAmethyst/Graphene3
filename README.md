@@ -1,12 +1,12 @@
-<div align="center">
-  <h1>Tritium (氚)</h1>
-  <img height="207" alt="Mohist Project Status" src="logo.png" />
+<h1 align="center">Tritium (氚)</h1>
+<img height="207" alt="Mohist Project Status" src="logo.png" />
 
 
 An all-in-one optimization module dedicated to optimizing client-side rendering and server-side stability and fluency.
 This project is still under development slowly. You can learn about the progress at [TODO List](TODO.md)
 
-## Feature
+
+<h2 align="center">Feature</h2>
 
 - **[Full version]** Fast Language: Dramatically speed up language switching by intercepting resource bundle reloading when switching languages
 - **[Forge only]** Fast Event: Replaced generated classes with construction lambdas to speed up construction event listening
@@ -23,29 +23,28 @@ This project is still under development slowly. You can learn about the progress
 - **[Forge only]** Technology module optimization: Optimize the performance of some technology industry modules (such as GregTech, SFM, AE2) to improve performance, which plays a great role in technology integration packages (such as ATM9)
 - **[Some versions]** Vanilla bug fix: Fix some bugs in vanilla, or port fixes from higher versions
 
-## Supported Minecraft Versions
+<h2 align="center">Supported Minecraft Versions</h2>
 
 This mod supports the following Minecraft versions:
 
-NeoForge: 1.21.x
-
-Forge: 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1
-
-Fabric: 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21.x
-
-Quilt: This mod loader is not supported by any version and will not be supported in the future.
+| Mod Loader | Supported Versions |
+|------------|--------------------|
+| NeoForge   | 1.21.x |
+| Forge      | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1 |
+| Fabric     | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21.x |
+| Quilt      | Not supported (will not be supported in the future) |
 
 > NOTE: Features supported by Tritium will vary with each Minecraft version
 
 > NeoForge and Fabric will follow up with future Minecraft official version updates, while Forge will stay at 1.20.1
 
-## Download
+<h2 align="center">Download</h2>
 
 If you are a regular player or an integration package author, please download the [stable version](https://github.com/CraftAmethyst/Tritium/releases)
 
 If you want to be an early adopter or developer, please download it on [Github Action](https://github.com/CraftAmethyst/Tritium/releases)
 
-## Develop
+<h2 align="center">Develop</h2>
 
 If you want to modify the source code of this project, please follow the steps below to set up your workspace:
 
@@ -57,17 +56,17 @@ IDEA will then automatically set up the workspace and wait for Gradle synchroniz
 
 If you want to build this project, execute `gradle clean jarJar build` and the Jar file will be generated in `build/lib`
 
-## Feedback question
+<h2 align="center">Feedback question</h2>
 
 If you encounter a bug/behavior inconsistency while using this module, please provide feedback in an [Issue](https://github.com/CraftAmethyst/Tritium/issues). It must be clearly organized and must include a crash log and reproduction steps.
 
-## Support us
+<h2 align="center">Support us</h2>
 
 If you have a better idea for a project, you are always welcome. Every developer is also welcome to submit a PR
 
 If you think this project is helpful to you, please click Star for this project, which is especially important to us.
 
-## Contributors
+<h2 align="center">Contributors</h2>
 
 <a href="https://2git.xyz/CraftAmethyst/Tritium/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=CraftAmethyst/Tritium" />

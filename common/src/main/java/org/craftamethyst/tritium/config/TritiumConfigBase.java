@@ -27,7 +27,7 @@ public class TritiumConfigBase {
     }
 
     public static class TechOptimizations {
-
+        public boolean lambdaEventListeners = true;
     }
 
     public static class Fixes {

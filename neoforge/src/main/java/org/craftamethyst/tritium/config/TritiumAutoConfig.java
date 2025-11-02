@@ -4,6 +4,7 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
+import me.zcraft.tritiumconfig.annotation.Range;
 import me.zcraft.tritiumconfig.config.TritiumConfig;
 import me.zcraft.tritiumconfig.config.TritiumConfigBase;
 import net.minecraft.client.gui.screens.Screen;
@@ -29,18 +30,18 @@ public class TritiumAutoConfig {
             for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {
                 sectionField.setAccessible(true);
 
-                if (sectionField.isAnnotationPresent(ClientOnly.class)) {
-                    continue;
-                }
-
+                // Include ClientOnly sections in client environment (this is a client config screen)
                 Object section = sectionField.get(config);
                 String sectionName = sectionField.getName();
 
-                ConfigCategory category = builder.getOrCreateCategory(
-                        Component.translatable("config.tritium.category." + sectionName)
-                );
+                // Only create category if section has fields
+                if (section != null && hasConfigurableFields(section)) {
+                    ConfigCategory category = builder.getOrCreateCategory(
+                            Component.translatable("config.tritium.category." + sectionName)
+                    );
 
-                generateSectionEntries(entryBuilder, category, section, sectionName);
+                    generateSectionEntries(entryBuilder, category, section, sectionName);
+                }
             }
         } catch (Exception e) {
             TritiumCommon.LOG.error("Failed to generate config screen", e);
@@ -58,10 +59,8 @@ public class TritiumAutoConfig {
         try {
             for (Field field : section.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                if (field.isAnnotationPresent(ClientOnly.class)) {
-                    continue;
-                }
-
+                
+                // Include ClientOnly fields in client config screen
                 String fieldName = field.getName();
                 Class<?> fieldType = field.getType();
                 Object currentValue = field.get(section);
@@ -79,24 +78,38 @@ public class TritiumAutoConfig {
                             .build());
 
                 } else if (fieldType == int.class || fieldType == Integer.class) {
-                    category.addEntry(entryBuilder.startIntField(
+                    var intField = entryBuilder.startIntField(
                                     Component.translatable(translationKey),
                                     (Integer) currentValue
                             )
                             .setDefaultValue(getDefaultIntValue(field))
                             .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                            .setSaveConsumer(createIntSaveConsumer(sectionName, fieldName))
-                            .build());
+                            .setSaveConsumer(createIntSaveConsumer(sectionName, fieldName));
+                    
+                    // Apply range constraints if present
+                    Range range = field.getAnnotation(Range.class);
+                    if (range != null) {
+                        intField.setMin((int) range.min()).setMax((int) range.max());
+                    }
+                    
+                    category.addEntry(intField.build());
 
                 } else if (fieldType == double.class || fieldType == Double.class) {
-                    category.addEntry(entryBuilder.startDoubleField(
+                    var doubleField = entryBuilder.startDoubleField(
                                     Component.translatable(translationKey),
                                     (Double) currentValue
                             )
                             .setDefaultValue(getDefaultDoubleValue(field))
                             .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                            .setSaveConsumer(createDoubleSaveConsumer(sectionName, fieldName))
-                            .build());
+                            .setSaveConsumer(createDoubleSaveConsumer(sectionName, fieldName));
+                    
+                    // Apply range constraints if present
+                    Range range = field.getAnnotation(Range.class);
+                    if (range != null) {
+                        doubleField.setMin(range.min()).setMax(range.max());
+                    }
+                    
+                    category.addEntry(doubleField.build());
 
                 } else if (fieldType == String.class) {
                     category.addEntry(entryBuilder.startStrField(
@@ -189,4 +202,23 @@ public class TritiumAutoConfig {
         }
     }
 
+    /**
+     * Check if a section has any configurable fields (non-comment fields)
+     */
+    private static boolean hasConfigurableFields(Object section) {
+        if (section == null) return false;
+        
+        try {
+            for (Field field : section.getClass().getDeclaredFields()) {
+                // Check if field is a configuration field (not synthetic, not static)
+                if (!field.isSynthetic() && !java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        
+        return false;
+    }
 }

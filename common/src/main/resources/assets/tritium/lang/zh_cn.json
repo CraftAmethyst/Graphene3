@@ -7,6 +7,10 @@
 
   "config.tritium.category.rendering": "渲染优化",
 
+  "config.tritium.category.clientOptimizations": "客户端优化",
+  "config.tritium.clientOptimizations.fastLanguageSwitch": "快速语言切换",
+  "config.tritium.clientOptimizations.fastLanguageSwitch.tooltip": "通过跳过完整资源包重新加载来优化语言切换速度",
+
   "config.tritium.category.network": "网络优化",
 
   "config.tritium.category.entities": "实体优化",

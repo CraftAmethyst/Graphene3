@@ -26,6 +26,10 @@ public abstract class LanguageManagerMixin {
 
     @Inject(method = "setSelected", at = @At("HEAD"))
     private void onSetLanguageHead(String languageCode, CallbackInfo ci) {
+        if (!me.zcraft.tritiumconfig.config.TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+            return;
+        }
+        
         tritium$previousLanguage = this.currentCode;
         
         if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
@@ -37,6 +41,10 @@ public abstract class LanguageManagerMixin {
 
     @Inject(method = "setSelected", at = @At("TAIL"))
     private void onSetLanguageTail(String languageCode, CallbackInfo ci) {
+        if (!me.zcraft.tritiumconfig.config.TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+            return;
+        }
+        
         if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
             TritiumCommon.LOG.info("Manually reloading language resources for: {}", languageCode);
 

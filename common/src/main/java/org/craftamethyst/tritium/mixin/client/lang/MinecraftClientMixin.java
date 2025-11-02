@@ -18,6 +18,10 @@ public class MinecraftClientMixin {
             cancellable = true,
             require = 0)
     private void onReloadResourcePacks(CallbackInfoReturnable<CompletableFuture<Void>> cir) {
+        if (!me.zcraft.tritiumconfig.config.TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+            return;
+        }
+        
         if (LanguageLoadOptimizer.isLanguageChanging()) {
             TritiumCommon.LOG.info("Skipping full resource pack reload during language change");
             cir.setReturnValue(CompletableFuture.completedFuture(null));

@@ -7,6 +7,10 @@
 
   "config.tritium.category.rendering": "Rendering",
 
+  "config.tritium.category.clientOptimizations": "Client Optimizations",
+  "config.tritium.clientOptimizations.fastLanguageSwitch": "Fast Language Switch",
+  "config.tritium.clientOptimizations.fastLanguageSwitch.tooltip": "Optimize language switching by skipping full resource pack reload",
+
   "config.tritium.category.network": "Network",
 
   "config.tritium.category.entities": "Entities",

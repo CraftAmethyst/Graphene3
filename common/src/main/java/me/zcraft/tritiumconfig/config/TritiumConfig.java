@@ -1,6 +1,7 @@
 package me.zcraft.tritiumconfig.config;
 
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
+import me.zcraft.tritiumconfig.annotation.Range;
 import org.craftamethyst.tritium.TritiumCommon;
 
 import java.io.IOException;
@@ -16,7 +17,9 @@ import java.util.Map;
  */
 public class TritiumConfig {
     private static final Map<String, ConfigValue<?>> configCache = new HashMap<>();
-    private static TritiumConfigBase config = new TritiumConfigBase();
+    private static final Map<String, Field> fieldCache = new HashMap<>();
+    private static final Object CONFIG_LOCK = new Object();
+    private static volatile TritiumConfigBase config = new TritiumConfigBase();
     private static String configFileName = "tritium";
     private static boolean isClient = true;
     private static boolean registered = false;
@@ -26,13 +29,14 @@ public class TritiumConfig {
     /**
      * Register the configuration system
      */
-    public static TritiumConfig register() {
+    public static synchronized TritiumConfig register() {
         if (registered) {
             TritiumCommon.LOG.warn("Tritium config is already registered!");
             return new TritiumConfig();
         }
 
         registered = true;
+        cacheFieldReflection();
         initializeConfigSystem();
         TritiumCommon.LOG.info("Tritium config registered successfully");
         return new TritiumConfig();
@@ -59,10 +63,11 @@ public class TritiumConfig {
     /**
      * Reload the configuration from disk
      */
-    public static void reload() {
+    public static synchronized void reload() {
         TritiumCommon.LOG.info("Reloading Tritium configuration...");
 
-        // Clear any cached values
+        // Force refresh all cached config values before clearing
+        configCache.values().forEach(ConfigValue::refresh);
         configCache.clear();
 
         if (configParser != null) {
@@ -75,7 +80,7 @@ public class TritiumConfig {
     /**
      * Save the current configuration to file
      */
-    public static void save() {
+    public static synchronized void save() {
         try {
             Path configPath = getConfigPath();
             String configContent = generateConfigFile();
@@ -110,25 +115,49 @@ public class TritiumConfig {
         fileWatcher.start();
     }
 
-    private static void rebuildConfigObject() {
+    /**
+     * Cache Field objects to avoid repeated reflection
+     */
+    private static void cacheFieldReflection() {
         try {
-            TritiumConfigBase newConfig = new TritiumConfigBase();
-            for (Field field : TritiumConfigBase.class.getDeclaredFields()) {
-                field.setAccessible(true);
-                Object section = field.get(newConfig);
-                String sectionName = field.getName();
+            for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {
+                sectionField.setAccessible(true);
+                String sectionName = sectionField.getName();
+                fieldCache.put("section." + sectionName, sectionField);
 
-                if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
-                    continue;
+                Object tempSection = sectionField.getType().newInstance();
+                for (Field field : tempSection.getClass().getDeclaredFields()) {
+                    field.setAccessible(true);
+                    fieldCache.put(sectionName + "." + field.getName(), field);
+                }
+            }
+            TritiumCommon.LOG.debug("Cached {} field reflections", fieldCache.size());
+        } catch (Exception e) {
+            TritiumCommon.LOG.error("Failed to cache field reflections", e);
+        }
+    }
+
+    private static void rebuildConfigObject() {
+        synchronized (CONFIG_LOCK) {
+            try {
+                TritiumConfigBase newConfig = new TritiumConfigBase();
+                for (Field field : TritiumConfigBase.class.getDeclaredFields()) {
+                    field.setAccessible(true);
+                    Object section = field.get(newConfig);
+                    String sectionName = field.getName();
+
+                    if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
+                        continue;
+                    }
+
+                    configureSection(section, sectionName);
                 }
 
-                configureSection(section, sectionName);
+                config = newConfig;
+                TritiumCommon.LOG.debug("Configuration object rebuilt");
+            } catch (Exception e) {
+                TritiumCommon.LOG.error("Failed to rebuild configuration object", e);
             }
-
-            config = newConfig;
-            TritiumCommon.LOG.debug("Configuration object rebuilt");
-        } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to rebuild configuration object", e);
         }
     }
 
@@ -145,8 +174,16 @@ public class TritiumConfig {
                 String fieldName = field.getName();
                 String configKey = fieldName;
                 Class<?> fieldType = field.getType();
-                ConfigValue<?> configValue = getCachedConfigValue(sectionName, configKey, fieldType, getDefaultValue(section, field));
+                Object defaultValue = getDefaultValue(section, field);
+                ConfigValue<?> configValue = getCachedConfigValue(sectionName, configKey, fieldType, defaultValue);
                 Object value = configValue.get();
+                
+                // Apply range validation for numeric types
+                if (value instanceof Number && (fieldType == int.class || fieldType == Integer.class || 
+                    fieldType == double.class || fieldType == Double.class)) {
+                    value = validateRange(field, (Number) value, (Number) defaultValue);
+                }
+                
                 field.set(section, value);
             }
         } catch (Exception e) {
@@ -171,6 +208,30 @@ public class TritiumConfig {
                 return new ConfigValue<>(() -> defaultValue);
             }
         });
+    }
+
+    /**
+     * Validate numeric value against Range annotation if present
+     */
+    private static <T extends Number> T validateRange(Field field, T value, T defaultValue) {
+        Range range = field.getAnnotation(Range.class);
+        if (range == null) {
+            return value;
+        }
+
+        double numValue = value.doubleValue();
+        double min = range.min();
+        double max = range.max();
+
+        if (numValue < min || numValue > max) {
+            TritiumCommon.LOG.warn(
+                "Config value {} = {} is out of range [{}, {}], using default: {}",
+                field.getName(), numValue, min, max, defaultValue
+            );
+            return defaultValue;
+        }
+
+        return value;
     }
 
     private static Object getDefaultValue(Object section, Field field) {
@@ -209,6 +270,7 @@ public class TritiumConfig {
         sb.append("# Generated by Tritium\n");
         sb.append("# \n");
         sb.append("# Client-only sections will not be generated on server side\n");
+        sb.append("# Edit this file and it will be automatically reloaded\n");
         sb.append("\n");
 
         try {
@@ -221,10 +283,12 @@ public class TritiumConfig {
                 if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
                     continue;
                 }
-                // Section header
-                sb.append("\n# ").append(capitalize(sectionName)).append("\n");
+                // TOML section header with description
+                sb.append("\n# ═══════════════════════════════════════════════════════\n");
+                sb.append("# ").append(capitalize(sectionName)).append(" Settings\n");
+                sb.append("# ═══════════════════════════════════════════════════════\n");
+                sb.append("[").append(sectionName).append("]\n");
                 generateSectionContent(sb, section, sectionName);
-                sb.append("\n");
             }
         } catch (Exception e) {
             TritiumCommon.LOG.error("Failed to generate configuration content", e);
@@ -245,6 +309,8 @@ public class TritiumConfig {
                 String fieldName = field.getName();
                 Object value = field.get(section);
 
+                // Add comment with field name description
+                sb.append("\n# ").append(formatFieldNameAsComment(fieldName)).append("\n");
                 sb.append(fieldName).append(" = ");
 
                 if (value instanceof Boolean) {
@@ -265,6 +331,27 @@ public class TritiumConfig {
     private static String capitalize(String str) {
         if (str == null || str.isEmpty()) return str;
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    }
+
+    /**
+     * Format camelCase field names into readable comments
+     */
+    private static String formatFieldNameAsComment(String fieldName) {
+        if (fieldName == null || fieldName.isEmpty()) return fieldName;
+        
+        StringBuilder result = new StringBuilder();
+        result.append(Character.toUpperCase(fieldName.charAt(0)));
+        
+        for (int i = 1; i < fieldName.length(); i++) {
+            char c = fieldName.charAt(i);
+            if (Character.isUpperCase(c)) {
+                result.append(' ').append(c);
+            } else {
+                result.append(c);
+            }
+        }
+        
+        return result.toString();
     }
 
     /**

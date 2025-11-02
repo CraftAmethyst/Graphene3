@@ -8,10 +8,16 @@ public class TritiumConfigBase {
     @ClientOnly
     public Rendering rendering = new Rendering();
 
+    @ClientOnly
+    public ClientOptimizations clientOptimizations = new ClientOptimizations();
+
     public Network network = new Network();
     public Entities entities = new Entities();
     public TechOptimizations techOptimizations = new TechOptimizations();
+    
+    @ClientOnly
     public Fixes fixes = new Fixes();
+    
     public ServerPerformance serverPerformance = new ServerPerformance();
 
     public static class Performance {
@@ -20,19 +26,24 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class Rendering {
+        // Future rendering optimizations will be added here
+    }
 
+    @ClientOnly
+    public static class ClientOptimizations {
+        public boolean fastLanguageSwitch = true;
     }
 
     public static class Network {
-
+        // Future network optimizations will be added here
     }
 
     public static class Entities {
-
+        // Future entity optimizations will be added here
     }
 
     public static class TechOptimizations {
-
+        // Future technical optimizations will be added here
     }
 
     @ClientOnly

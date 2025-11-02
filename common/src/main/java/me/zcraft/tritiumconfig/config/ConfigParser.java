@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public class ConfigParser {
     private final Path configPath;
     private final Map<String, String> configValues = new HashMap<>();
+    private String currentSection = "";
     private long lastLoadTime = 0;
 
     public ConfigParser(Path configPath) {
@@ -27,16 +28,34 @@ public class ConfigParser {
 
         try {
             configValues.clear();
-            Files.lines(configPath)
-                    .filter(line -> !line.trim().startsWith("#") && !line.trim().isEmpty())
-                    .forEach(line -> {
-                        String[] parts = line.split("=", 2);
-                        if (parts.length == 2) {
-                            String key = parts[0].trim();
-                            String value = parts[1].trim();
-                            configValues.put(key, value);
-                        }
-                    });
+            currentSection = "";
+            Files.lines(configPath).forEach(line -> {
+                String trimmed = line.trim();
+                
+                // Skip comments and empty lines
+                if (trimmed.startsWith("#") || trimmed.isEmpty()) {
+                    return;
+                }
+                
+                // Parse TOML section headers [section]
+                if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+                    currentSection = trimmed.substring(1, trimmed.length() - 1).trim();
+                    TritiumCommon.LOG.debug("Entering section: {}", currentSection);
+                    return;
+                }
+                
+                // Parse key=value pairs
+                String[] parts = line.split("=", 2);
+                if (parts.length == 2) {
+                    String key = parts[0].trim();
+                    String value = parts[1].trim();
+                    
+                    // Store with section prefix if we're in a section
+                    String fullKey = currentSection.isEmpty() ? key : currentSection + "." + key;
+                    configValues.put(key, value);
+                    TritiumCommon.LOG.debug("Loaded config: {} = {}", fullKey, value);
+                }
+            });
             lastLoadTime = System.currentTimeMillis();
             TritiumCommon.LOG.debug("Loaded {} config values from: {}", configValues.size(), configPath);
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin;
+package org.craftamethyst.tritium.mixin.client.lang;
 
 import net.minecraft.client.Minecraft;
 import org.craftamethyst.tritium.Constants;

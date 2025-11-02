@@ -35,7 +35,7 @@ If you want to be an early adopter or developer, please download it on [Github A
 
 If you want to modify the source code of this project, please follow the steps below to set up your workspace:
 
-Execute `https://github.com/CraftAmethyst/Tritium.git` to clone this project
+Execute `git clone https://github.com/CraftAmethyst/Tritium.git` to clone this project
 
 Navigate to the project folder, right-click, and click `Open Folder as Intellij IDEA ... Edition Project`
 

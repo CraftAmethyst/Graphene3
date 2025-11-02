@@ -6,14 +6,14 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
-    "client.gl.NoErrorMixin"
+    "client.gl.NoErrorMixin",
+    "server.AsyncWorldSaveMixin"
   ],
   "client": [
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin"
   ],
-  "server": [
-  ],
+  "server": [],
   "injectors": {
     "defaultRequire": 1
   }

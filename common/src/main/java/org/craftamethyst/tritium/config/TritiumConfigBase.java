@@ -37,5 +37,7 @@ public class TritiumConfigBase {
 
     public static class ServerPerformance {
         public boolean noiseSamplingCache = true;
+        public boolean asyncWorldSave = true;
+        public int asyncWorldSaveTimeoutSeconds = 30;
     }
 }

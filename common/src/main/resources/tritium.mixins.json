@@ -7,7 +7,7 @@
     "mixins": [
     ],
     "client": [
-      "org.craftamethyst.graphene3.mixin.MixinMinecraft"
+      "org.craftamethyst.tritium.mixin.MixinMinecraft"
     ],
     "server": [
     ],

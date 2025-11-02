@@ -1,20 +1,21 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "org.craftamethyst.tritium.mixin",
-    "refmap": "${mod_id}.refmap.json",
-    "compatibilityLevel": "JAVA_17",
-    "mixins": [
-        "chunk.NoiseSamplingCacheMixin"
-    ],
-    "client": [
-        "client.lang.LanguageManagerMixin",
-        "client.lang.MinecraftClientMixin"
-    ],
-    "server": [
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    }
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.craftamethyst.tritium.mixin",
+  "refmap": "${mod_id}.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "chunk.NoiseSamplingCacheMixin",
+    "client.gl.NoErrorMixin"
+  ],
+  "client": [
+    "client.lang.LanguageManagerMixin",
+    "client.lang.MinecraftClientMixin"
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
 

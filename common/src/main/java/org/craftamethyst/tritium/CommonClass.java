@@ -16,9 +16,17 @@ public class CommonClass {
     // game has no mechanism to load tooltip listeners so this must be
     // invoked from a mod loader specific project like Forge or Fabric.
     public static void init() {
-
-        Constants.LOG.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.isDevelopmentEnvironment() ? "development" : "production");
-        Constants.LOG.info("Diamond Item >> {}", Registry.ITEM.getKey(Items.DIAMOND));
+        Constants.LOG.info("Loading...\n" +
+                "\n" +
+                "  ______       _  __   _                 \n" +
+                " /_  __/_____ (_)/ /_ (_)__  __ ____ ___ \n" +
+                "  / /  / ___// // __// // / / // __ `__ \\\n" +
+                " / /  / /   / // /_ / // /_/ // / / / / /\n" +
+                "/_/  /_/   /_/ \\__//_/ \\__,_//_/ /_/ /_/ \n" +
+                "                                         \n" +
+                "Version: {} | Platform: {} | Environment: {}\n" +
+                "\n",
+                Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.isDevelopmentEnvironment() ? "development" : "production");
 
         // 初始化配置
         try {

@@ -14,7 +14,7 @@ public class tritium {
         // project.
     
         // Use Forge to bootstrap the Common mod.
-        Constants.LOG.info("Hello Forge world!");
+        Constants.LOG.info("Forge Ready");
         CommonClass.init();
     
         // Some code like events require special initialization from the

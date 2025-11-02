@@ -3,6 +3,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
 
 version = version
@@ -73,6 +74,7 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Config UI + AutoConfig (Forge)
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
@@ -84,10 +86,40 @@ tasks.withType(JavaCompile) {
 
 processResources {
     from project(":Common").sourceSets.main.resources
+    
+    def expandProps = [
+        'version': project.version
+    ]
+    
+    inputs.properties(expandProps)
+    
+    filesMatching('META-INF/mods.toml') {
+        expand(expandProps)
+    }
 }
 
 
+jar {
+    manifest {
+        attributes([
+            'Specification-Title'     : mod_name,
+            'Specification-Vendor'    : mod_author,
+            'Specification-Version'   : '1',
+            'Implementation-Title'    : project.name,
+            'Implementation-Version'  : project.version,
+            'Implementation-Vendor'   : mod_author,
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
 jar.finalizedBy('reobfJar')
+
+mixin {
+    add sourceSets.main, '${mod_id}.refmap.json'
+    config 'tritium.mixins.json'
+    config 'tritium.forge.mixins.json'
+}
 
 publishing {
     publications {

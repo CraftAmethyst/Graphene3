@@ -25,7 +25,8 @@
       ]
     },
     "mixins": [
-      "tritium.mixins.json"
+      "tritium.mixins.json",
+      "tritium.fabric.mixins.json"
     ],
   
     "depends": {

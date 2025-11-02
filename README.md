@@ -1,4 +1,7 @@
-# Tritium (氚)
+<div align="center">
+  <h1>Tritium (氚)</h1>
+  <img height="207" alt="Mohist Project Status" src="logo.png" />
+
 
 An all-in-one optimization module dedicated to optimizing client-side rendering and server-side stability and fluency.
 This project is still under development slowly. You can learn about the progress at [TODO List](TODO.md)
@@ -31,7 +34,6 @@ Forge: 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1
 Fabric: 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21.x
 
 Quilt: This mod loader is not supported by any version and will not be supported in the future.
-
 
 > NOTE: Features supported by Tritium will vary with each Minecraft version
 
@@ -66,6 +68,7 @@ If you have a better idea for a project, you are always welcome. Every developer
 If you think this project is helpful to you, please click Star for this project, which is especially important to us.
 
 ## Contributors
+
 <a href="https://2git.xyz/CraftAmethyst/Tritium/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=CraftAmethyst/Tritium" />
 </a>

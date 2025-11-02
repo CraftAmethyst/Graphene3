@@ -8,6 +8,7 @@
     "chunk.NoiseSamplingCacheMixin"
   ],
   "client": [
+    "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin"
   ],

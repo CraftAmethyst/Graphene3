@@ -12,7 +12,7 @@
 - [ ]  **[Full version]** GPU Plus: Fix the game's video memory leak problem through various methods, and also bring a variety of new OpenGL 4+ features
 - [ ]  **[Windows only]** GPU entity collision optimization: By placing the physical AABB collision calculation on the GPU, the main thread pressure is shared, achieving significant performance improvement in dense biological scenes.
 - [ ]  **[Full version]** Quickly save the world: Make the world saving thread asynchronous to greatly increase the speed of saving the world
-- [ ]  bugfix(vl): MC-259387
+- [x]  bugfix(vl): MC-259387
 - [ ]  config: add config screen
 - [ ]  techOpt(SFM): Factory Manager
 - [ ]  techOpt(gt)

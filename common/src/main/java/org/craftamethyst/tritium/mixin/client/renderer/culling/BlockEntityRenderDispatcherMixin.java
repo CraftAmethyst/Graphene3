@@ -30,7 +30,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
             CallbackInfo ci) {
 
-        if (!TritiumConfig.get().rendering.enableBlockEntityCulling) return;
+        if (!TritiumConfig.get().rendering.entityCulling.enableBlockEntityCulling) return;
 
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(blockEntity instanceof BlockEntityVisibility cullable)) return;
@@ -66,7 +66,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
             CallbackInfo ci) {
 
-        if (!TritiumConfig.get().rendering.enableBlockEntityCulling) return;
+        if (!TritiumConfig.get().rendering.entityCulling.enableBlockEntityCulling) return;
 
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(blockEntity instanceof BlockEntityVisibility cullable)) return;

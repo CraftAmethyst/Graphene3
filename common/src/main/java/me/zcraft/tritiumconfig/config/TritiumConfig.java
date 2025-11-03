@@ -6,17 +6,19 @@ import me.zcraft.tritiumconfig.annotation.SubCategory;
 import org.craftamethyst.tritium.TritiumCommon;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TritiumConfig {
-    private static final Map<String, ConfigValue<?>> configCache = new HashMap<>();
-    private static final Map<String, Field> fieldCache = new HashMap<>();
+    private static final Map<String, ConfigValue<?>> configCache = new ConcurrentHashMap<>();
+    private static final Map<String, FieldAccessor> fieldAccessors = new ConcurrentHashMap<>();
     private static final Object CONFIG_LOCK = new Object();
     private static volatile TritiumConfigBase config = new TritiumConfigBase();
     private static String configFileName = "tritium";
@@ -41,10 +43,21 @@ public class TritiumConfig {
             throw new RuntimeException("Invalid default configuration", e);
         }
 
-        cacheFieldReflection();
+        cacheFieldAccessors();
         initializeConfigSystem();
         TritiumCommon.LOG.info("Tritium config registered successfully");
         return new TritiumConfig();
+    }
+
+    public static synchronized void reload() {
+        configCache.values().forEach(ConfigValue::refresh);
+        configCache.clear();
+
+        if (configParser != null) {
+            configParser.load();
+            ConfigMigration.migrateConfig(getConfigPath(), configParser);
+        }
+        rebuildConfigObject();
     }
 
     public static void setEnvironment(boolean client) {
@@ -58,16 +71,12 @@ public class TritiumConfig {
         return config;
     }
 
-    public static synchronized void reload(){
-        configCache.values().forEach(ConfigValue::refresh);
-        configCache.clear();
-
-        if (configParser != null) {
-            configParser.load();
-
-            ConfigMigration.migrateConfig(getConfigPath(), configParser);
+    public static void stop() {
+        if (fileWatcher != null) {
+            fileWatcher.stop();
         }
-        rebuildConfigObject();
+        configCache.clear();
+        fieldAccessors.clear();
     }
 
     public static synchronized void save() {
@@ -80,11 +89,13 @@ public class TritiumConfig {
         }
     }
 
-    public static void stop() {
-        if (fileWatcher != null) {
-            fileWatcher.stop();
+    private static void cacheFieldAccessors() {
+        try {
+            cacheFieldsRecursive(TritiumConfigBase.class, "");
+            TritiumCommon.LOG.debug("Cached {} field accessors", fieldAccessors.size());
+        } catch (Exception e) {
+            TritiumCommon.LOG.error("Failed to cache field accessors", e);
         }
-        configCache.clear();
     }
 
     private static void initializeConfigSystem() {
@@ -95,47 +106,37 @@ public class TritiumConfig {
         configParser = new ConfigParser(configPath);
 
         ConfigMigration.migrateConfig(configPath, configParser);
-
         rebuildConfigObject();
 
         fileWatcher = new ConfigFileWatcher(configPath, TritiumConfig::reload);
         fileWatcher.start();
     }
 
-    private static void cacheFieldReflection() {
-        try {
-            cacheFieldsRecursive(TritiumConfigBase.class, "");
-            TritiumCommon.LOG.debug("Cached {} field reflections", fieldCache.size());
-        } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to cache field reflections", e);
-        }
-    }
-
     private static void cacheFieldsRecursive(Class<?> clazz, String prefix) throws Exception {
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
             String fullPath = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
 
             if (!field.isAnnotationPresent(SubCategory.class)) {
-                fieldCache.put(fullPath, field);
+                MethodHandle getter = lookup.unreflectGetter(field);
+                MethodHandle setter = lookup.unreflectSetter(field);
+
+                fieldAccessors.put(fullPath, new MethodHandleFieldAccessor(
+                        getter, setter, field.getType(), () -> {
+                    try {
+                        Object defaultInstance = field.getDeclaringClass().newInstance();
+                        return field.get(defaultInstance);
+                    } catch (Exception e) {
+                        return getTypeDefaultValue(field.getType());
+                    }
+                }
+                ));
             }
 
             if (field.isAnnotationPresent(SubCategory.class)) {
                 cacheFieldsRecursive(field.getType(), fullPath);
-            }
-        }
-    }
-
-    private static void rebuildConfigObject() {
-        synchronized (CONFIG_LOCK) {
-            try {
-                TritiumConfigBase newConfig = new TritiumConfigBase();
-                configureObjectRecursive(newConfig, "");
-                config = newConfig;
-                ConfigValidator.validateConfig(config);
-                TritiumCommon.LOG.debug("Configuration object rebuilt and validated");
-            } catch (Exception e) {
-                TritiumCommon.LOG.error("Failed to rebuild configuration object", e);
             }
         }
     }
@@ -156,15 +157,18 @@ public class TritiumConfig {
                 field.set(obj, subObj);
             } else {
                 if (isSimpleType(field.getType())) {
-                    Object defaultValue = getDefaultValue(obj, field);
-                    ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
-                    Object value = configValue.get();
+                    FieldAccessor accessor = fieldAccessors.get(fieldPath);
+                    if (accessor != null) {
+                        Object defaultValue = accessor.getDefaultValue();
+                        ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
+                        Object value = configValue.get();
 
-                    if (value instanceof Number) {
-                        value = validateRange(field, (Number) value, (Number) defaultValue);
+                        if (value instanceof Number) {
+                            value = validateRange(field, (Number) value, (Number) defaultValue);
+                        }
+
+                        accessor.setValue(obj, value);
                     }
-
-                    field.set(obj, value);
                 }
             }
         }
@@ -172,26 +176,63 @@ public class TritiumConfig {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static ConfigValue<?> getCachedConfigValue(String key, Class<?> type, Object defaultValue) {
-        return configCache.computeIfAbsent(key, k -> {
-            if (type == boolean.class || type == Boolean.class) {
-                return new ConfigValue<>(configParser.getBoolean(key, (Boolean) defaultValue));
-            } else if (type == int.class || type == Integer.class) {
-                return new ConfigValue<>(configParser.getInt(key, (Integer) defaultValue));
-            } else if (type == long.class || type == Long.class) {
-                return new ConfigValue<>(configParser.getLong(key, (Long) defaultValue));
-            } else if (type == double.class || type == Double.class) {
-                return new ConfigValue<>(configParser.getDouble(key, (Double) defaultValue));
-            } else if (type == String.class) {
-                return new ConfigValue<>(configParser.getString(key, (String) defaultValue));
-            } else if (type.isEnum()) {
-                return new ConfigValue<>(configParser.getEnum(key, (Enum) defaultValue));
-            } else if (List.class.isAssignableFrom(type)) {
-                return new ConfigValue<>(configParser.getStringList(key, (List<String>) defaultValue));
-            } else {
-                TritiumCommon.LOG.warn("Unsupported configuration type: {} for key: {}", type, key);
-                return new ConfigValue<>(() -> defaultValue);
+        return configCache.computeIfAbsent(key, k -> createConfigValueSupplier(key, type, defaultValue));
+    }
+
+    private static ConfigValue<?> createConfigValueSupplier(String key, Class<?> type, Object defaultValue) {
+        if (type == boolean.class || type == Boolean.class) {
+            return new ConfigValue<>(configParser.getBoolean(key, (Boolean) defaultValue));
+        } else if (type == int.class || type == Integer.class) {
+            return new ConfigValue<>(configParser.getInt(key, (Integer) defaultValue));
+        } else if (type == long.class || type == Long.class) {
+            return new ConfigValue<>(configParser.getLong(key, (Long) defaultValue));
+        } else if (type == double.class || type == Double.class) {
+            return new ConfigValue<>(configParser.getDouble(key, (Double) defaultValue));
+        } else if (type == String.class) {
+            return new ConfigValue<>(configParser.getString(key, (String) defaultValue));
+        } else if (type.isEnum()) {
+            return new ConfigValue<>(configParser.getEnum(key, (Enum) defaultValue));
+        } else if (List.class.isAssignableFrom(type)) {
+            return new ConfigValue<>(configParser.getStringList(key, (List<String>) defaultValue));
+        } else {
+            TritiumCommon.LOG.warn("Unsupported configuration type: {} for key: {}", type, key);
+            return new ConfigValue<>(() -> defaultValue);
+        }
+    }
+
+    private static void rebuildConfigObject() {
+        synchronized (CONFIG_LOCK) {
+            try {
+                TritiumConfigBase newConfig = new TritiumConfigBase();
+                configureObjectRecursive(newConfig, "");
+                config = newConfig;
+                ConfigValidator.validateConfig(config);
+                TritiumCommon.LOG.debug("Configuration object rebuilt and validated");
+            } catch (Exception e) {
+                TritiumCommon.LOG.error("Failed to rebuild configuration object", e);
             }
-        });
+        }
+    }
+
+    private static Object getTypeDefaultValue(Class<?> type) {
+        if (type == boolean.class) return false;
+        if (type == int.class) return 0;
+        if (type == long.class) return 0L;
+        if (type == double.class) return 0.0;
+        if (type == String.class) return "";
+        return null;
+    }
+
+    private interface FieldAccessor {
+        Object getValue(Object obj) throws Exception;
+        void setValue(Object obj, Object value) throws Exception;
+        Object getDefaultValue() throws Exception;
+        Class<?> getType();
+    }
+
+    @FunctionalInterface
+    private interface SupplierWithException<T> {
+        T get() throws Exception;
     }
 
     private static <T extends Number> T validateRange(Field field, T value, T defaultValue) {
@@ -215,17 +256,46 @@ public class TritiumConfig {
         return value;
     }
 
-    private static Object getDefaultValue(Object obj, Field field) {
-        try {
-            Object defaultObj = obj.getClass().newInstance();
-            return field.get(defaultObj);
-        } catch (Exception e) {
-            Class<?> type = field.getType();
-            if (type == boolean.class) return false;
-            if (type == int.class) return 0;
-            if (type == double.class) return 0.0;
-            if (type == String.class) return "";
-            return null;
+    private static class MethodHandleFieldAccessor implements FieldAccessor {
+        private final MethodHandle getter;
+        private final MethodHandle setter;
+        private final Class<?> type;
+        private final SupplierWithException<Object> defaultValueSupplier;
+
+        public MethodHandleFieldAccessor(MethodHandle getter, MethodHandle setter,
+                                         Class<?> type, SupplierWithException<Object> defaultValueSupplier) {
+            this.getter = getter;
+            this.setter = setter;
+            this.type = type;
+            this.defaultValueSupplier = defaultValueSupplier;
+        }
+
+        @Override
+        public Object getValue(Object obj) throws Exception {
+            try {
+                return getter.invoke(obj);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void setValue(Object obj, Object value) throws Exception {
+            try {
+                setter.invoke(obj, value);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Object getDefaultValue() throws Exception {
+            return defaultValueSupplier.get();
+        }
+
+        @Override
+        public Class<?> getType() {
+            return type;
         }
     }
 
@@ -319,6 +389,7 @@ public class TritiumConfig {
             }
         }
     }
+
     private static boolean isSimpleType(Class<?> type) {
         return type.isPrimitive() ||
                 type == Boolean.class ||
@@ -330,9 +401,6 @@ public class TritiumConfig {
                 type == java.util.List.class;
     }
 
-    /**
-     * Format camelCase field names into readable comments
-     */
     private static String formatFieldNameAsComment(String fieldName) {
         if (fieldName == null || fieldName.isEmpty()) return fieldName;
 

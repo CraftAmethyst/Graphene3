@@ -5,15 +5,14 @@ import org.craftamethyst.tritium.TritiumCommon;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class ConfigParser {
+    public final Map<String, String> configValues = new HashMap<>();
     private final Path configPath;
-    private final Map<String, String> configValues = new HashMap<>();
-    private String currentSection = "";
     private long lastLoadTime = 0;
+    private String currentSection = "";
 
     public ConfigParser(Path configPath) {
         this.configPath = configPath;
@@ -31,29 +30,26 @@ public class ConfigParser {
             currentSection = "";
             Files.lines(configPath).forEach(line -> {
                 String trimmed = line.trim();
-                
-                // Skip comments and empty lines
                 if (trimmed.startsWith("#") || trimmed.isEmpty()) {
                     return;
                 }
-                
-                // Parse TOML section headers [section]
+
                 if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
                     currentSection = trimmed.substring(1, trimmed.length() - 1).trim();
-                    TritiumCommon.LOG.debug("Entering section: {}", currentSection);
                     return;
                 }
-                
-                // Parse key=value pairs
+
                 String[] parts = line.split("=", 2);
                 if (parts.length == 2) {
                     String key = parts[0].trim();
                     String value = parts[1].trim();
-                    
-                    // Store with section prefix if we're in a section
+
                     String fullKey = currentSection.isEmpty() ? key : currentSection + "." + key;
-                    configValues.put(key, value);
-                    TritiumCommon.LOG.debug("Loaded config: {} = {}", fullKey, value);
+                    if (value.startsWith("\"") && value.endsWith("\"")) {
+                        value = value.substring(1, value.length() - 1);
+                    }
+
+                    configValues.put(fullKey, value);
                 }
             });
             lastLoadTime = System.currentTimeMillis();
@@ -69,14 +65,7 @@ public class ConfigParser {
             if (value == null) return defaultValue;
 
             value = value.toLowerCase().trim();
-            if (value.equals("true") || value.equals("t") || value.equals("1") || value.equals("yes") || value.equals("y")) {
-                return true;
-            } else if (value.equals("false") || value.equals("f") || value.equals("0") || value.equals("no") || value.equals("n")) {
-                return false;
-            } else {
-                TritiumCommon.LOG.warn("Invalid boolean value '{}' for key '{}', using default: {}", value, key, defaultValue);
-                return defaultValue;
-            }
+            return value.equals("true") || value.equals("t") || value.equals("1") || value.equals("yes") || value.equals("y");
         };
     }
 
@@ -94,16 +83,24 @@ public class ConfigParser {
         };
     }
 
-    public Supplier<String> getString(String key, String defaultValue) {
+    public Supplier<Long> getLong(String key, long defaultValue) {
         return () -> {
             String value = configValues.get(key);
             if (value == null) return defaultValue;
 
-            value = value.trim();
-            if (value.startsWith("\"") && value.endsWith("\"")) {
-                value = value.substring(1, value.length() - 1);
+            try {
+                return Long.parseLong(value.trim());
+            } catch (NumberFormatException e) {
+                TritiumCommon.LOG.warn("Invalid long value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                return defaultValue;
             }
-            return value;
+        };
+    }
+
+    public Supplier<String> getString(String key, String defaultValue) {
+        return () -> {
+            String value = configValues.get(key);
+            return value != null ? value.trim() : defaultValue;
         };
     }
 
@@ -116,6 +113,53 @@ public class ConfigParser {
                 return Double.parseDouble(value.trim());
             } catch (NumberFormatException e) {
                 TritiumCommon.LOG.warn("Invalid double value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                return defaultValue;
+            }
+        };
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public Supplier<Enum> getEnum(String key, Enum defaultValue) {
+        return () -> {
+            String value = configValues.get(key);
+            if (value == null) return defaultValue;
+
+            try {
+                return Enum.valueOf(defaultValue.getClass(), value.trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                TritiumCommon.LOG.warn("Invalid enum value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                return defaultValue;
+            }
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    public Supplier<List<String>> getStringList(String key, List<String> defaultValue) {
+        return () -> {
+            String value = configValues.get(key);
+            if (value == null) return defaultValue;
+
+            try {
+                if (value.startsWith("[") && value.endsWith("]")) {
+                    String arrayContent = value.substring(1, value.length() - 1).trim();
+                    if (arrayContent.isEmpty()) {
+                        return new ArrayList<>();
+                    }
+
+                    List<String> result = new ArrayList<>();
+                    String[] items = arrayContent.split(",");
+                    for (String item : items) {
+                        String trimmedItem = item.trim();
+                        if (trimmedItem.startsWith("\"") && trimmedItem.endsWith("\"")) {
+                            trimmedItem = trimmedItem.substring(1, trimmedItem.length() - 1);
+                        }
+                        result.add(trimmedItem);
+                    }
+                    return result;
+                }
+                return Collections.singletonList(value.trim());
+            } catch (Exception e) {
+                TritiumCommon.LOG.warn("Invalid list value '{}' for key '{}', using default: {}", value, key, defaultValue);
                 return defaultValue;
             }
         };

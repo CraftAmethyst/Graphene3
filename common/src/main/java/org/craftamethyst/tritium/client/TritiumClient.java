@@ -33,7 +33,7 @@ public class TritiumClient {
 
     public boolean shouldSkipEntity(Entity e) {
         if (e == null) return false;
-        if (!TritiumConfig.get().rendering.enableCulling) return false;
+        if (!TritiumConfig.get().rendering.entityCulling.enableCulling) return false;
         if (isEntityBlacklisted(e)) return false;
         updateCameraPosition();
         return aabbCulling.shouldCullEntity(e);
@@ -41,7 +41,7 @@ public class TritiumClient {
 
     public boolean shouldSkipBlockEntity(BlockEntity be) {
         if (be == null) return false;
-        if (!TritiumConfig.get().rendering.enableBlockEntityCulling) return false;
+        if (!TritiumConfig.get().rendering.entityCulling.enableBlockEntityCulling) return false;
         updateCameraPosition();
         return aabbCulling.shouldCullBlockEntity(be);
     }
@@ -58,7 +58,7 @@ public class TritiumClient {
         ResourceLocation entityId = EntityType.getKey(entity.getType());
 
         String entityName = entityId.toString();
-        List<? extends String> blacklist = TritiumConfig.get().rendering.entityBlacklist;
+        List<? extends String> blacklist = TritiumConfig.get().rendering.entityCulling.entityBlacklist;
 
         for (String pattern : blacklist) {
             if (matchesPattern(entityName, pattern)) {

@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.craftamethyst.tritium.tritium"
+      "org.craftamethyst.tritium.TritiumFabric"
     ],
     "modmenu": [
       "org.craftamethyst.tritium.config.TritiumConfigScreenFactory"

@@ -20,7 +20,7 @@ public abstract class LeafRenderMixin {
                                            BlockPos pos, Direction face,
                                            BlockPos offsetPos,
                                            CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfig.get().rendering.enableLeafCulling) {
+        if (!TritiumConfig.get().rendering.leafCulling.enableLeafCulling) {
             return;
         }
         if (state.getBlock() instanceof LeavesBlock) {

@@ -37,7 +37,7 @@ public class LevelRendererMixin {
             Entity entity, double cameraX, double cameraY, double cameraZ,
             float tickDelta, PoseStack matrices, MultiBufferSource consumers,
             CallbackInfo ci) {
-        if (!TritiumConfig.get().rendering.enableCulling) return;
+        if (!TritiumConfig.get().rendering.entityCulling.enableCulling) return;
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(entity instanceof EntityVisibility cullable)) return;
         if (cullable.graphene$isForcedVisible() || entity.noCulling) {
@@ -45,7 +45,7 @@ public class LevelRendererMixin {
             return;
         }
         if (client.shouldSkipEntity(entity)) {
-            if (!TritiumConfig.get().rendering.enableNameTagCulling
+            if (!TritiumConfig.get().rendering.entityCulling.enableNameTagCulling
                     && matrices != null
                     && consumers != null
                     && graphene$shouldRenderNameTag(entity)) {

@@ -47,7 +47,7 @@ public final class LeafOptiEngine {
             return false;
         }
 
-        boolean result = TritiumConfig.get().rendering.enableLeafCulling && !RenderOptimizer.isInFallbackMode()
+        boolean result = TritiumConfig.get().rendering.leafCulling.enableLeafCulling && !RenderOptimizer.isInFallbackMode()
                 ? RenderOptimizer.shouldCullBlockFace(level, pos, face)
                 : checkSimpleConnection(level, adjacentPos, face);
 

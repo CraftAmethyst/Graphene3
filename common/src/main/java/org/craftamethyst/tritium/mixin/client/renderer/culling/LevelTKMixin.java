@@ -20,7 +20,7 @@ public abstract class LevelTKMixin {
             cancellable = true
     )
     private void ConEntityTick(Consumer<Entity> consumer, Entity entity, CallbackInfo ci) {
-        if (!TritiumConfig.get().rendering.enableTickStopping) return;
+        if (!TritiumConfig.get().rendering.entityCulling.enableTickStopping) return;
         if (TritiumClient.instance != null && TritiumClient.instance.shouldSkipEntity(entity)) {
             ci.cancel();
         }

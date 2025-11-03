@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "org.craftamethyst.tritium.tritium"
+    ],
+    "modmenu": [
+      "org.craftamethyst.tritium.config.TritiumConfigScreenFactory"
     ]
   },
   "mixins": [

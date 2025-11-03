@@ -43,12 +43,16 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
     // Config UI + AutoConfig (Fabric)
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${fabric_cloth_config_version}")
     modImplementation "com.github.ben-manes.caffeine:caffeine:3.2.0"
     modImplementation('com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT') {
         exclude(group: "org.lwjgl")
         exclude(group: "org.lwjgl.lwjgl")
     }
+
+    //Mod Menu
+    modImplementation("com.terraformersmc:modmenu:${mod_menu_version}")
+
     include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
 }

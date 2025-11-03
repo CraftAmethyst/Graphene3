@@ -7,9 +7,9 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import org.craftamethyst.tritium.client.TritiumConfigScreenReg;
 
 @Mod(TritiumCommon.MOD_ID)
-public class Tritium {
+public class TritiumNeoForge {
 
-    public Tritium(IEventBus eventBus) {
+    public TritiumNeoForge(IEventBus eventBus) {
         TritiumCommon.LOG.info("NeoForge Ready");
         TritiumCommon.init();
         if (FMLEnvironment.dist == Dist.CLIENT) {

@@ -6,6 +6,7 @@
 - [ ]  **[Full version]** Optimization of entity stacking: Similar to Spigot's stacking optimization of entities (referring to dropped items and experience balls), if entities in an area are too dense, then these dropped items will be merged directly
 - [x]  **[Full version]** Optimization of entity :Stop the ticking of distant entities
 - [ ]  **[Full version]** Chest rendering optimization: Removed dynamic models of chests, leaving them rendered as static block geometry (at the expense of no animation when chests open)
+- [x]  **[Full version]** KillMobsCommand: 50k
 - [ ]  **[Full version]** Distant object stop tick: If an entity or fluid is too far away from the player, it will no longer tick
 - [ ]  **[Full version]** Dynamic FPS: Automatically reduce framerate when the game is unfocused (down to 1 FPS) or minimized (not rendering at all)
 - [ ]  **[Full version]** Memory Leak Fix: Fixed various memory leaks, such as the game crashing after a while (even if you did nothing)

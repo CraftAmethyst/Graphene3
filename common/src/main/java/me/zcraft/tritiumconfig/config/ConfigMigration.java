@@ -2,6 +2,7 @@ package me.zcraft.tritiumconfig.config;
 
 import me.zcraft.tritiumconfig.annotation.ConfigVersion;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.io.IOException;
 import java.nio.file.Files;

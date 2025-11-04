@@ -1,4 +1,4 @@
-package me.zcraft.tritiumconfig.config;
+package org.craftamethyst.tritium.config;
 
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
 import me.zcraft.tritiumconfig.annotation.ConfigVersion;

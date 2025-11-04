@@ -7,7 +7,6 @@ import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import me.zcraft.tritiumconfig.annotation.Range;
 import me.zcraft.tritiumconfig.annotation.SubCategory;
 import me.zcraft.tritiumconfig.config.TritiumConfig;
-import me.zcraft.tritiumconfig.config.TritiumConfigBase;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.craftamethyst.tritium.TritiumCommon;

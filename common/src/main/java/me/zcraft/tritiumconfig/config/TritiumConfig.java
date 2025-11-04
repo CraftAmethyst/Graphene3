@@ -3,7 +3,9 @@ package me.zcraft.tritiumconfig.config;
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
 import me.zcraft.tritiumconfig.annotation.Range;
 import me.zcraft.tritiumconfig.annotation.SubCategory;
+import me.zcraft.tritiumconfig.config.watcher.ConfigFileWatcher;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;

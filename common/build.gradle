@@ -51,6 +51,7 @@ neoForge {
 dependencies {
     implementation 'org.joml:joml:1.10.5'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     // fabric and neoforge both bundle mixinextras, so it is safe to use it in common

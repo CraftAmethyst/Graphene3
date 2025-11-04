@@ -31,7 +31,7 @@ public class TritiumAutoConfig {
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         try {
-            TritiumConfigBase config = me.zcraft.tritiumconfig.config.TritiumConfig.get();
+            TritiumConfigBase config = TritiumConfig.get();
             initializeFieldAccessors(config);
 
             for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {

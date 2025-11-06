@@ -34,6 +34,8 @@
 
   "config.tritium.rendering.leafCulling_enableLeafCulling": "启用树叶剔除",
   "config.tritium.rendering.leafCulling_enableLeafCulling.tooltip": "启用树叶剔除优化",
+  "config.tritium.rendering.leafCulling_hideInnerLeaves": "隐藏内部树叶",
+  "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "当树叶方块被树叶或实心方块完全包围时不渲染该方块",
 
   "config.tritium.rendering.chestOptimization_enableChestOptimization": "启用箱子优化",
   "config.tritium.rendering.chestOptimization_enableChestOptimization.tooltip": "优化箱子渲染性能",

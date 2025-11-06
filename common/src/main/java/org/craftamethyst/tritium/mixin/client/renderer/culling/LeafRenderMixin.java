@@ -24,6 +24,12 @@ public abstract class LeafRenderMixin {
             return;
         }
         if (state.getBlock() instanceof LeavesBlock) {
+            // hide inner leaves: if fully enclosed, render no faces.
+            if (TritiumConfig.get().rendering.leafCulling.hideInnerLeaves && LeafOptiEngine.shouldHideInnerLeaves(level, pos)) {
+                cir.setReturnValue(false);
+                return;
+            }
+            // otherwise, cull faces that touch another leaf block.
             cir.setReturnValue(!LeafOptiEngine.shouldCullFace(level, pos, face));
         }
     }

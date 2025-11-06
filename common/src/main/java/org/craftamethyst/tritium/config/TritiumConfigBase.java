@@ -91,6 +91,7 @@ public class TritiumConfigBase {
         public static class LeafCulling {
             public boolean enableLeafCulling = true;
             public boolean hideInnerLeaves = false;
+            public boolean enableFaceOcclusionCulling = true;
         }
 
         public static class ChestOptimization {

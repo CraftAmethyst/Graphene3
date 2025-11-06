@@ -8,96 +8,201 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class BlockFaceOcclusionCuller {
     private static final AtomicBoolean FALLBACK_MODE = new AtomicBoolean(false);
-    private static final int traceDistance = 16;
-    private static final Cache<Long, Boolean> BLOCK_CACHE = Caffeine.newBuilder()
-            .maximumSize(10000)
+
+    // Max ray distance (in blocks)
+    private static final int TRACE_DISTANCE = 16;
+
+    // Trace sampling offset from face center (in blocks)
+    private static final double SAMPLE_OFFSET = 0.2;
+
+    // Cache: key -> shouldCull (true means the face is safely occluded)
+    private static final Cache<Key, Boolean> BLOCK_CACHE = Caffeine.newBuilder()
+            .maximumSize(16_000)
             .expireAfterWrite(1, TimeUnit.SECONDS)
             .build();
+
+    // Track in-flight traces to avoid duplicate work per (level,pos,face)
+    private static final ConcurrentMap<Key, CompletableFuture<Boolean>> INFLIGHT = new ConcurrentHashMap<>();
+
     private static ExecutorService tracerPool;
     private static ScheduledExecutorService timeoutChecker;
+    private static final AtomicInteger PENDING = new AtomicInteger();
+
+    static {
+        initExecutors();
+    }
 
     public static boolean shouldCullBlockFace(BlockGetter level, BlockPos pos, Direction face) {
         if (FALLBACK_MODE.get()) {
+            // Back-compat heuristic: cull if neighbor is a leaf.
             return LeafCulling.checkSimpleConnection(level, pos.relative(face), face);
         }
 
-        Vec3 start = getFaceCenter(pos, face);
-        Vec3 end = start.add(new Vec3(
-                face.getStepX() * traceDistance,
-                face.getStepY() * traceDistance,
-                face.getStepZ() * traceDistance
-        ));
-        long posKey = pos.asLong();
-        Boolean cached = BLOCK_CACHE.getIfPresent(posKey);
+        final Key key = new Key(System.identityHashCode(level), pos.asLong(), (byte) face.ordinal());
+        final Boolean cached = BLOCK_CACHE.getIfPresent(key);
         if (cached != null) {
             return cached;
         }
 
-        try {
-            boolean result = traceAsync(start, end, level)
-                    .exceptionally(e -> {
-                        FALLBACK_MODE.set(true);
-                        return LeafCulling.checkSimpleConnection(level, pos.relative(face));
-                    })
-                    .getNow(false);
+        // Cheap neighbor-based early outs.
+        final BlockPos adjacentPos = pos.relative(face);
+        final BlockState neighbor = level.getBlockState(adjacentPos);
 
-            BLOCK_CACHE.put(posKey, result);
-            return result;
-        } catch (Exception e) {
-            FALLBACK_MODE.set(true);
-            return LeafCulling.checkSimpleConnection(level, pos.relative(face), face);
+        if (neighbor.isAir()) {
+            BLOCK_CACHE.put(key, false); // visible to air, do not cull
+            return false;
         }
+
+        // If neighbor is sturdy on the opposite face, the face is not visible.
+        if (neighbor.isFaceSturdy(level, adjacentPos, face.getOpposite()) ||
+                LeafCulling.checkSimpleConnection(level, adjacentPos)) { // adjacent leaf -> cull
+            BLOCK_CACHE.put(key, true);
+            return true;
+        }
+
+        // Defer to async trace; respond conservatively (do not cull) until we have a result.
+        scheduleTrace(level, pos, face, key);
+        return false;
     }
 
-    private static CompletableFuture<Boolean> traceAsync(Vec3 start, Vec3 end, BlockGetter level) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Future<?> task = tracerPool.submit(() -> {
-            try {
-                if (Thread.interrupted()) return;
-                future.complete(traceVisibility(start, end, level));
-            } catch (Exception e) {
-                future.completeExceptionally(e);
-            }
-        });
+    private static void scheduleTrace(BlockGetter level, BlockPos pos, Direction face, Key key) {
+        INFLIGHT.computeIfAbsent(key, k -> {
+            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            Runnable work = () -> {
+                try {
+                    if (Thread.currentThread().isInterrupted()) return;
+                    Vec3 startCenter = getFaceCenter(pos, face);
+                    Vec3 dir = new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
+                    Vec3 endCenter = startCenter.add(dir.scale(TRACE_DISTANCE));
+                    boolean anyVisible = traceVisibilityMultiSample(startCenter, endCenter, level, face);
+                    boolean shouldCull = !anyVisible; // only cull when fully occluded
+                    future.complete(shouldCull);
+                } catch (Throwable t) {
+                    future.completeExceptionally(t);
+                } finally {
+                    PENDING.decrementAndGet();
+                }
+            };
 
-        timeoutChecker.schedule(() -> {
-            if (!future.isDone()) {
-                task.cancel(true);
+            if (PENDING.incrementAndGet() > 4096) {
+                // Too much pressure: skip scheduling to avoid overload.
+                PENDING.decrementAndGet();
                 future.complete(false);
+            } else {
+                Future<?> task = tracerPool.submit(work);
+                timeoutChecker.schedule(() -> {
+                    if (!future.isDone()) {
+                        task.cancel(true);
+                        future.complete(false);
+                    }
+                }, 25, TimeUnit.MILLISECONDS);
             }
-        }, 1, TimeUnit.MINUTES);
 
-        return future;
+            future.whenComplete((res, err) -> {
+                try {
+                    if (err != null) {
+                        FALLBACK_MODE.set(true);
+                        // Conservative fallback: cull only when neighbor is leaf.
+                        boolean fb = LeafCulling.checkSimpleConnection(level, pos.relative(face));
+                        BLOCK_CACHE.put(key, fb);
+                    } else {
+                        BLOCK_CACHE.put(key, res);
+                    }
+                } finally {
+                    INFLIGHT.remove(key);
+                }
+            });
+
+            return future;
+        });
+    }
+
+    private static boolean traceVisibilityMultiSample(Vec3 centerStart, Vec3 centerEnd, BlockGetter level, Direction face) {
+        // Center + 4 offsets in the two axes perpendicular to 'face'
+        Vec3[] offsets = sampleOffsets(face);
+        for (Vec3 off : offsets) {
+            if (Thread.interrupted()) return true; // treat as visible to avoid over-culling
+            Vec3 s = centerStart.add(off);
+            Vec3 e = centerEnd.add(off);
+            if (traceVisibility(s, e, level)) {
+                return true; // any visible sample -> face is visible
+            }
+        }
+        return false; // all samples blocked -> occluded
     }
 
     private static boolean traceVisibility(Vec3 start, Vec3 end, BlockGetter level) {
         Vec3 direction = end.subtract(start);
         double distance = direction.length();
-        if (distance < 0.001) return true;
+        if (distance < 1.0e-3) return true;
 
         direction = direction.normalize();
-        double stepSize = Math.min(0.5, distance / 8);
+        // Smaller step for better precision around thin shapes, but cap total steps.
+        double stepSize = Math.min(0.25, Math.max(0.0625, distance / 32.0));
+        int maxSteps = (int) Math.min(256, Math.ceil(distance / stepSize) + 2);
+
         BlockPos.MutableBlockPos mpos = new BlockPos.MutableBlockPos();
         Vec3 current = start;
+        int steps = 0;
 
-        while (current.distanceTo(start) < distance) {
-            if (Thread.interrupted()) return false;
+        while (steps++ < maxSteps && current.distanceTo(start) < distance) {
+            if (Thread.interrupted()) return true; // be conservative: visible
 
             mpos.set(current.x, current.y, current.z);
             BlockState state = level.getBlockState(mpos);
 
-            if (!state.isAir() && state.getCollisionShape(level, mpos).bounds().move(mpos).contains(current)) {
-                return false;
+            if (!state.isAir()) {
+                // Fast reject empty occlusion; then coarse AABB test.
+                if (!state.getOcclusionShape(level, mpos).isEmpty() &&
+                        state.getCollisionShape(level, mpos).bounds().move(mpos).contains(current)) {
+                    return false; // blocked
+                }
             }
 
             current = current.add(direction.scale(stepSize));
         }
-        return true;
+        return true; // no blocker found along the segment
+    }
+
+    private static Vec3[] sampleOffsets(Direction face) {
+        // Tangential axes per face
+        switch (face) {
+            case UP:
+            case DOWN:
+                return new Vec3[]{
+                        Vec3.ZERO,
+                        new Vec3(+SAMPLE_OFFSET, 0, 0),
+                        new Vec3(-SAMPLE_OFFSET, 0, 0),
+                        new Vec3(0, 0, +SAMPLE_OFFSET),
+                        new Vec3(0, 0, -SAMPLE_OFFSET)
+                };
+            case NORTH:
+            case SOUTH:
+                return new Vec3[]{
+                        Vec3.ZERO,
+                        new Vec3(+SAMPLE_OFFSET, 0, 0),
+                        new Vec3(-SAMPLE_OFFSET, 0, 0),
+                        new Vec3(0, +SAMPLE_OFFSET, 0),
+                        new Vec3(0, -SAMPLE_OFFSET, 0)
+                };
+            case EAST:
+            case WEST:
+            default:
+                return new Vec3[]{
+                        Vec3.ZERO,
+                        new Vec3(0, +SAMPLE_OFFSET, 0),
+                        new Vec3(0, -SAMPLE_OFFSET, 0),
+                        new Vec3(0, 0, +SAMPLE_OFFSET),
+                        new Vec3(0, 0, -SAMPLE_OFFSET)
+                };
+        }
     }
 
     private static Vec3 getFaceCenter(BlockPos pos, Direction face) {
@@ -112,4 +217,41 @@ public final class BlockFaceOcclusionCuller {
         return FALLBACK_MODE.get();
     }
 
+    private static synchronized void initExecutors() {
+        if (tracerPool == null) {
+            int cpus = Math.max(2, Runtime.getRuntime().availableProcessors());
+            tracerPool = new ThreadPoolExecutor(
+                    Math.max(1, cpus / 4),
+                    Math.max(2, cpus / 2),
+                    30L, TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<>(4096),
+                    new NamedThreadFactory("Tritium-occl-trace", true),
+                    new ThreadPoolExecutor.DiscardPolicy()
+            );
+        }
+        if (timeoutChecker == null) {
+            timeoutChecker = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Tritium-occl-timeout", true));
+        }
+    }
+
+    private static final class NamedThreadFactory implements ThreadFactory {
+        private final String baseName;
+        private final boolean daemon;
+        private final AtomicInteger idx = new AtomicInteger(1);
+
+        private NamedThreadFactory(String baseName, boolean daemon) {
+            this.baseName = Objects.requireNonNull(baseName);
+            this.daemon = daemon;
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r, baseName + "-" + idx.getAndIncrement());
+            t.setDaemon(daemon);
+            t.setPriority(Thread.NORM_PRIORITY - 1);
+            return t;
+        }
+    }
+
+    private record Key(int levelId, long pos, byte face) { }
 }

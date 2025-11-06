@@ -36,6 +36,8 @@
   "config.tritium.rendering.leafCulling_enableLeafCulling.tooltip": "Enable leaf culling optimization",
   "config.tritium.rendering.leafCulling_hideInnerLeaves": "Hide Inner Leaves",
   "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "Do not render leaf blocks that are fully enclosed by leaves or solid blocks",
+  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "Enable Face Occlusion Culling",
+  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "Use async ray-trace occlusion test for leaf faces (cached; conservative when uncertain)",
 
   "config.tritium.rendering.chestOptimization_enableChestOptimization": "Enable Chest Optimization",
   "config.tritium.rendering.chestOptimization_enableChestOptimization.tooltip": "Optimize chest rendering performance",

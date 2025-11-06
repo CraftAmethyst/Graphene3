@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.craftamethyst.tritium.cull.LeafCulling;
+import org.craftamethyst.tritium.cull.BlockFaceOcclusionCuller;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,8 +30,13 @@ public abstract class LeafRenderMixin {
                 cir.setReturnValue(false);
                 return;
             }
-            // otherwise, cull faces that touch another leaf block.
-            cir.setReturnValue(!LeafCulling.shouldCullFace(level, pos, face));
+            // Use occlusion culler if enabled; otherwise, fall back to adjacency heuristic.
+            if (TritiumConfig.get().rendering.leafCulling.enableFaceOcclusionCulling) {
+                boolean cull = BlockFaceOcclusionCuller.shouldCullBlockFace(level, pos, face);
+                cir.setReturnValue(!cull);
+            } else {
+                cir.setReturnValue(!LeafCulling.shouldCullFace(level, pos, face));
+            }
         }
     }
 }

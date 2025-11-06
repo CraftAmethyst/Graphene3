@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
 import org.craftamethyst.tritium.client.TritiumClient;
-import org.craftamethyst.tritium.engine.cull.CullCache;
+import org.craftamethyst.tritium.cull.CullCache;
 import org.craftamethyst.tritium.helper.EntityTickHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

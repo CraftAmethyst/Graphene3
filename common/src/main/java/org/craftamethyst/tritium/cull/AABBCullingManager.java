@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.engine.cull;
+package org.craftamethyst.tritium.cull;
 
 import com.logisticscraft.occlusionculling.OcclusionCullingInstance;
 import com.logisticscraft.occlusionculling.util.Vec3d;
@@ -9,8 +9,8 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.craftamethyst.tritium.engine.cull.iface.BlockEntityVisibility;
-import org.craftamethyst.tritium.engine.cull.iface.EntityVisibility;
+import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
+import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 
 public class AABBCullingManager {
     private static final double HITBOX_LIMIT = 10.0D;

@@ -7,7 +7,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.craftamethyst.tritium.engine.cull.LeafOptiEngine;
+import org.craftamethyst.tritium.cull.LeafCulling;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,12 +25,12 @@ public abstract class LeafRenderMixin {
         }
         if (state.getBlock() instanceof LeavesBlock) {
             // hide inner leaves: if fully enclosed, render no faces.
-            if (TritiumConfig.get().rendering.leafCulling.hideInnerLeaves && LeafOptiEngine.shouldHideInnerLeaves(level, pos)) {
+            if (TritiumConfig.get().rendering.leafCulling.hideInnerLeaves && LeafCulling.shouldHideInnerLeaves(level, pos)) {
                 cir.setReturnValue(false);
                 return;
             }
             // otherwise, cull faces that touch another leaf block.
-            cir.setReturnValue(!LeafOptiEngine.shouldCullFace(level, pos, face));
+            cir.setReturnValue(!LeafCulling.shouldCullFace(level, pos, face));
         }
     }
 }

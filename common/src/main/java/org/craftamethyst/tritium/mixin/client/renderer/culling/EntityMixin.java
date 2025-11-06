@@ -1,7 +1,7 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
 import net.minecraft.world.entity.Entity;
-import org.craftamethyst.tritium.engine.cull.iface.EntityVisibility;
+import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

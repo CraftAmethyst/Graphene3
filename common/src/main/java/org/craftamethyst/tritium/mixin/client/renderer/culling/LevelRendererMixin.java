@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.craftamethyst.tritium.accessor.EntityRendererAccessor;
 import org.craftamethyst.tritium.client.TritiumClient;
-import org.craftamethyst.tritium.engine.cull.iface.EntityVisibility;
+import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

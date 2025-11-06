@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.engine.cull;
+package org.craftamethyst.tritium.cull;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class RenderOptimizer {
+public final class BlockFaceOcclusionCuller {
     private static final AtomicBoolean FALLBACK_MODE = new AtomicBoolean(false);
     private static final int traceDistance = 16;
     private static final Cache<Long, Boolean> BLOCK_CACHE = Caffeine.newBuilder()
@@ -23,7 +23,7 @@ public final class RenderOptimizer {
 
     public static boolean shouldCullBlockFace(BlockGetter level, BlockPos pos, Direction face) {
         if (FALLBACK_MODE.get()) {
-            return LeafOptiEngine.checkSimpleConnection(level, pos.relative(face), face);
+            return LeafCulling.checkSimpleConnection(level, pos.relative(face), face);
         }
 
         Vec3 start = getFaceCenter(pos, face);
@@ -42,7 +42,7 @@ public final class RenderOptimizer {
             boolean result = traceAsync(start, end, level)
                     .exceptionally(e -> {
                         FALLBACK_MODE.set(true);
-                        return LeafOptiEngine.checkSimpleConnection(level, pos.relative(face));
+                        return LeafCulling.checkSimpleConnection(level, pos.relative(face));
                     })
                     .getNow(false);
 
@@ -50,7 +50,7 @@ public final class RenderOptimizer {
             return result;
         } catch (Exception e) {
             FALLBACK_MODE.set(true);
-            return LeafOptiEngine.checkSimpleConnection(level, pos.relative(face), face);
+            return LeafCulling.checkSimpleConnection(level, pos.relative(face), face);
         }
     }
 

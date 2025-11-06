@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.engine.cull;
+package org.craftamethyst.tritium.cull;
 
 import it.unimi.dsi.fastutil.ints.Int2BooleanOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2BooleanOpenHashMap;

@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.engine.cull.iface;
+package org.craftamethyst.tritium.cull.iface;
 
 public interface CullingTarget {
     boolean graphene$isForcedVisible();

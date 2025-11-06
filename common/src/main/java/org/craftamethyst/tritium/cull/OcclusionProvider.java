@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.engine.cull;
+package org.craftamethyst.tritium.cull;
 
 import com.logisticscraft.occlusionculling.DataProvider;
 import net.minecraft.client.Minecraft;

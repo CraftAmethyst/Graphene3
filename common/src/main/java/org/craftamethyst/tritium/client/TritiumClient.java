@@ -7,8 +7,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import org.craftamethyst.tritium.engine.cull.AABBCullingManager;
-import org.craftamethyst.tritium.engine.cull.CullCache;
+import org.craftamethyst.tritium.cull.AABBCullingManager;
+import org.craftamethyst.tritium.cull.CullCache;
 
 import java.util.List;
 

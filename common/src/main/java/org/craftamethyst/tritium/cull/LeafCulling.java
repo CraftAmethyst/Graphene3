@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.engine.cull;
+package org.craftamethyst.tritium.cull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public final class LeafOptiEngine {
+public final class LeafCulling {
 
     public static boolean shouldCullFace(BlockGetter level, BlockPos pos, Direction face) {
         return isLeaf(level.getBlockState(pos.relative(face)));

@@ -67,6 +67,6 @@ If you think this project is helpful to you, please click Star for this project,
 
 <h2 align="center">Contributors</h2>
 
-<a href="https://2git.xyz/CraftAmethyst/Tritium/graphs/contributors">
+<a href="https://github.com/CraftAmethyst/Tritium/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=CraftAmethyst/Tritium" />
 </a>

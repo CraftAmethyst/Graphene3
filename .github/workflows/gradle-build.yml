@@ -3,7 +3,7 @@ name: Gradle Build
 on:
   push:
     branches:
-      - 1.21
+      - *
   pull_request:
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build
-        run: ./gradlew --no-daemon clean build
+        run: ./gradlew --no-daemon clean jarJar build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -38,6 +38,9 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
           path: |
+            Common/build/libs/*.jar
+            Fabric/build/libs/*.jar
+            Forge/build/libs/*.jar
             common/build/libs/*.jar
             fabric/build/libs/*.jar
             forge/build/libs/*.jar

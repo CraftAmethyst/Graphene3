@@ -7,7 +7,6 @@
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
     "light.FastBamboo",
-    "packs.FilePackResourcesMixin",
     "server.AsyncWorldSaveMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin"
@@ -20,7 +19,8 @@
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
     "client.renderer.culling.EntityMixin",
     "client.renderer.culling.EntityRenderDispatcherMixin",
-    "client.renderer.culling.LeafRenderMixin"
+    "client.renderer.culling.LeafRenderMixin",
+    "packs.FilePackResourcesMixin"
   ],
   "server": [],
   "injectors": {

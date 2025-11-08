@@ -15,6 +15,13 @@ legacyForge {
 }
 
 dependencies {
+    // Core libs used by performance/culling features in newer branch; safe to include on 1.20
+    implementation 'org.joml:joml:1.10.5'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    // Use Forge variant at compile-time to provide AutoConfig API on Java 17 (compatible with 1.20)
+    compileOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 }

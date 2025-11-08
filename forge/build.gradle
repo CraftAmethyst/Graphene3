@@ -46,7 +46,12 @@ legacyForge {
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
+    // Compile common sources directly; repeat its runtime deps here for compilation
     compileOnly project(":common")
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    implementation 'org.jetbrains:annotations:24.1.0'
+
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
     // Config UI + AutoConfig (Forge)

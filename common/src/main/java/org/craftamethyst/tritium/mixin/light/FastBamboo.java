@@ -10,9 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * 跳过竹子光照计算。
- */
 @Mixin(net.minecraft.world.level.block.state.BlockBehaviour.class)
 public abstract class FastBamboo {
 

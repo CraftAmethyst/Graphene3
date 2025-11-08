@@ -1,9 +1,8 @@
-package me.zcraft.tritiumconfig.config;
+package org.craftamethyst.tritium.config;
 
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
 import me.zcraft.tritiumconfig.annotation.Range;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TritiumConfigBase {
@@ -18,10 +17,10 @@ public class TritiumConfigBase {
     public Network network = new Network();
     public Entities entities = new Entities();
     public TechOptimizations techOptimizations = new TechOptimizations();
-    
+
     @ClientOnly
     public Fixes fixes = new Fixes();
-    
+
     public ServerPerformance serverPerformance = new ServerPerformance();
 
     public static class Performance {
@@ -30,7 +29,13 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class Rendering {
-        // Future rendering optimizations will be added here
+        public LeafCulling leafCulling = new LeafCulling();
+
+        public static class LeafCulling {
+            public boolean enableLeafCulling = true;
+            public boolean hideInnerLeaves = false;
+            public boolean enableFaceOcclusionCulling = true;
+        }
     }
 
     @ClientOnly
@@ -52,7 +57,7 @@ public class TritiumConfigBase {
         @Range(min = 1, max = 256)
         public int verticalRange = 32;
 
-        public List<String> entityWhitelist = Arrays.asList("minecraft:ender_dragon");
+        public List<String> entityWhitelist = List.of("minecraft:ender_dragon");
     }
 
     public static class TechOptimizations {

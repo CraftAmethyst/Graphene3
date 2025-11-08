@@ -41,5 +41,9 @@
   "config.tritium.serverPerformance.asyncWorldSave": "Async World Save",
   "config.tritium.serverPerformance.asyncWorldSave.tooltip": "Enable asynchronous world saving to reduce server lag",
   "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds": "Async Save Timeout",
-  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "Timeout in seconds for asynchronous world save"
+  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "Timeout in seconds for asynchronous world save",
+  "config.tritium.rendering.leafCulling_hideInnerLeaves": "Hide Inner Leaves",
+  "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "Do not render leaf blocks that are fully enclosed by leaves or solid blocks",
+  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "Enable Face Occlusion Culling",
+  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "Use async ray-trace occlusion test for leaf faces (cached; conservative when uncertain)"
 }

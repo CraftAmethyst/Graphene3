@@ -5,7 +5,6 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.zcraft.tritiumconfig.annotation.Range;
 import me.zcraft.tritiumconfig.config.TritiumConfig;
-import me.zcraft.tritiumconfig.config.TritiumConfigBase;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.craftamethyst.tritium.TritiumCommon;
@@ -31,7 +30,7 @@ public class TritiumAutoConfig {
                 sectionField.setAccessible(true);
                 Object section = sectionField.get(config);
                 String sectionName = sectionField.getName();
-                if (section != null && hasConfigurableFields(section)) {
+                if (hasConfigurableFields(section)) {
                     ConfigCategory category = builder.getOrCreateCategory(
                             Component.translatable("config.tritium.category." + sectionName)
                     );

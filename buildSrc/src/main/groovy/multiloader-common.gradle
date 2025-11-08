@@ -52,6 +52,28 @@ repositories {
         name = 'TerraformersMC'
         url = 'https://maven.terraformersmc.com/releases/'
     }
+
+    // Sonatype/CodeMC snapshots for occlusionculling snapshot artifacts
+    exclusiveContent {
+        forRepositories(
+                maven {
+                    name = 'SonatypeSnapshots'
+                    url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+                },
+                maven {
+                    name = 'SonatypeOSS'
+                    url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                },
+                maven {
+                    name = 'CodeMC'
+                    url = 'https://repo.codemc.io/repository/maven-public/'
+                }
+        )
+        filter { includeGroup('com.logisticscraft') }
+    }
+
+    // JitPack (fallback for GitHub-hosted artifacts)
+    maven { url = 'https://jitpack.io' }
 }
 
 // Declare capabilities on the outgoing configurations.

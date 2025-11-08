@@ -41,5 +41,9 @@
   "config.tritium.serverPerformance.asyncWorldSave": "异步世界保存",
   "config.tritium.serverPerformance.asyncWorldSave.tooltip": "启用异步世界保存以减少服务器卡顿",
   "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds": "异步保存超时时间",
-  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "异步世界保存的超时时间（秒）"
+  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "异步世界保存的超时时间（秒）",
+  "config.tritium.rendering.leafCulling_hideInnerLeaves": "隐藏内部树叶",
+  "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "当树叶方块被树叶或实心方块完全包围时不渲染该方块",
+  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "启用面遮挡剔除",
+  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "对树叶面启用异步射线遮挡检测（带缓存，不确定时保守显示）"
 }

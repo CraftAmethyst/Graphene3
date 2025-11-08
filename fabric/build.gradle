@@ -14,11 +14,16 @@ dependencies {
 
     // Compile common sources directly, plus match its runtime deps needed by those sources
     implementation project(":common")
+    include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
 
     // Config UI + AutoConfig (Fabric)
     modImplementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
+
+    // ModMenu integration
+    modImplementation "com.terraformersmc:modmenu:7.+"
 }
 
 loom {

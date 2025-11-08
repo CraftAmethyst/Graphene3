@@ -56,6 +56,12 @@ dependencies {
 
     // Config UI + AutoConfig (Forge)
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+
+    // Bundle Caffeine and dependencies into the JAR
+    jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.2.0,4.0.0)')
+    jarJar(group: 'com.google.errorprone', name: 'error_prone_annotations', version: '[2.0.0,3.0.0)')
+    jarJar(group: 'org.checkerframework', name: 'checker-qual', version: '[3.0.0,4.0.0)')
+    jarJar(group: 'com.logisticscraft', name: 'occlusionculling', version: '[0.0.8-SNAPSHOT,0.1.0)')
 }
 
 jar {
@@ -63,4 +69,8 @@ jar {
     manifest.attributes([
             "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
     ])
+}
+
+tasks.named('jarJar') {
+    finalizedBy('reobfJar')
 }

@@ -37,6 +37,16 @@ This mod supports the following Minecraft versions:
 
 > NeoForge and Fabric will follow up with future Minecraft official version updates, while Forge will stay at 1.20.1
 
+<h2 align="center">Dependencies mod</h2>
+
+Before installing the Tritium module, download the corresponding dependencies according to the corresponding mod loader
+
+| Mod Loader | Dependencies Mod      |
+|------------|-----------------------|
+| NeoForge   | Cloth Config          |
+| Forge      | Cloth Config          |
+| Fabric     | Cloth Config, ModMenu |
+
 <h2 align="center">Download</h2>
 
 If you are a regular player or an integration package author, please download the [stable version](https://github.com/CraftAmethyst/Tritium/releases)

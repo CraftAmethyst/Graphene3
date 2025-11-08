@@ -19,6 +19,14 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
 
+    // Core libs for culling features
+    implementation 'org.joml:joml:1.10.5'
+    include 'org.joml:joml:1.10.5'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+
     // Config UI + AutoConfig (Fabric)
     modImplementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
 }

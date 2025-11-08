@@ -76,6 +76,11 @@ dependencies {
     compileOnly project(":Common")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
+    // Core libs for culling features
+    implementation 'org.joml:joml:1.10.5'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+
     // Config UI + AutoConfig (Forge)
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
 }

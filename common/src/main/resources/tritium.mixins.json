@@ -7,13 +7,19 @@
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
     "light.FastBamboo",
+    "packs.FilePackResourcesMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin"
   ],
   "client": [
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
-    "client.lang.MinecraftClientMixin"
+    "client.lang.MinecraftClientMixin",
+    "client.renderer.culling.BlockEntityMixin",
+    "client.renderer.culling.BlockEntityRenderDispatcherMixin",
+    "client.renderer.culling.EntityMixin",
+    "client.renderer.culling.EntityRenderDispatcherMixin",
+    "client.renderer.culling.LeafRenderMixin"
   ],
   "server": [
     "server.AsyncWorldSaveMixin"

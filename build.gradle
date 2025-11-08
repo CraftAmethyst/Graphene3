@@ -56,6 +56,28 @@ subprojects {
             name = 'TerraformersMC'
             url = 'https://maven.terraformersmc.com/releases/'
         }
+
+        // Sonatype Snapshots for occlusionculling
+        maven {
+            name = 'SonatypeSnapshots'
+            url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+        }
+        maven {
+            name = 'SonatypeOSS'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+
+        // CodeMC for occlusionculling
+        maven {
+            name = 'CodeMC'
+            url = 'https://repo.codemc.io/repository/maven-public/'
+        }
+
+        // JitPack (fallback for GitHub-hosted artifacts)
+        maven {
+            name = 'JitPack'
+            url = 'https://jitpack.io'
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {

@@ -13,6 +13,7 @@
     "tickstop.LevelMixin"
   ],
   "client": [
+    "client.fps.MinecraftMixin",
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin",

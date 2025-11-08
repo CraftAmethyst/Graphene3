@@ -42,6 +42,10 @@
   "config.tritium.clientOptimizations.fastLanguageSwitch.tooltip": "通过跳过完整资源包重新加载来优化语言切换速度",
   "config.tritium.clientOptimizations.resourcePackCache": "资源包缓存",
   "config.tritium.clientOptimizations.resourcePackCache.tooltip": "缓存文件包资源的命名空间查找以提升性能",
+  "config.tritium.clientOptimizations.dynamicFPS": "动态帧率",
+  "config.tritium.clientOptimizations.dynamicFPS.tooltip": "当游戏不聚焦时自动降低帧率（降至 最低帧率）或最小化（根本不渲染）",
+  "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "最低帧率",
+  "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "动态帧率功能的最低帧率配置项(最低: 1)",
 
   "config.tritium.category.network": "网络优化",
 

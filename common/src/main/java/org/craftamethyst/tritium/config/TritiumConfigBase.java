@@ -82,6 +82,10 @@ public class TritiumConfigBase {
     public static class ClientOptimizations {
         public boolean fastLanguageSwitch = true;
         public boolean resourcePackCache = true;
+
+        public boolean dynamicFPS = true;
+        @Range(min = 1)
+        public int dynamicFPS_minimizedFPS = 1;
     }
 
     public static class Network {

@@ -8,7 +8,7 @@
 - [ ]  **[Full version]** Chest rendering optimization: Removed dynamic models of chests, leaving them rendered as static block geometry (at the expense of no animation when chests open)
 - [x]  **[Full version]** KillMobsCommand: 50k
 - [ ]  **[Full version]** Distant object stop tick: If an entity or fluid is too far away from the player, it will no longer tick
-- [ ]  **[Full version]** Dynamic FPS: Automatically reduce framerate when the game is unfocused (down to 1 FPS) or minimized (not rendering at all)
+- [x]  **[Full version]** Dynamic FPS: Automatically reduce framerate when the game is unfocused (down to 1 FPS) or minimized (not rendering at all)
 - [ ]  **[Full version]** Memory Leak Fix: Fixed various memory leaks, such as the game crashing after a while (even if you did nothing)
 - [x]  **[Full version]** Mask GL Error: Fix GL error log refreshes even though there is no substantive error.
 - [ ]  **[Full version]** GPU Plus: Fix the game's video memory leak problem through various methods, and also bring a variety of new OpenGL 4+ features

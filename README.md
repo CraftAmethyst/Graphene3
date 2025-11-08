@@ -1,47 +1,44 @@
 <h1 align="center">Tritium (氚)</h1>
-<img height="207" alt="Mohist Project Status" src="logo.png" />
+<img height="207" alt="Tritium Logo" src="logo.png" />
+
+An all-in-one optimization mod dedicated to improving client-side rendering performance and server-side stability.
+This project is actively under development. Track progress at the [TODO List](TODO.md).
 
 
-An all-in-one optimization module dedicated to optimizing client-side rendering and server-side stability and fluency.
-This project is still under development slowly. You can learn about the progress at [TODO List](TODO.md)
+<h2 align="center">Features</h2>
 
-
-<h2 align="center">Feature</h2>
-
-- **[Full version]** Fast Language: Dramatically speed up language switching by intercepting resource bundle reloading when switching languages
-- **[Forge only]** Fast Event: Replaced generated classes with construction lambdas to speed up construction event listening
-- **[Full version]** Leaf Culling: Ported Optifine smart foliage options
-- **[Full version]** Optimization of entity stacking: Similar to Spigot's stacking optimization of entities (referring to dropped items and experience balls), if entities in an area are too dense, then these dropped items will be merged directly
-- **[Full version]** Chest rendering optimization: Removed dynamic models of chests, leaving them rendered as static block geometry (at the expense of no animation when chests open)
-- **[Full version]** Distant object stop tick: If an entity or fluid is too far away from the player, it will no longer tick
-- **[Full version]** Dynamic FPS: Automatically reduce framerate when the game is unfocused (down to 1 FPS) or minimized (not rendering at all)
-- **[Full version]** Memory Leak Fix: Fixed various memory leaks, such as the game crashing after a while (even if you did nothing)
-- **[Full version]** Mask GL Error: Fix GL error log refreshes even though there is no substantive error.
-- **[Full version]** GPU Plus: Fix the game's video memory leak problem through various methods, and also bring a variety of new OpenGL 4+ features
-- **[Forge only]** Quickly save the world: Make the world saving thread asynchronous to greatly increase the speed of saving the world
-- **[Forge only]** Technology module optimization: Optimize the performance of some technology industry modules (such as GregTech, SFM, AE2) to improve performance, which plays a great role in technology integration packages (such as ATM9)
-- **[Some versions]** Vanilla bug fix: Fix some bugs in vanilla, or port fixes from higher versions
+- **[All Versions]** Fast Language Switching: Dramatically speeds up language switching by intercepting resource bundle reloading
+- **[Forge Only]** Fast Event System: Replaces generated classes with lambda constructors to accelerate event listener construction
+- **[All Versions]** Leaf Culling: Ports OptiFine's smart foliage rendering options
+- **[All Versions]** Entity Stacking Optimization: Merges nearby dropped items and experience orbs when entity density is high, similar to Spigot's optimization
+- **[All Versions]** Chest Rendering Optimization: Replaces dynamic chest models with static block geometry (removes opening animations for better performance)
+- **[All Versions]** Distant Entity Tick Reduction: Stops ticking entities and fluids that are far from the player
+- **[All Versions]** Dynamic FPS: Automatically reduces framerate when the game window is unfocused (1 FPS) or minimized (pauses rendering)
+- **[All Versions]** Memory Leak Fixes: Resolves various memory leaks that could cause crashes during extended gameplay
+- **[All Versions]** GL Error Suppression: Eliminates spurious GL error log spam
+- **[All Versions]** GPU Plus: Fixes video memory leaks and introduces new OpenGL 4+ features
+- **[Forge Only]** Asynchronous World Saving: Makes world saving asynchronous to significantly improve save performance
+- **[Forge Only]** Tech Mod Optimization: Improves performance of technical mods (e.g., GregTech, SFM, AE2), especially beneficial for tech-focused modpacks like ATM9
+- **[Select Versions]** Vanilla Bug Fixes: Fixes vanilla bugs and backports fixes from newer versions
 
 <h2 align="center">Supported Minecraft Versions</h2>
-
-This mod supports the following Minecraft versions:
 
 | Mod Loader | Supported Versions |
 |------------|--------------------|
 | NeoForge   | 1.21.x |
 | Forge      | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1 |
 | Fabric     | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21.x |
-| Quilt      | Not supported (will not be supported in the future) |
+| Quilt      | Not supported |
 
-> NOTE: Features supported by Tritium will vary with each Minecraft version
+> **Note:** Available features vary by Minecraft version.
 
-> NeoForge and Fabric will follow up with future Minecraft official version updates, while Forge will stay at 1.20.1
+> **Update Policy:** NeoForge and Fabric versions will be updated to support future Minecraft releases. Forge support will remain at 1.20.1.
 
-<h2 align="center">Dependencies mod</h2>
+<h2 align="center">Dependencies</h2>
 
-Before installing the Tritium module, download the corresponding dependencies according to the corresponding mod loader
+Install the required dependencies for your mod loader before installing Tritium:
 
-| Mod Loader | Dependencies Mod      |
+| Mod Loader | Required Dependencies |
 |------------|-----------------------|
 | NeoForge   | Cloth Config          |
 | Forge      | Cloth Config          |
@@ -49,31 +46,41 @@ Before installing the Tritium module, download the corresponding dependencies ac
 
 <h2 align="center">Download</h2>
 
-If you are a regular player or an integration package author, please download the [stable version](https://github.com/CraftAmethyst/Tritium/releases)
+**For Players and Modpack Authors:** Download the [stable release](https://github.com/CraftAmethyst/Tritium/releases)
 
-If you want to be an early adopter or developer, please download it on [Github Action](https://github.com/CraftAmethyst/Tritium/releases)
+**For Early Adopters and Developers:** Download development builds from [GitHub Actions](https://github.com/CraftAmethyst/Tritium/actions)
 
-<h2 align="center">Develop</h2>
+<h2 align="center">Development</h2>
 
-If you want to modify the source code of this project, please follow the steps below to set up your workspace:
+To set up a development environment:
 
-Execute `git clone https://github.com/CraftAmethyst/Tritium.git` to clone this project
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/CraftAmethyst/Tritium.git
+   ```
 
-Navigate to the project folder, right-click, and click `Open Folder as Intellij IDEA ... Edition Project`
+2. Open the project folder in IntelliJ IDEA:
+   - Right-click the folder and select `Open Folder as IntelliJ IDEA Project`
+   - IDEA will automatically configure the workspace and sync Gradle dependencies
 
-IDEA will then automatically set up the workspace and wait for Gradle synchronization to complete.
+3. Build the project:
+   ```bash
+   gradle clean jarJar build
+   ```
+   The compiled JAR file will be located in `build/libs`
 
-If you want to build this project, execute `gradle clean jarJar build` and the Jar file will be generated in `build/lib`
+<h2 align="center">Bug Reports</h2>
 
-<h2 align="center">Feedback question</h2>
+If you encounter bugs or unexpected behavior, please submit an [Issue](https://github.com/CraftAmethyst/Tritium/issues) with:
+- A clear description of the problem
+- Crash logs (if applicable)
+- Steps to reproduce the issue
 
-If you encounter a bug/behavior inconsistency while using this module, please provide feedback in an [Issue](https://github.com/CraftAmethyst/Tritium/issues). It must be clearly organized and must include a crash log and reproduction steps.
+<h2 align="center">Contributing</h2>
 
-<h2 align="center">Support us</h2>
+Contributions are welcome! If you have ideas for improvements or new features, feel free to submit a pull request.
 
-If you have a better idea for a project, you are always welcome. Every developer is also welcome to submit a PR
-
-If you think this project is helpful to you, please click Star for this project, which is especially important to us.
+If you find this project helpful, please consider starring the repository. Your support is greatly appreciated!
 
 <h2 align="center">Contributors</h2>
 

@@ -1,6 +1,7 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
@@ -21,6 +22,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             at = @At("HEAD"), cancellable = true, require = 0)
     private void tritium$cullBlockEntity(BlockEntity be, float partialTick, PoseStack poseStack,
                                          MultiBufferSource buffers, CallbackInfo ci) {
+        if (!TritiumConfig.get().rendering.occlusionCulling.enableBlockEntityCulling) return;
         if (!(be instanceof BlockEntityVisibility vis) || vis.graphene$isForcedVisible()) return;
         Level level = be.getLevel();
         Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();

@@ -12,10 +12,18 @@
   "config.tritium.rendering.leafCulling.hideInnerLeaves.tooltip": "Do not render leaf blocks that are fully enclosed by leaves or solid blocks",
   "config.tritium.rendering.leafCulling.enableFaceOcclusionCulling": "Enable Face Occlusion Culling",
   "config.tritium.rendering.leafCulling.enableFaceOcclusionCulling.tooltip": "Use async ray-trace occlusion test for leaf faces (cached; conservative when uncertain)",
+  "config.tritium.rendering.occlusionCulling.enableEntityCulling": "Enable Entity Culling",
+  "config.tritium.rendering.occlusionCulling.enableEntityCulling.tooltip": "Skip rendering entities that are occluded by blocks",
+  "config.tritium.rendering.occlusionCulling.enableBlockEntityCulling": "Enable Block Entity Culling",
+  "config.tritium.rendering.occlusionCulling.enableBlockEntityCulling.tooltip": "Skip rendering block entities that are occluded by blocks",
+  "config.tritium.rendering.occlusionCulling.hitboxSizeLimit": "Hitbox Size Limit",
+  "config.tritium.rendering.occlusionCulling.hitboxSizeLimit.tooltip": "Entities/block entities larger than this won't be culled (1-100 blocks)",
 
   "config.tritium.category.clientOptimizations": "Client Optimizations",
   "config.tritium.clientOptimizations.fastLanguageSwitch": "Fast Language Switch",
   "config.tritium.clientOptimizations.fastLanguageSwitch.tooltip": "Optimize language switching by skipping full resource pack reload",
+  "config.tritium.clientOptimizations.resourcePackCache": "Resource Pack Cache",
+  "config.tritium.clientOptimizations.resourcePackCache.tooltip": "Cache namespace lookups in file pack resources for better performance",
 
   "config.tritium.category.network": "Network",
 

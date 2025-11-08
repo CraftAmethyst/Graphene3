@@ -61,6 +61,18 @@ public class TritiumAutoConfig {
 
                 String translationKey = "config.tritium." + sectionName + "." + fieldName;
 
+                // Check if this is a nested config object (non-primitive, non-List, non-String)
+                if (!fieldType.isPrimitive() &&
+                        !fieldType.equals(Boolean.class) &&
+                        !fieldType.equals(Integer.class) &&
+                        !fieldType.equals(Double.class) &&
+                        !fieldType.equals(String.class) &&
+                        !List.class.isAssignableFrom(fieldType)) {
+                    // This is a nested config object, recursively process it
+                    generateSectionEntries(entryBuilder, category, currentValue, sectionName + "." + fieldName);
+                    continue;
+                }
+
                 if (fieldType == boolean.class || fieldType == Boolean.class) {
                     category.addEntry(entryBuilder.startBooleanToggle(
                                     Component.translatable(translationKey),
@@ -163,13 +175,22 @@ public class TritiumAutoConfig {
     private static void updateConfigValue(String section, String key, Object value) {
         try {
             TritiumConfigBase config = TritiumConfig.get();
-            Field sectionField = TritiumConfigBase.class.getDeclaredField(section);
-            sectionField.setAccessible(true);
-            Object sectionObj = sectionField.get(config);
 
-            Field valueField = sectionObj.getClass().getDeclaredField(key);
+            // Split section path to handle nested objects (e.g., "rendering.leafCulling")
+            String[] sectionPath = section.split("\\.");
+            Object currentObj = config;
+
+            // Navigate through nested objects
+            for (String pathPart : sectionPath) {
+                Field field = currentObj.getClass().getDeclaredField(pathPart);
+                field.setAccessible(true);
+                currentObj = field.get(currentObj);
+            }
+
+            // Set the final value
+            Field valueField = currentObj.getClass().getDeclaredField(key);
             valueField.setAccessible(true);
-            valueField.set(sectionObj, value);
+            valueField.set(currentObj, value);
 
             TritiumConfig.save();
 
@@ -180,7 +201,7 @@ public class TritiumAutoConfig {
 
     private static boolean getDefaultBooleanValue(Field field) {
         try {
-            Object defaultSection = field.getDeclaringClass().newInstance();
+            Object defaultSection = field.getDeclaringClass().getDeclaredConstructor().newInstance();
             return field.getBoolean(defaultSection);
         } catch (Exception e) {
             return false;
@@ -189,7 +210,7 @@ public class TritiumAutoConfig {
 
     private static int getDefaultIntValue(Field field) {
         try {
-            Object defaultSection = field.getDeclaringClass().newInstance();
+            Object defaultSection = field.getDeclaringClass().getDeclaredConstructor().newInstance();
             return field.getInt(defaultSection);
         } catch (Exception e) {
             return 0;
@@ -198,7 +219,7 @@ public class TritiumAutoConfig {
 
     private static double getDefaultDoubleValue(Field field) {
         try {
-            Object defaultSection = field.getDeclaringClass().newInstance();
+            Object defaultSection = field.getDeclaringClass().getDeclaredConstructor().newInstance();
             return field.getDouble(defaultSection);
         } catch (Exception e) {
             return 0.0;
@@ -207,7 +228,7 @@ public class TritiumAutoConfig {
 
     private static String getDefaultStringValue(Field field) {
         try {
-            Object defaultSection = field.getDeclaringClass().newInstance();
+            Object defaultSection = field.getDeclaringClass().getDeclaredConstructor().newInstance();
             return (String) field.get(defaultSection);
         } catch (Exception e) {
             return "";
@@ -217,7 +238,7 @@ public class TritiumAutoConfig {
     @SuppressWarnings("unchecked")
     private static List<String> getDefaultStringListValue(Field field) {
         try {
-            Object defaultSection = field.getDeclaringClass().newInstance();
+            Object defaultSection = field.getDeclaringClass().getDeclaredConstructor().newInstance();
             return (List<String>) field.get(defaultSection);
         } catch (Exception e) {
             return List.of();

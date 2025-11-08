@@ -2,6 +2,7 @@ package org.craftamethyst.tritium.cull;
 
 import com.logisticscraft.occlusionculling.OcclusionCullingInstance;
 import com.logisticscraft.occlusionculling.util.Vec3d;
+import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -9,7 +10,6 @@ import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
 import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 
 public class AABBCullingManager {
-    private static final double HITBOX_LIMIT = 10.0D;
 
     private static final ThreadLocal<OcclusionCullingInstance> OCCLUSION = ThreadLocal.withInitial(
             () -> new OcclusionCullingInstance(128, new OcclusionProvider())
@@ -28,7 +28,8 @@ public class AABBCullingManager {
     }
 
     private static boolean exceedsLimit(AABB aabb) {
-        return (aabb.getXsize() > HITBOX_LIMIT) || (aabb.getYsize() > HITBOX_LIMIT) || (aabb.getZsize() > HITBOX_LIMIT);
+        double limit = TritiumConfig.get().rendering.occlusionCulling.hitboxSizeLimit;
+        return (aabb.getXsize() > limit) || (aabb.getYsize() > limit) || (aabb.getZsize() > limit);
     }
 
     private static Vec3d toVec3d(Vec3 v) {

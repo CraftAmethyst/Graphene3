@@ -30,17 +30,26 @@ public class TritiumConfigBase {
     @ClientOnly
     public static class Rendering {
         public LeafCulling leafCulling = new LeafCulling();
+        public OcclusionCulling occlusionCulling = new OcclusionCulling();
 
         public static class LeafCulling {
             public boolean enableLeafCulling = true;
             public boolean hideInnerLeaves = false;
             public boolean enableFaceOcclusionCulling = true;
         }
+
+        public static class OcclusionCulling {
+            public boolean enableEntityCulling = true;
+            public boolean enableBlockEntityCulling = true;
+            @Range(min = 1, max = 100)
+            public double hitboxSizeLimit = 10.0;
+        }
     }
 
     @ClientOnly
     public static class ClientOptimizations {
         public boolean fastLanguageSwitch = true;
+        public boolean resourcePackCache = true;
     }
 
     public static class Network {
@@ -73,6 +82,7 @@ public class TritiumConfigBase {
     public static class ServerPerformance {
         public boolean noiseSamplingCache = true;
         public boolean asyncWorldSave = true;
+        @Range(min = 1, max = 300)
         public int asyncWorldSaveTimeoutSeconds = 30;
     }
 }

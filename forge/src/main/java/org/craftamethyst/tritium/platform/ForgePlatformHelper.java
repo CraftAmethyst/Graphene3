@@ -1,9 +1,9 @@
 package org.craftamethyst.tritium.platform;
 
-import org.craftamethyst.tritium.Constants;
-import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
+import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 
 public class ForgePlatformHelper implements IPlatformHelper {
 
@@ -28,7 +28,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public String getModVersion() {
         return ModList.get()
-                .getModContainerById(Constants.MOD_ID)
+                .getModContainerById(TritiumCommon.MOD_ID)
                 .map(container -> container.getModInfo().getVersion().toString())
                 .orElse("Unknown");
     }

@@ -1,7 +1,7 @@
 package org.craftamethyst.tritium.mixin.client.lang;
 
 import net.minecraft.client.Minecraft;
-import org.craftamethyst.tritium.Constants;
+import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.util.LanguageLoadOptimizer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,8 +18,12 @@ public class MinecraftClientMixin {
             cancellable = true,
             require = 0)
     private void onReloadResourcePacks(CallbackInfoReturnable<CompletableFuture<Void>> cir) {
+        if (!me.zcraft.tritiumconfig.config.TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+            return;
+        }
+        
         if (LanguageLoadOptimizer.isLanguageChanging()) {
-            Constants.LOG.info("Skipping full resource pack reload during language change");
+            TritiumCommon.LOG.info("Skipping full resource pack reload during language change");
             cir.setReturnValue(CompletableFuture.completedFuture(null));
             LanguageLoadOptimizer.reset();
         }

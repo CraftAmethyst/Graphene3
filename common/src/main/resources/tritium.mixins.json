@@ -5,7 +5,10 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "chunk.NoiseSamplingCacheMixin"
+    "chunk.NoiseSamplingCacheMixin",
+    "light.FastBamboo",
+    "tickstop.EntityTypeMixin",
+    "tickstop.LevelMixin"
   ],
   "client": [
     "client.gl.NoErrorMixin",

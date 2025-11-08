@@ -6,6 +6,12 @@
   "config.tritium.performance.bambooLight.tooltip": "Skip lighting calculations for bamboo to improve performance",
 
   "config.tritium.category.rendering": "Rendering",
+  "config.tritium.rendering.leafCulling.enableLeafCulling": "Enable Leaf Culling",
+  "config.tritium.rendering.leafCulling.enableLeafCulling.tooltip": "Enable leaf rendering optimization to improve performance",
+  "config.tritium.rendering.leafCulling.hideInnerLeaves": "Hide Inner Leaves",
+  "config.tritium.rendering.leafCulling.hideInnerLeaves.tooltip": "Do not render leaf blocks that are fully enclosed by leaves or solid blocks",
+  "config.tritium.rendering.leafCulling.enableFaceOcclusionCulling": "Enable Face Occlusion Culling",
+  "config.tritium.rendering.leafCulling.enableFaceOcclusionCulling.tooltip": "Use async ray-trace occlusion test for leaf faces (cached; conservative when uncertain)",
 
   "config.tritium.category.clientOptimizations": "Client Optimizations",
   "config.tritium.clientOptimizations.fastLanguageSwitch": "Fast Language Switch",
@@ -41,9 +47,5 @@
   "config.tritium.serverPerformance.asyncWorldSave": "Async World Save",
   "config.tritium.serverPerformance.asyncWorldSave.tooltip": "Enable asynchronous world saving to reduce server lag",
   "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds": "Async Save Timeout",
-  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "Timeout in seconds for asynchronous world save",
-  "config.tritium.rendering.leafCulling_hideInnerLeaves": "Hide Inner Leaves",
-  "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "Do not render leaf blocks that are fully enclosed by leaves or solid blocks",
-  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "Enable Face Occlusion Culling",
-  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "Use async ray-trace occlusion test for leaf faces (cached; conservative when uncertain)"
+  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "Timeout in seconds for asynchronous world save"
 }

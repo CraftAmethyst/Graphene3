@@ -6,6 +6,12 @@
   "config.tritium.performance.bambooLight.tooltip": "跳过竹子的光照计算以提高性能",
 
   "config.tritium.category.rendering": "渲染优化",
+  "config.tritium.rendering.leafCulling.enableLeafCulling": "启用树叶剔除",
+  "config.tritium.rendering.leafCulling.enableLeafCulling.tooltip": "启用树叶渲染优化以提升性能",
+  "config.tritium.rendering.leafCulling.hideInnerLeaves": "隐藏内部树叶",
+  "config.tritium.rendering.leafCulling.hideInnerLeaves.tooltip": "当树叶方块被树叶或实心方块完全包围时不渲染该方块",
+  "config.tritium.rendering.leafCulling.enableFaceOcclusionCulling": "启用面遮挡剔除",
+  "config.tritium.rendering.leafCulling.enableFaceOcclusionCulling.tooltip": "对树叶面启用异步射线遮挡检测（带缓存，不确定时保守显示）",
 
   "config.tritium.category.clientOptimizations": "客户端优化",
   "config.tritium.clientOptimizations.fastLanguageSwitch": "快速语言切换",
@@ -41,9 +47,5 @@
   "config.tritium.serverPerformance.asyncWorldSave": "异步世界保存",
   "config.tritium.serverPerformance.asyncWorldSave.tooltip": "启用异步世界保存以减少服务器卡顿",
   "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds": "异步保存超时时间",
-  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "异步世界保存的超时时间（秒）",
-  "config.tritium.rendering.leafCulling_hideInnerLeaves": "隐藏内部树叶",
-  "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "当树叶方块被树叶或实心方块完全包围时不渲染该方块",
-  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "启用面遮挡剔除",
-  "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "对树叶面启用异步射线遮挡检测（带缓存，不确定时保守显示）"
+  "config.tritium.serverPerformance.asyncWorldSaveTimeoutSeconds.tooltip": "异步世界保存的超时时间（秒）"
 }

@@ -7,6 +7,8 @@
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
     "light.FastBamboo",
+    "packs.CompositePackResourcesMixin",
+    "packs.FilePackResourcesMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin"
   ],

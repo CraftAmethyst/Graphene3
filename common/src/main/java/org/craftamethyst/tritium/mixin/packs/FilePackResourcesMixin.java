@@ -5,6 +5,7 @@ import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
+import org.craftamethyst.tritium.TritiumCommon;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,6 +44,7 @@ public abstract class FilePackResourcesMixin {
                         getter = MethodHandles.filterReturnValue(fieldHandle, methodHandle);
                         break;
                     } catch (Exception e) {
+                        TritiumCommon.LOG.debug("Failed to access getOrCreateZipFile via reflection", e);
                     }
                 }
             }
@@ -57,7 +59,7 @@ public abstract class FilePackResourcesMixin {
                 }
             }
         } catch (Exception e) {
-
+            TritiumCommon.LOG.debug("Failed to resolve ZipFile getter for FilePackResources; optimization disabled", e);
         }
         TRITIUM$ZIP_FILE_GETTER = getter;
     }
@@ -74,29 +76,43 @@ public abstract class FilePackResourcesMixin {
     private volatile ZipFile tritium$cachedZipFile;
 
     @Unique
-    private static String tritium$extractNamespace(String directory, String name) {
-        if (!name.startsWith(directory)) return "";
-        int start = directory.length();
-        int end = name.indexOf('/', start);
-        return end == -1 ? name.substring(start) : name.substring(start, end);
-    }
+    private void tritium$buildCaches(ZipFile zipFile) {
+        Map<String, List<ZipEntry>> nsMap = new ConcurrentHashMap<>();
+        Map<PackType, Set<String>> nsSets = new ConcurrentHashMap<>();
+        nsSets.put(PackType.CLIENT_RESOURCES, ConcurrentHashMap.newKeySet());
+        nsSets.put(PackType.SERVER_DATA, ConcurrentHashMap.newKeySet());
 
-    @Unique
-    private static Map<String, List<ZipEntry>> tritium$scanAllEntries(ZipFile zipFile) {
-        if (zipFile == null || zipFile.size() == 0) {
-            return Collections.emptyMap();
+        if (zipFile != null && zipFile.size() > 0) {
+            String assetsBase = tritium$addPrefix(PackType.CLIENT_RESOURCES.getDirectory() + "/");
+            String dataBase = tritium$addPrefix(PackType.SERVER_DATA.getDirectory() + "/");
+
+            zipFile.stream().forEach(entry -> {
+                String name = entry.getName();
+                PackType pt = null;
+                String base = null;
+                if (name.startsWith(assetsBase)) {
+                    pt = PackType.CLIENT_RESOURCES;
+                    base = assetsBase;
+                } else if (name.startsWith(dataBase)) {
+                    pt = PackType.SERVER_DATA;
+                    base = dataBase;
+                } else {
+                    return;
+                }
+                int nsStart = base.length();
+                int nsEnd = name.indexOf('/', nsStart);
+                if (nsEnd <= nsStart) return; // no namespace segment
+                String ns = name.substring(nsStart, nsEnd);
+                if (!ResourceLocation.isValidNamespace(ns)) return;
+
+                nsSets.get(pt).add(ns);
+                String nsDir = base + ns + "/";
+                nsMap.computeIfAbsent(nsDir, k -> new ArrayList<>()).add(entry);
+            });
         }
 
-        Map<String, List<ZipEntry>> map = new ConcurrentHashMap<>();
-        zipFile.stream().forEach(entry -> {
-            String name = entry.getName();
-            int slash = name.lastIndexOf('/');
-            if (slash > 0) {
-                String dir = name.substring(0, slash + 1);
-                map.computeIfAbsent(dir, k -> new ArrayList<>()).add(entry);
-            }
-        });
-        return map;
+        this.tritium$entryCache = nsMap;
+        this.tritium$namespaceCache = nsSets;
     }
 
     @Unique
@@ -108,16 +124,18 @@ public abstract class FilePackResourcesMixin {
                         if (TRITIUM$ZIP_FILE_GETTER != null) {
                             tritium$cachedZipFile = (ZipFile) TRITIUM$ZIP_FILE_GETTER.invoke(this);
                             if (tritium$cachedZipFile != null && tritium$cachedZipFile.size() > 100) {
-                                this.tritium$entryCache = tritium$scanAllEntries(tritium$cachedZipFile);
+                                tritium$buildCaches(tritium$cachedZipFile);
                             } else {
                                 this.tritium$entryCache = Collections.emptyMap();
+                                this.tritium$namespaceCache = new ConcurrentHashMap<>();
                             }
                         } else {
                             this.tritium$entryCache = Collections.emptyMap();
+                            this.tritium$namespaceCache = new ConcurrentHashMap<>();
                         }
-                        tritium$namespaceCache = new ConcurrentHashMap<>();
                         tritium$cacheInitialized = true;
                     } catch (Throwable e) {
+                        TritiumCommon.LOG.warn("Failed to initialize zip cache in FilePackResourcesMixin", e);
                         tritium$entryCache = Collections.emptyMap();
                         tritium$namespaceCache = new ConcurrentHashMap<>();
                         tritium$cacheInitialized = true;
@@ -131,31 +149,14 @@ public abstract class FilePackResourcesMixin {
     private void fastGetNamespaces(PackType type, CallbackInfoReturnable<Set<String>> cir) {
         tritium$ensureCacheInitialized();
 
-        if (tritium$entryCache.isEmpty()) {
-            return;
+        if (tritium$entryCache == null || tritium$entryCache.isEmpty()) {
+            return; // fall back to vanilla for small or missing zips
         }
 
         Set<String> cached = tritium$namespaceCache.get(type);
         if (cached != null) {
             cir.setReturnValue(cached);
-            return;
         }
-
-        String dir = tritium$addPrefix(type.getDirectory() + "/");
-        Set<String> set = ConcurrentHashMap.newKeySet();
-
-        List<ZipEntry> entries = tritium$entryCache.get(dir);
-        if (entries != null && !entries.isEmpty()) {
-            entries.stream()
-                    .map(ZipEntry::getName)
-                    .filter(name -> name.startsWith(dir))
-                    .map(name -> tritium$extractNamespace(dir, name))
-                    .filter(ns -> !ns.isEmpty() && ResourceLocation.isValidNamespace(ns))
-                    .forEach(set::add);
-        }
-
-        tritium$namespaceCache.put(type, set);
-        cir.setReturnValue(set);
     }
 
     @Inject(method = "listResources", at = @At("HEAD"), cancellable = true)
@@ -163,28 +164,37 @@ public abstract class FilePackResourcesMixin {
                                    PackResources.ResourceOutput output, CallbackInfo ci) {
         tritium$ensureCacheInitialized();
 
-        if (tritium$entryCache.isEmpty() || tritium$cachedZipFile == null) {
-            return;
+        if (tritium$entryCache == null || tritium$entryCache.isEmpty() || tritium$cachedZipFile == null) {
+            return; // fall back to vanilla
+        }
+
+        String nsDir = tritium$addPrefix(packType.getDirectory() + "/" + namespace + "/");
+        List<ZipEntry> entries = tritium$entryCache.get(nsDir);
+        if (entries == null || entries.isEmpty()) {
+            return; // let vanilla handle it
         }
 
         ci.cancel();
-        String dir = tritium$addPrefix(packType.getDirectory() + "/" + namespace + "/");
-        String prefixPath = dir + path + "/";
+        String prefixPath = path.isEmpty() ? nsDir : (nsDir + path + "/");
 
-        List<ZipEntry> entries = tritium$entryCache.get(dir);
-        if (entries != null) {
-            entries.stream()
-                    .filter(e -> !e.isDirectory())
-                    .filter(e -> e.getName().startsWith(prefixPath))
-                    .forEach(entry -> {
-                        String full = entry.getName();
-                        String rel = full.substring(dir.length());
-                        ResourceLocation loc = ResourceLocation.tryBuild(namespace, rel);
-                        if (loc != null) {
-                            output.accept(loc, IoSupplier.create(tritium$cachedZipFile, entry));
-                        }
-                    });
+        for (ZipEntry entry : entries) {
+            if (entry.isDirectory()) continue;
+            String name = entry.getName();
+            if (!name.startsWith(prefixPath)) continue;
+            String rel = name.substring(nsDir.length());
+            ResourceLocation loc = ResourceLocation.tryBuild(namespace, rel);
+            if (loc != null) {
+                output.accept(loc, IoSupplier.create(tritium$cachedZipFile, entry));
+            }
         }
+    }
+
+    @Inject(method = "close", at = @At("HEAD"))
+    private void tritium$onClose(CallbackInfo ci) {
+        tritium$entryCache = null;
+        tritium$namespaceCache = null;
+        tritium$cachedZipFile = null;
+        tritium$cacheInitialized = false;
     }
 
     @Unique

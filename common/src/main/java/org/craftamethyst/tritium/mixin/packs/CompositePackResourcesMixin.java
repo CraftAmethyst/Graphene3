@@ -29,12 +29,15 @@ class CompositePackResourcesMixin {
     @Inject(method = "listResources", at = @At("HEAD"), cancellable = true)
     private void tritium$listResources(PackType type, String ns, String path,
                                        PackResources.ResourceOutput output, CallbackInfo ci) {
+        // keep order: primary first, then overlays sequentially to preserve overlay semantics
         ci.cancel();
         if (tritium$primary != null) {
             tritium$primary.listResources(type, ns, path, output);
         }
         if (tritium$overlays != null && !tritium$overlays.isEmpty()) {
-            tritium$overlays.parallelStream().forEach(p -> p.listResources(type, ns, path, output));
+            for (PackResources p : tritium$overlays) {
+                p.listResources(type, ns, path, output);
+            }
         }
     }
 }

@@ -30,7 +30,7 @@
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
-    "cloth_config": ">=15",
+    "cloth-config": ">=15",
     "java": ">=${java_version}"
   },
   "suggests": {

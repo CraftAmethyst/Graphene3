@@ -134,9 +134,10 @@ public class TritiumAutoConfig {
                     generateSubCategoryEntries(entryBuilder, nestedSubCategoryBuilder, currentValue, sectionName, fullPath);
                     subCategoryBuilder.add(nestedSubCategoryBuilder.build());
                 } else {
-                    FieldAccessor accessor = fieldAccessors.get(fullPath);
+                    String accessorPath = sectionName + "." + fullPath;
+                    FieldAccessor accessor = fieldAccessors.get(accessorPath);
                     if (accessor != null) {
-                        generateSubCategoryFieldEntry(entryBuilder, subCategoryBuilder, accessor, currentValue, translationKey, fullPath);
+                        generateSubCategoryFieldEntry(entryBuilder, subCategoryBuilder, accessor, currentValue, translationKey, accessorPath);
                     }
                 }
             }

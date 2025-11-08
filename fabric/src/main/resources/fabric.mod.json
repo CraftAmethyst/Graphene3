@@ -22,6 +22,9 @@
     "entrypoints": {
       "main": [
         "org.craftamethyst.tritium.tritium"
+      ],
+      "modmenu": [
+        "org.craftamethyst.tritium.config.TritiumConfigScreenFactory"
       ]
     },
     "mixins": [
@@ -31,9 +34,9 @@
   
     "depends": {
       "fabricloader": ">=0.14",
-      "fabric": "*",
+      "fabric-api": "*",
       "minecraft": "1.19.x",
-      "cloth_config": ">=8",
+      "cloth-config": ">=8",
       "java": ">=17"
     },
     "suggests": {

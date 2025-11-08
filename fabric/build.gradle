@@ -29,9 +29,15 @@ dependencies {
 
     // Config UI + AutoConfig (Fabric)
     modImplementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
+
+    // Mod Menu for config screen integration
+    modImplementation "com.terraformersmc:modmenu:4.0.6"
 }
 
 loom {
+    mixin {
+        defaultRefmapName = "tritium.refmap.json"
+    }
     runs {
         client {
             client()

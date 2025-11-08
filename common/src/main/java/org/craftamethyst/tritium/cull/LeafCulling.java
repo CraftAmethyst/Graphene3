@@ -29,7 +29,7 @@ public final class LeafCulling {
     }
 
     /**
-     * back-compat: preserved for callers; simplified to the same adjacency test.
+     * back-compat: preserved for callers; simplified to the same adjacency pack.
      */
     public static boolean checkConnectedLeaves(BlockGetter level, BlockPos pos, @Nullable Direction face) {
         return isLeaf(level.getBlockState(pos));

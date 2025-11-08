@@ -159,7 +159,7 @@ public final class BlockFaceOcclusionCuller {
             BlockState state = level.getBlockState(mpos);
 
             if (!state.isAir()) {
-                // Fast reject empty occlusion; then coarse AABB test.
+                // Fast reject empty occlusion; then coarse AABB pack.
                 if (!state.getOcclusionShape(level, mpos).isEmpty() &&
                         state.getCollisionShape(level, mpos).bounds().move(mpos).contains(current)) {
                     return false; // blocked

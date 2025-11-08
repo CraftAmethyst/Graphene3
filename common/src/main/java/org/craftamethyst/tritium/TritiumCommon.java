@@ -22,7 +22,6 @@ public class TritiumCommon {
                 "Version: {} | Platform: {} | Environment: {}\n" +
                 "\n",
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
-
        //Register configuration file
         try {
             TritiumConfig.register();

@@ -37,17 +37,20 @@
   "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "Enable Face Occlusion Culling",
   "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "Use async ray-trace occlusion test for leaf faces (cached; conservative when uncertain)",
 
+  "config.tritium.rendering.chest_rendering_optimization": "Chest rendering optimization",
+  "config.tritium.rendering.chest_rendering_optimization.tooltip": "Without chests lid animations.",
+
   "config.tritium.category.clientOptimizations": "Client Optimizations",
   "config.tritium.clientOptimizations.fastLanguageSwitch": "Fast Language Switch",
   "config.tritium.clientOptimizations.fastLanguageSwitch.tooltip": "Optimize language switching by skipping full resource pack reload",
   "config.tritium.clientOptimizations.resourcePackCache": "Resource Pack Cache",
   "config.tritium.clientOptimizations.resourcePackCache.tooltip": "Cache namespace lookups in file pack resources for better performance",
+
   "config.tritium.clientOptimizations.dynamicFPS": "Dynamic FPS",
-  "config.tritium.clientOptimizations.dynamicFPS.tooltip": "Automatically reduce framerate when the game is unfocused (down to 1 FPS) or minimized (not rendering at all)",
+  "config.tritium.clientOptimizations.dynamicFPS_enable": "Enable Dynamic FPS",
+  "config.tritium.clientOptimizations.dynamicFPS_enable.tooltip": "Automatically reduce framerate when the game is unfocused (down to 1 FPS) or minimized (not rendering at all)",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "Minimum FPS",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "The minimum fps of the dynamic fps feature",
-  "config.tritium.clientOptimizations.chest_rendering_optimization": "Chest rendering optimization",
-  "config.tritium.clientOptimizations.chest_rendering_optimization.tooltip": "Without chests lid animations.",
 
   "config.tritium.category.network": "Network",
 

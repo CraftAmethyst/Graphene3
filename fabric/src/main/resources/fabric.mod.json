@@ -12,7 +12,7 @@
     "sources": "https://github.com/CraftAmethyst/Tritium"
   },
   "license": "${license}",
-  "icon": "assets/logo/logo.png",
+  "icon": "assets/tritium/logo.png",
   "environment": "*",
   "entrypoints": {
     "main": [

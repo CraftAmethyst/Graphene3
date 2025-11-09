@@ -125,8 +125,10 @@ public class TritiumAutoConfig {
 
                 String fieldName = field.getName();
                 Object currentValue = field.get(section);
-                String fullPath = path + "." + fieldName;
-                String translationKey = "config.tritium." + sectionName + "." + fullPath.replace('.', '_');
+                String fullPath = path.isEmpty() ? fieldName : path + "." + fieldName;
+                // 修复：使用正确的路径格式
+                String accessorPath = sectionName + "." + path + "." + fieldName;
+                String translationKey = "config.tritium" + "." + sectionName + "." + fullPath.replace('.', '_');
 
                 if (field.isAnnotationPresent(SubCategory.class)) {
                     SubCategory subCat = field.getAnnotation(SubCategory.class);
@@ -134,7 +136,6 @@ public class TritiumAutoConfig {
                     generateSubCategoryEntries(entryBuilder, nestedSubCategoryBuilder, currentValue, sectionName, fullPath);
                     subCategoryBuilder.add(nestedSubCategoryBuilder.build());
                 } else {
-                    String accessorPath = sectionName + "." + fullPath;
                     FieldAccessor accessor = fieldAccessors.get(accessorPath);
                     if (accessor != null) {
                         generateSubCategoryFieldEntry(entryBuilder, subCategoryBuilder, accessor, currentValue, translationKey, accessorPath);
@@ -145,6 +146,7 @@ public class TritiumAutoConfig {
             TritiumCommon.LOG.error("Failed to generate subcategory entries for section: {}", sectionName, e);
         }
     }
+
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static void generateFieldEntry(ConfigEntryBuilder entryBuilder,
@@ -242,7 +244,7 @@ public class TritiumAutoConfig {
                                                       FieldAccessor accessor,
                                                       Object currentValue,
                                                       String translationKey,
-                                                      String fullPath) {
+                                                      String accessorPath) {
         Class<?> fieldType = accessor.getType();
 
         try {
@@ -253,7 +255,7 @@ public class TritiumAutoConfig {
                         )
                         .setDefaultValue((Boolean) accessor.getDefaultValue())
                         .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                        .setSaveConsumer(createSaveConsumer(fullPath))
+                        .setSaveConsumer(createSaveConsumer(accessorPath))
                         .build());
 
             } else if (fieldType == int.class || fieldType == Integer.class) {
@@ -263,7 +265,7 @@ public class TritiumAutoConfig {
                         )
                         .setDefaultValue((Integer) accessor.getDefaultValue())
                         .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                        .setSaveConsumer(createSaveConsumer(fullPath));
+                        .setSaveConsumer(createSaveConsumer(accessorPath));
 
                 Range range = accessor.getRangeAnnotation();
                 if (range != null) {
@@ -279,7 +281,7 @@ public class TritiumAutoConfig {
                         )
                         .setDefaultValue((Double) accessor.getDefaultValue())
                         .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                        .setSaveConsumer(createSaveConsumer(fullPath));
+                        .setSaveConsumer(createSaveConsumer(accessorPath));
 
                 Range range = accessor.getRangeAnnotation();
                 if (range != null) {
@@ -295,7 +297,7 @@ public class TritiumAutoConfig {
                         )
                         .setDefaultValue((String) accessor.getDefaultValue())
                         .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                        .setSaveConsumer(createSaveConsumer(fullPath))
+                        .setSaveConsumer(createSaveConsumer(accessorPath))
                         .build());
 
             } else if (List.class.isAssignableFrom(fieldType)) {
@@ -307,7 +309,7 @@ public class TritiumAutoConfig {
                         )
                         .setDefaultValue((List<String>) accessor.getDefaultValue())
                         .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                        .setSaveConsumer(createSaveConsumer(fullPath))
+                        .setSaveConsumer(createSaveConsumer(accessorPath))
                         .build());
 
             } else if (fieldType.isEnum()) {
@@ -318,11 +320,11 @@ public class TritiumAutoConfig {
                         )
                         .setDefaultValue((Enum) accessor.getDefaultValue())
                         .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                        .setSaveConsumer(createSaveConsumer(fullPath))
+                        .setSaveConsumer(createSaveConsumer(accessorPath))
                         .build());
             }
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to generate subcategory field entry: {}", fullPath, e);
+            TritiumCommon.LOG.error("Failed to generate subcategory field entry: {}", accessorPath, e);
         }
     }
 

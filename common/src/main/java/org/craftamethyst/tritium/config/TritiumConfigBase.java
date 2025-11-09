@@ -43,6 +43,9 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class Rendering {
+
+        public boolean chest_rendering_optimization = false;
+
         // Entity and Block Entity Culling
         @SubCategory("Entity Culling")
         public EntityCulling entityCulling = new EntityCulling();
@@ -83,11 +86,15 @@ public class TritiumConfigBase {
         public boolean fastLanguageSwitch = true;
         public boolean resourcePackCache = true;
 
-        public boolean dynamicFPS = true;
-        @Range(min = 1)
-        public int dynamicFPS_minimizedFPS = 1;
+        @SubCategory("dynamicFPS")
+        public DynamicFPS dynamicFPS = new DynamicFPS();
 
-        public boolean chest_rendering_optimization = false;
+        public static class DynamicFPS{
+            public boolean enable = true;
+            @Range(min = 1)
+            public int minimizedFPS = 1;
+        }
+
     }
 
     public static class Network {

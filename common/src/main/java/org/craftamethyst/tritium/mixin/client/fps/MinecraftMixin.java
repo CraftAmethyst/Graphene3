@@ -27,14 +27,14 @@ public abstract class MinecraftMixin {
     @Inject(method = "<init>",at = @At(value = "TAIL"))
     private void init(GameConfig pGameConfig, CallbackInfo ci){
         GLFW.glfwSetWindowIconifyCallback(this.window.getWindow(), (window, iconified) -> {
-            if(TritiumConfig.get().clientOptimizations.dynamicFPS)Minecraft.getInstance().noRender = iconified;
+            if(TritiumConfig.get().clientOptimizations.dynamicFPS.enable)Minecraft.getInstance().noRender = iconified;
         });
     }
 
     @Inject(method = "getFramerateLimit",at = @At("RETURN"),cancellable = true)
     public void framerateLimit(CallbackInfoReturnable<Integer> cir){
-        if(!this.isWindowActive() && TritiumConfig.get().clientOptimizations.dynamicFPS){
-            cir.setReturnValue(TritiumConfig.get().clientOptimizations.dynamicFPS_minimizedFPS);
+        if(!this.isWindowActive() && TritiumConfig.get().clientOptimizations.dynamicFPS.enable){
+            cir.setReturnValue(TritiumConfig.get().clientOptimizations.dynamicFPS.minimizedFPS);
         }
     }
 }

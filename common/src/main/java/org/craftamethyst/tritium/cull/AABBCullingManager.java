@@ -49,7 +49,7 @@ public class AABBCullingManager {
         }
 
         if (entity instanceof EntityVisibility cullable) {
-            if (cullable.graphene$isForcedVisible()) {
+            if (cullable.tritium$isForcedVisible()) {
                 cullCache.cacheEntity(entity, false);
                 return false;
             }
@@ -93,7 +93,7 @@ public class AABBCullingManager {
         }
 
         if (blockEntity instanceof BlockEntityVisibility cullable) {
-            if (cullable.graphene$isForcedVisible()) {
+            if (cullable.tritium$isForcedVisible()) {
                 cullCache.cacheBlockEntity(blockEntity, false);
                 return false;
             }

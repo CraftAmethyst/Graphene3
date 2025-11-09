@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class NoiseSamplingCacheMixin {
 
     @Unique
-    private final ThreadLocal<DensityFunction.SinglePointContext> graphene$reusableContext =
+    private final ThreadLocal<DensityFunction.SinglePointContext> tritium$reusableContext =
             ThreadLocal.withInitial(() -> new DensityFunction.SinglePointContext(0, 0, 0));
     @Final
     @Shadow
@@ -31,6 +31,6 @@ public class NoiseSamplingCacheMixin {
         }
         int startBlockX = net.minecraft.core.QuartPos.toBlock(firstNoiseX);
         int startBlockZ = net.minecraft.core.QuartPos.toBlock(firstNoiseZ);
-        graphene$reusableContext.set(new DensityFunction.SinglePointContext(startBlockX, 0, startBlockZ));
+        tritium$reusableContext.set(new DensityFunction.SinglePointContext(startBlockX, 0, startBlockZ));
     }
 }

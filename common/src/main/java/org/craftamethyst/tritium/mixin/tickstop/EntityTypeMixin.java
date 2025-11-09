@@ -8,27 +8,27 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(EntityType.class)
 public abstract class EntityTypeMixin implements IOptimizableEntity {
     @Unique
-    private boolean graphene$alwaysTick;
+    private boolean tritium$alwaysTick;
     @Unique
-    private boolean graphene$tickInRaid;
+    private boolean tritium$tickInRaid;
 
     @Override
-    public boolean graphene$shouldAlwaysTick() {
-        return this.graphene$alwaysTick;
+    public boolean tritium$shouldAlwaysTick() {
+        return this.tritium$alwaysTick;
     }
 
     @Override
-    public void graphene$setAlwaysTick(boolean value) {
-        this.graphene$alwaysTick = value;
+    public void tritium$setAlwaysTick(boolean value) {
+        this.tritium$alwaysTick = value;
     }
 
     @Override
-    public boolean graphene$shouldTickInRaid() {
-        return this.graphene$tickInRaid;
+    public boolean tritium$shouldTickInRaid() {
+        return this.tritium$tickInRaid;
     }
 
     @Override
-    public void graphene$setTickInRaid(boolean value) {
-        this.graphene$tickInRaid = value;
+    public void tritium$setTickInRaid(boolean value) {
+        this.tritium$tickInRaid = value;
     }
 }

@@ -1,13 +1,13 @@
 package org.craftamethyst.tritium.cull.iface;
 
 public interface CullingTarget {
-    boolean graphene$isForcedVisible();
+    boolean tritium$isForcedVisible();
 
-    void graphene$setCulled(boolean value);
+    void tritium$setCulled(boolean value);
 
-    boolean graphene$isCulled();
+    boolean tritium$isCulled();
 
-    void graphene$setOutOfCamera(boolean value);
+    void tritium$setOutOfCamera(boolean value);
 
-    boolean graphene$isOutOfCamera();
+    boolean tritium$isOutOfCamera();
 }

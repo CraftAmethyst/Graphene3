@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LevelRendererMixin {
 
     @Unique
-    private final Minecraft graphene$mc = Minecraft.getInstance();
+    private final Minecraft tritium$mc = Minecraft.getInstance();
     @Final
     @Shadow
     private EntityRenderDispatcher entityRenderDispatcher;
@@ -33,39 +33,39 @@ public class LevelRendererMixin {
     @Inject(method = "renderEntity",
             at = @At("TAIL"),
             cancellable = true)
-    private void graphene$skipCulledEntityButMaybeRenderNameTag(
+    private void tritium$skipCulledEntityButMaybeRenderNameTag(
             Entity entity, double cameraX, double cameraY, double cameraZ,
             float tickDelta, PoseStack matrices, MultiBufferSource consumers,
             CallbackInfo ci) {
         if (!TritiumConfig.get().rendering.entityCulling.enableCulling) return;
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(entity instanceof EntityVisibility cullable)) return;
-        if (cullable.graphene$isForcedVisible() || entity.noCulling) {
-            cullable.graphene$setOutOfCamera(false);
+        if (cullable.tritium$isForcedVisible() || entity.noCulling) {
+            cullable.tritium$setOutOfCamera(false);
             return;
         }
         if (client.shouldSkipEntity(entity)) {
             if (!TritiumConfig.get().rendering.entityCulling.enableNameTagCulling
                     && matrices != null
                     && consumers != null
-                    && graphene$shouldRenderNameTag(entity)) {
-                graphene$renderNameTag(entity, cameraX, cameraY, cameraZ, tickDelta, matrices, consumers);
+                    && tritium$shouldRenderNameTag(entity)) {
+                tritium$renderNameTag(entity, cameraX, cameraY, cameraZ, tickDelta, matrices, consumers);
             }
             ci.cancel();
             return;
         }
-        cullable.graphene$setOutOfCamera(false);
+        cullable.tritium$setOutOfCamera(false);
     }
 
     @Unique
-    private boolean graphene$shouldRenderNameTag(Entity entity) {
+    private boolean tritium$shouldRenderNameTag(Entity entity) {
         EntityRenderer<Entity> renderer = (EntityRenderer<Entity>) entityRenderDispatcher.getRenderer(entity);
         return renderer instanceof EntityRendererAccessor accessor
-                && accessor.graphene_shouldShowName(entity);
+                && accessor.tritium_shouldShowName(entity);
     }
 
     @Unique
-    private void graphene$renderNameTag(Entity entity, double camX, double camY, double camZ,
+    private void tritium$renderNameTag(Entity entity, double camX, double camY, double camZ,
                                         float tickDelta, PoseStack matrices, MultiBufferSource consumers) {
         EntityRenderer<Entity> renderer = (EntityRenderer<Entity>) entityRenderDispatcher.getRenderer(entity);
         if (!(renderer instanceof EntityRendererAccessor accessor)) return;
@@ -77,7 +77,7 @@ public class LevelRendererMixin {
         Vec3 offset = renderer.getRenderOffset(entity, tickDelta);
         matrices.pushPose();
         matrices.translate(x + offset.x, y + offset.y, z + offset.z);
-        accessor.graphene_renderNameTag(entity, entity.getDisplayName(), matrices, consumers,
+        accessor.tritium_renderNameTag(entity, entity.getDisplayName(), matrices, consumers,
                 entityRenderDispatcher.getPackedLightCoords(entity, tickDelta));
         matrices.popPose();
     }

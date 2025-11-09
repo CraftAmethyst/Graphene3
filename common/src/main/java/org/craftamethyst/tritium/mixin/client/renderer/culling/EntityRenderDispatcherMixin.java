@@ -20,7 +20,7 @@ public abstract class EntityRenderDispatcherMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private <E extends Entity> void graphene$earlyCullingCheck(
+    private <E extends Entity> void tritium$earlyCullingCheck(
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
 
@@ -45,7 +45,7 @@ public abstract class EntityRenderDispatcherMixin {
             at = @At("TAIL"),
             cancellable = true
     )
-    private <E extends Entity> void graphene$skipCulledOrTickSkippedEntity(
+    private <E extends Entity> void tritium$skipCulledOrTickSkippedEntity(
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
         if (!TritiumConfig.get().entities.ite) return;

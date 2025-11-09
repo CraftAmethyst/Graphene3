@@ -9,33 +9,33 @@ import org.spongepowered.asm.mixin.Unique;
 public abstract class BlockEntityMixin implements BlockEntityVisibility {
 
     @Unique
-    private boolean graphene$culled = false;
+    private boolean tritium$culled = false;
 
     @Unique
-    private boolean graphene$outOfCamera = false;
+    private boolean tritium$outOfCamera = false;
 
     @Override
-    public boolean graphene$isCulled() {
-        return graphene$culled;
+    public boolean tritium$isCulled() {
+        return tritium$culled;
     }
 
     @Override
-    public void graphene$setCulled(boolean value) {
-        graphene$culled = value;
+    public void tritium$setCulled(boolean value) {
+        tritium$culled = value;
     }
 
     @Override
-    public boolean graphene$isForcedVisible() {
+    public boolean tritium$isForcedVisible() {
         return false;
     }
 
     @Override
-    public void graphene$setOutOfCamera(boolean value) {
-        graphene$outOfCamera = value;
+    public void tritium$setOutOfCamera(boolean value) {
+        tritium$outOfCamera = value;
     }
 
     @Override
-    public boolean graphene$isOutOfCamera() {
-        return graphene$outOfCamera;
+    public boolean tritium$isOutOfCamera() {
+        return tritium$outOfCamera;
     }
 }

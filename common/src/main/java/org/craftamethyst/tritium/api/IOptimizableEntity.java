@@ -1,11 +1,11 @@
 package org.craftamethyst.tritium.api;
 
 public interface IOptimizableEntity {
-    boolean graphene$shouldAlwaysTick();
+    boolean tritium$shouldAlwaysTick();
 
-    void graphene$setAlwaysTick(boolean value);
+    void tritium$setAlwaysTick(boolean value);
 
-    boolean graphene$shouldTickInRaid();
+    boolean tritium$shouldTickInRaid();
 
-    void graphene$setTickInRaid(boolean value);
+    void tritium$setTickInRaid(boolean value);
 }

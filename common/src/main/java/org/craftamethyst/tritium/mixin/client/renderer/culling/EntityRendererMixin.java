@@ -20,12 +20,12 @@ public abstract class EntityRendererMixin<T extends Entity> {
                                           MultiBufferSource bufferSource, int packedLight, float partialTick);
 
     @Unique
-    public boolean graphene_shouldShowName(T entity) {
+    public boolean tritium_shouldShowName(T entity) {
         return shouldShowName(entity);
     }
 
     @Unique
-    public void graphene_renderNameTag(T entity, Component component, PoseStack poseStack,
+    public void tritium_renderNameTag(T entity, Component component, PoseStack poseStack,
                                        MultiBufferSource multiBufferSource, int light, float partialTick) {
         renderNameTag(entity, component, poseStack, multiBufferSource, light, partialTick);
     }

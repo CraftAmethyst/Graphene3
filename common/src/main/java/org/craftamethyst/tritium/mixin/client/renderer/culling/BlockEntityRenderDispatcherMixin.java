@@ -26,7 +26,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private <E extends BlockEntity> void graphene$earlyCullingCheck(
+    private <E extends BlockEntity> void tritium$earlyCullingCheck(
             E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
             CallbackInfo ci) {
 
@@ -43,7 +43,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             }
         }
 
-        if (cullable.graphene$isForcedVisible()) return;
+        if (cullable.tritium$isForcedVisible()) return;
         BlockEntityRenderer<E> renderer = getRenderer(blockEntity);
         if (renderer != null && renderer.shouldRenderOffScreen(blockEntity)) return;
         if (client.shouldSkipBlockEntity(blockEntity)) {
@@ -62,7 +62,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             ),
             cancellable = true
     )
-    private <E extends BlockEntity> void graphene$skipCulledBlockEntity(
+    private <E extends BlockEntity> void tritium$skipCulledBlockEntity(
             E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
             CallbackInfo ci) {
 
@@ -74,7 +74,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
         BlockEntityRenderer<E> renderer = getRenderer(blockEntity);
         if (renderer != null && renderer.shouldRenderOffScreen(blockEntity)) return;
 
-        if (!cullable.graphene$isForcedVisible() && client.shouldSkipBlockEntity(blockEntity)) {
+        if (!cullable.tritium$isForcedVisible() && client.shouldSkipBlockEntity(blockEntity)) {
             ci.cancel();
         }
     }

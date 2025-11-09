@@ -46,6 +46,8 @@
   "config.tritium.clientOptimizations.dynamicFPS.tooltip": "Automatically reduce framerate when the game is unfocused (down to 1 FPS) or minimized (not rendering at all)",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "Minimum FPS",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "The minimum fps of the dynamic fps feature",
+  "config.tritium.clientOptimizations.chest_rendering_optimization": "Chest rendering optimization",
+  "config.tritium.clientOptimizations.chest_rendering_optimization.tooltip": "Without chests lid animations.",
 
   "config.tritium.category.network": "Network",
 

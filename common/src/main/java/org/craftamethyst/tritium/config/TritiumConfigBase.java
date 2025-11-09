@@ -86,6 +86,8 @@ public class TritiumConfigBase {
         public boolean dynamicFPS = true;
         @Range(min = 1)
         public int dynamicFPS_minimizedFPS = 1;
+
+        public boolean chest_rendering_optimization = false;
     }
 
     public static class Network {

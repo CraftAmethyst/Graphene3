@@ -19,6 +19,7 @@
     "client.lang.MinecraftClientMixin",
     "client.renderer.culling.BlockEntityMixin",
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
+    "client.renderer.culling.ChestRendererMixin",
     "client.renderer.culling.EntityMixin",
     "client.renderer.culling.EntityRenderDispatcherMixin",
     "client.renderer.culling.EntityRendererMixin",

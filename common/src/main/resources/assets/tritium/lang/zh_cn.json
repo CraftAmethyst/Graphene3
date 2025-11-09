@@ -46,6 +46,8 @@
   "config.tritium.clientOptimizations.dynamicFPS.tooltip": "当游戏不聚焦时自动降低帧率（降至 最低帧率）或最小化（根本不渲染）",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "最低帧率",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "动态帧率功能的最低帧率配置项(最低: 1)",
+  "config.tritium.clientOptimizations.chest_rendering_optimization": "箱子渲染优化",
+  "config.tritium.clientOptimizations.chest_rendering_optimization.tooltip": "没有开箱动画。",
 
   "config.tritium.category.network": "网络优化",
 

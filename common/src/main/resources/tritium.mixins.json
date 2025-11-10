@@ -28,6 +28,7 @@
     "client.renderer.culling.LeafRenderMixin",
     "client.renderer.culling.LevelRendererMixin",
     "client.renderer.culling.LevelTKMixin",
+    "client.renderer.fbo.FastBlit",
     "client.renderer.other.MixinPoseStack"
   ],
   "server": [],

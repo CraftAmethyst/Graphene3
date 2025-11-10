@@ -46,6 +46,7 @@ public class TritiumConfigBase {
 
         public boolean chest_rendering_optimization = false;
 
+        public boolean fastBlit = true;
         // Entity and Block Entity Culling
         @SubCategory("Entity Culling")
         public EntityCulling entityCulling = new EntityCulling();

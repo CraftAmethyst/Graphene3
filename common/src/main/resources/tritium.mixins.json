@@ -27,7 +27,8 @@
     "client.renderer.culling.EntityRendererMixin",
     "client.renderer.culling.LeafRenderMixin",
     "client.renderer.culling.LevelRendererMixin",
-    "client.renderer.culling.LevelTKMixin"
+    "client.renderer.culling.LevelTKMixin",
+    "client.renderer.other.MixinPoseStack"
   ],
   "server": [],
   "injectors": {

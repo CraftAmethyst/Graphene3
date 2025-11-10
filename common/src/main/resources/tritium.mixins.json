@@ -17,6 +17,8 @@
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin",
+    "client.memleakfix.AE2WTLibCreativeTabLeakFix",
+    "client.memleakfix.ScreenshotByteBufferLeakFixMixin",
     "client.renderer.culling.BlockEntityMixin",
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
     "client.renderer.culling.ChestRendererMixin",

@@ -20,7 +20,7 @@ public abstract class FastBlit {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void graphene$fastBlit(int width, int height, boolean disableBlend, CallbackInfo ci) {
+    private void tritium$fastBlit(int width, int height, boolean disableBlend, CallbackInfo ci) {
         if (!TritiumConfig.get().rendering.fastBlit || !disableBlend) {
             return;
         }

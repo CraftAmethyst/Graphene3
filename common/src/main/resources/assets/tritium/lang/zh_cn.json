@@ -75,6 +75,10 @@
   "config.tritium.fixes.buttonFix.tooltip": "修复按钮相关的渲染问题",
   "config.tritium.fixes.noGLog": "禁用GL日志",
   "config.tritium.fixes.noGLog.tooltip": "减少不必要的日志输出",
+  "config.tritium.fixes.MemoryLeakFix_AE2WTLibCreativeTabLeakFix": "AE2WTLibMemLeakFix",
+  "config.tritium.fixes.MemoryLeakFix_AE2WTLibCreativeTabLeakFix.tooltip": "AE2WTLib创造标签页内存泄漏修复",
+  "config.tritium.fixes.MemoryLeakFix_ScreenshotByteBufferLeakFix": "ScreenshotByteBufferLeakFix",
+  "config.tritium.fixes.MemoryLeakFix_ScreenshotByteBufferLeakFix.tooltip": "ScreenshotByteBufferMemLeakFix",
 
   "config.tritium.category.serverPerformance": "服务器性能",
   "config.tritium.serverPerformance.noiseSamplingCache": "噪声采样缓存",

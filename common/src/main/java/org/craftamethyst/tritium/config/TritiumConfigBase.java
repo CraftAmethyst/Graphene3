@@ -123,6 +123,9 @@ public class TritiumConfigBase {
     public static class Fixes {
         public boolean buttonFix = true;
         public boolean noGLog = true;
+        @SubCategory("Memory Leak Fix")
+        public static boolean MemoryLeakFix_AE2WTLibCreativeTabLeakFix =true;
+        public static boolean MemoryLeakFix_ScreenshotByteBufferLeakFix =true;
     }
 
     public static class ServerPerformance {

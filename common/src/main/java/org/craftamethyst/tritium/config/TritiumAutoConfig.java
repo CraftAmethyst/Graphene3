@@ -126,7 +126,6 @@ public class TritiumAutoConfig {
                 String fieldName = field.getName();
                 Object currentValue = field.get(section);
                 String fullPath = path.isEmpty() ? fieldName : path + "." + fieldName;
-                // 修复：使用正确的路径格式
                 String accessorPath = sectionName + "." + path + "." + fieldName;
                 String translationKey = "config.tritium" + "." + sectionName + "." + fullPath.replace('.', '_');
 

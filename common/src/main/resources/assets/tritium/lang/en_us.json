@@ -75,6 +75,10 @@
   "config.tritium.fixes.buttonFix.tooltip": "Fix button related rendering issues",
   "config.tritium.fixes.noGLog": "No GL Log",
   "config.tritium.fixes.noGLog.tooltip": "Reduce unnecessary log output",
+  "config.tritium.fixes.MemoryLeakFix_AE2WTLibCreativeTabLeakFix": "AE2WTLibMemLeakFix",
+  "config.tritium.fixes.MemoryLeakFix_AE2WTLibCreativeTabLeakFix.tooltip": "AE2WTLibCreativeTabMemLeakFix",
+  "config.tritium.fixes.MemoryLeakFix_ScreenshotByteBufferLeakFix": "ScreenshotByteBufferLeakFix",
+  "config.tritium.fixes.MemoryLeakFix_ScreenshotByteBufferLeakFix.tooltip": "ScreenshotByteBufferMemLeakFix",
 
   "config.tritium.category.serverPerformance": "Server Performance",
   "config.tritium.serverPerformance.noiseSamplingCache": "Noise Sampling Cache",

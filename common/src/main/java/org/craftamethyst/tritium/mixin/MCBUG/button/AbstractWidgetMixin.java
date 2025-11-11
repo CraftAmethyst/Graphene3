@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.client.button;
+package org.craftamethyst.tritium.mixin.MCBUG.button;
 
 import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.gui.components.AbstractWidget;

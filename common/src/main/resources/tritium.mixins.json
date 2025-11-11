@@ -15,6 +15,7 @@
     "MCBUG.bee.RandomPosMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.MixinBoat",
+    "MCBUG.creeper.CreeperMixin",
     "packs.CompositePackResourcesMixin",
     "packs.FilePackResourcesMixin",
     "tickstop.EntityTypeMixin",

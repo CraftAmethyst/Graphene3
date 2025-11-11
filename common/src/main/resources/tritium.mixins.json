@@ -8,6 +8,8 @@
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
     "light.FastBamboo",
+    "light.MixinDynamicGraphMinFixedPoint",
+    "MCBUG.boat.MixinBoat",
     "packs.CompositePackResourcesMixin",
     "packs.FilePackResourcesMixin",
     "tickstop.EntityTypeMixin",
@@ -31,7 +33,8 @@
     "client.renderer.culling.LevelTKMixin",
     "client.renderer.fbo.FastBlit",
     "client.renderer.other.MixinPoseStack",
-    "client.renderer.vertex.MixinVertexConsumer"
+    "client.renderer.vertex.MixinVertexConsumer",
+    "MCBUG.button.AbstractWidgetMixin"
   ],
   "server": [],
   "injectors": {

@@ -15,7 +15,7 @@ public abstract class MixinVertexConsumer {
 
     @Inject(method = "addVertex(Lorg/joml/Matrix4f;FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;",
             at = @At("HEAD"), cancellable = true)
-    private void graphene$zeroAllocVertex(Matrix4f mat, float x, float y, float z,
+    private void tritium$zeroAllocVertex(Matrix4f mat, float x, float y, float z,
                                           CallbackInfoReturnable<VertexConsumer> cir) {
         Vector3f v = VertexBufferCache.get().set(x, y, z);
         mat.transformPosition(v);
@@ -25,7 +25,7 @@ public abstract class MixinVertexConsumer {
 
     @Inject(method = "setNormal(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;",
             at = @At("HEAD"), cancellable = true)
-    private void graphene$zeroAllocNormal(PoseStack.Pose pose, float x, float y, float z,
+    private void tritium$zeroAllocNormal(PoseStack.Pose pose, float x, float y, float z,
                                           CallbackInfoReturnable<VertexConsumer> cir) {
         Vector3f n = VertexBufferCache.get().set(x, y, z);
         pose.transformNormal(n.x, n.y, n.z, n);

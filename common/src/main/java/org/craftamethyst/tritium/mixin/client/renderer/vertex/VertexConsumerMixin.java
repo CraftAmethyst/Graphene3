@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(VertexConsumer.class)
-public abstract class MixinVertexConsumer {
+public interface VertexConsumerMixin {
 
     @Inject(method = "addVertex(Lorg/joml/Matrix4f;FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;",
             at = @At("HEAD"), cancellable = true)

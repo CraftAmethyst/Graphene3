@@ -7,11 +7,10 @@
   "priority": 2000,
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
+    "light.DynamicGraphMinFixedPointMixin",
     "light.FastBamboo",
-    "light.MixinDynamicGraphMinFixedPoint",
     "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
-    "MCBUG.bee.MixinBeeDeathRotation",
     "MCBUG.bee.RandomPosMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.MixinBoat",
@@ -38,7 +37,7 @@
     "client.renderer.culling.LevelTKMixin",
     "client.renderer.fbo.FastBlit",
     "client.renderer.other.MixinPoseStack",
-    "client.renderer.vertex.MixinVertexConsumer",
+    "client.renderer.vertex.VertexConsumerMixin",
     "MCBUG.button.AbstractWidgetMixin"
   ],
   "server": [],

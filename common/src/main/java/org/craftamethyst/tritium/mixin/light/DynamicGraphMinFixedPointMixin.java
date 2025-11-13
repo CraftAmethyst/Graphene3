@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.LongPredicate;
 
 @Mixin(DynamicGraphMinFixedPoint.class)
-public abstract class MixinDynamicGraphMinFixedPoint {
+public abstract class DynamicGraphMinFixedPointMixin {
 
     @Mutable
     @Shadow @Final

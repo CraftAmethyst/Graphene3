@@ -37,6 +37,7 @@
     "client.renderer.culling.LevelTKMixin",
     "client.renderer.fbo.FastBlit",
     "client.renderer.other.MixinPoseStack",
+    "client.renderer.reflex.ReflexSchedulerMixin",
     "client.renderer.vertex.VertexConsumerMixin",
     "MCBUG.button.AbstractWidgetMixin"
   ],

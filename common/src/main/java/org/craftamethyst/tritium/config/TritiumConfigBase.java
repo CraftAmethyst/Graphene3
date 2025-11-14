@@ -38,15 +38,19 @@ public class TritiumConfigBase {
     public ServerPerformance serverPerformance = new ServerPerformance();
 
     public static class Performance {
+        @SubCategory("FastBambooLight")
         public boolean bambooLight = true;
     }
 
     @ClientOnly
     public static class Rendering {
-
+        @SubCategory("ChestRenderingOpt")
         public boolean chest_rendering_optimization = false;
-
+        @SubCategory("FastBlit")
         public boolean fastBlit = true;
+        @SubCategory("Reflex")
+        public Reflex reflex = new Reflex();
+
         // Entity and Block Entity Culling
         @SubCategory("Entity Culling")
         public EntityCulling entityCulling = new EntityCulling();
@@ -55,24 +59,21 @@ public class TritiumConfigBase {
         @SubCategory("Leaf Culling")
         public LeafCulling leafCulling = new LeafCulling();
 
+        public static class Reflex {
+            public static boolean enableReflex = true;
+            public static boolean reflexDebug = false;
+            @Range(min=-100000, max=100000)
+            public static int reflexOffsetNs = 0;
+            @Range(min=0, max=1000)
+            public static int MAX_FPS = 0;
+        }
         public static class EntityCulling {
             public boolean enableCulling = true;
-            public boolean enableEntityCulling = true;
             public boolean enableBlockEntityCulling = true;
             public boolean enableTickStopping = false;
             public boolean enableNameTagCulling = true;
 
-            @Range(min = 1, max = 256)
-            public int horizontalRange = 64;
-
-            @Range(min = 1, max = 256)
-            public int verticalRange = 32;
-
-            @Range(min = 1, max = 100)
-            public double hitboxSizeLimit = 10.0;
-
             public List<String> entityBlacklist = Arrays.asList("minecraft:player", "minecraft:villager");
-            public List<String> entityWhitelist = List.of("minecraft:ender_dragon");
         }
 
         public static class LeafCulling {
@@ -84,7 +85,9 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class ClientOptimizations {
+        @SubCategory("FastLanguage")
         public boolean fastLanguageSwitch = true;
+        @SubCategory("FastResourcePack")
         public boolean resourcePackCache = true;
 
         @SubCategory("dynamicFPS")
@@ -103,6 +106,7 @@ public class TritiumConfigBase {
     }
 
     public static class Entities {
+        @SubCategory("EntityOpt")
         public boolean optimizeEntities = true;
         public boolean tickRaidersInRaid = true;
         public boolean ite = true;
@@ -122,7 +126,9 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class Fixes {
+        @SubCategory("Button Fix")
         public boolean buttonFix = true;
+        @SubCategory("No GLog")
         public boolean noGLog = true;
         @SubCategory("Memory Leak Fix")
         public static boolean MemoryLeakFix_AE2WTLibCreativeTabLeakFix =true;
@@ -130,6 +136,7 @@ public class TritiumConfigBase {
     }
 
     public static class ServerPerformance {
+        @SubCategory("Noise Sampling Cache")
         public boolean noiseSamplingCache = true;
     }
 }

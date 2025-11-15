@@ -8,7 +8,9 @@
   "config.tritium.category.rendering": "渲染优化",
   "config.tritium.rendering.entityCulling": "实体剔除",
   "config.tritium.rendering.leafCulling": "树叶剔除",
-
+  "config.tritium.rendering.cro": "箱子优化",
+  "config.tritium.rendering.FastBlit": "FastBlit",
+  "config.tritium.rendering.reflex": "Reflex",
   "config.tritium.rendering.entityCulling_enableCulling": "启用剔除",
   "config.tritium.rendering.entityCulling_enableCulling.tooltip": "主剔除功能开关",
   "config.tritium.rendering.entityCulling_enableEntityCulling": "启用实体剔除",

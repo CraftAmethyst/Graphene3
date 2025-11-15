@@ -39,7 +39,11 @@ public class TritiumConfigBase {
 
     public static class Performance {
         @SubCategory("FastBambooLight")
-        public boolean bambooLight = true;
+        public FastBambooLight FastBambooLight = new FastBambooLight();
+        public static class FastBambooLight {
+            public boolean bambooLight = true;
+        }
+
     }
 
     @ClientOnly

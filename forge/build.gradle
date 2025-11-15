@@ -45,9 +45,21 @@ legacyForge {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+}
+
 dependencies {
     // Compile common sources directly; repeat its runtime deps here for compilation
     compileOnly project(":common")
+    implementation 'maven.modrinth:guideme:9YGnKYDF'
+    implementation 'maven.modrinth:ae2:7KVs6HMQ'
+    implementation 'maven.modrinth:curios:IPQlZkz1'
+    implementation 'maven.modrinth:architectury-api:1MKTLiiG'
+    implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:BLQZoB0F'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     implementation 'org.jetbrains:annotations:24.1.0'

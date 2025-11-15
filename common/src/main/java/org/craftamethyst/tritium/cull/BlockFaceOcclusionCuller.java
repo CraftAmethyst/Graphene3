@@ -30,15 +30,13 @@ public final class BlockFaceOcclusionCuller {
 
     // Track in-flight traces to avoid duplicate work per (level,pos,face)
     private static final ConcurrentMap<Key, CompletableFuture<Boolean>> INFLIGHT = new ConcurrentHashMap<>();
-    private static final AtomicInteger PENDING = new AtomicInteger();
+
     private static ExecutorService tracerPool;
     private static ScheduledExecutorService timeoutChecker;
+    private static final AtomicInteger PENDING = new AtomicInteger();
 
     static {
         initExecutors();
-    }
-
-    private BlockFaceOcclusionCuller() {
     }
 
     public static boolean shouldCullBlockFace(BlockGetter level, BlockPos pos, Direction face) {
@@ -208,10 +206,11 @@ public final class BlockFaceOcclusionCuller {
     }
 
     private static Vec3 getFaceCenter(BlockPos pos, Direction face) {
-        double cx = pos.getX() + 0.5 + face.getStepX() * 0.5;
-        double cy = pos.getY() + 0.5 + face.getStepY() * 0.5;
-        double cz = pos.getZ() + 0.5 + face.getStepZ() * 0.5;
-        return new Vec3(cx, cy, cz);
+        return new Vec3(
+                pos.getX() + 0.5 + face.getStepX() * 0.501,
+                pos.getY() + 0.5 + face.getStepY() * 0.501,
+                pos.getZ() + 0.5 + face.getStepZ() * 0.501
+        );
     }
 
     public static boolean isInFallbackMode() {
@@ -254,6 +253,5 @@ public final class BlockFaceOcclusionCuller {
         }
     }
 
-    private record Key(int levelId, long pos, byte face) {
-    }
+    private record Key(int levelId, long pos, byte face) { }
 }

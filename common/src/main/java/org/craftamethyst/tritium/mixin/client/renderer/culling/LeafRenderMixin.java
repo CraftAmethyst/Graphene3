@@ -16,25 +16,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Block.class)
 public abstract class LeafRenderMixin {
-
-    @Inject(method = "shouldRenderFace(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;)Z",
-            at = @At("HEAD"), cancellable = true, require = 0)
-    private static void tritium$leafFaceCull(BlockState state, BlockGetter level, BlockPos pos, Direction face,
-                                             BlockPos neighborPos, CallbackInfoReturnable<Boolean> cir) {
-        if (!(state.getBlock() instanceof LeavesBlock)) return;
-        if (!TritiumConfig.get().rendering.leafCulling.enableLeafCulling) return;
-
-        // Hide inner leaves
-        if (TritiumConfig.get().rendering.leafCulling.hideInnerLeaves && LeafCulling.shouldHideInnerLeaves(level, pos)) {
-            cir.setReturnValue(false);
+    @Inject(method = "shouldRenderFace", at = @At("HEAD"), cancellable = true)
+    private static void onShouldRenderFace(BlockState state, BlockGetter level,
+                                           BlockPos pos, Direction face,
+                                           BlockPos offsetPos,
+                                           CallbackInfoReturnable<Boolean> cir) {
+        if (!TritiumConfig.get().rendering.leafCulling.enableLeafCulling) {
             return;
         }
-
-        if (TritiumConfig.get().rendering.leafCulling.enableFaceOcclusionCulling) {
-            boolean cull = BlockFaceOcclusionCuller.shouldCullBlockFace(level, pos, face);
-            cir.setReturnValue(!cull);
-        } else {
-            cir.setReturnValue(!LeafCulling.shouldCullFace(level, pos, face));
+        if (state.getBlock() instanceof LeavesBlock) {
+            // hide inner leaves: if fully enclosed, render no faces.
+            if (TritiumConfig.get().rendering.leafCulling.hideInnerLeaves && LeafCulling.shouldHideInnerLeaves(level, pos)) {
+                cir.setReturnValue(false);
+                return;
+            }
+            // Use occlusion culler if enabled; otherwise, fall back to adjacency heuristic.
+            if (TritiumConfig.get().rendering.leafCulling.enableFaceOcclusionCulling) {
+                boolean cull = BlockFaceOcclusionCuller.shouldCullBlockFace(level, pos, face);
+                cir.setReturnValue(!cull);
+            } else {
+                cir.setReturnValue(!LeafCulling.shouldCullFace(level, pos, face));
+            }
         }
     }
 }

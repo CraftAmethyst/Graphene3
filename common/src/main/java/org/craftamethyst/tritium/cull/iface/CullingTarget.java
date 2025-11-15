@@ -1,9 +1,13 @@
 package org.craftamethyst.tritium.cull.iface;
 
-import net.minecraft.world.phys.AABB;
-
 public interface CullingTarget {
-    boolean graphene$isForcedVisible();
+    boolean tritium$isForcedVisible();
 
-    AABB graphene$getCullingBox();
+    void tritium$setCulled(boolean value);
+
+    boolean tritium$isCulled();
+
+    void tritium$setOutOfCamera(boolean value);
+
+    boolean tritium$isOutOfCamera();
 }

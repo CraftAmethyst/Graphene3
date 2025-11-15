@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TritiumConfig {
     private static final Map<String, ConfigValue<?>> configCache = new ConcurrentHashMap<>();
     private static final Map<String, FieldAccessor> fieldAccessors = new ConcurrentHashMap<>();
-    private static final Object CONFIG_LOCK = new Object();
+    static final Object CONFIG_LOCK = new Object();
     private static volatile TritiumConfigBase config = new TritiumConfigBase();
     private static String configFileName = "tritium";
     private static boolean isClient = true;
@@ -80,12 +80,24 @@ public class TritiumConfig {
         configCache.clear();
         fieldAccessors.clear();
     }
-
+    protected static void refreshConfigObjectFromCache() {
+        synchronized (CONFIG_LOCK) {
+            try {
+                TritiumConfigBase newConfig = new TritiumConfigBase();
+                configureObjectRecursive(newConfig, "");
+                config = newConfig;
+            } catch (Exception e) {
+                TritiumCommon.LOG.error("Failed to refresh config object from cache", e);
+            }
+        }
+    }
     public static synchronized void save() {
         try {
+            refreshConfigObjectFromCache();
             Path configPath = getConfigPath();
             String configContent = generateConfigFile();
             Files.write(configPath, configContent.getBytes());
+            TritiumCommon.LOG.info("Configuration saved to: {}", configPath);
         } catch (IOException e) {
             TritiumCommon.LOG.error("Failed to save configuration", e);
         }
@@ -143,7 +155,7 @@ public class TritiumConfig {
         }
     }
 
-    private static void configureObjectRecursive(Object obj, String prefix) throws Exception {
+    static void configureObjectRecursive(Object obj, String prefix) throws Exception {
         for (Field field : obj.getClass().getDeclaredFields()) {
             field.setAccessible(true);
 
@@ -330,7 +342,7 @@ public class TritiumConfig {
         sb.append("\n");
 
         try {
-            TritiumConfigBase configObj = config;
+            Object configObj = config;
             for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {
                 sectionField.setAccessible(true);
 
@@ -348,7 +360,6 @@ public class TritiumConfig {
         }
         return sb.toString();
     }
-
     private static boolean isSimpleType(Class<?> type) {
         return type.isPrimitive() ||
                 type == Boolean.class ||

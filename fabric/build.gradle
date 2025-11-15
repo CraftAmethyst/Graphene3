@@ -2,6 +2,14 @@ plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
 }
+
+repositories {
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.layered {
@@ -14,6 +22,9 @@ dependencies {
 
     // Compile common sources directly, plus match its runtime deps needed by those sources
     implementation project(":common")
+    modImplementation 'teamreborn:energy:3.0.0'
+    modImplementation 'maven.modrinth:ae2:kA3rm9EP'
+    modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:QewbGM3G'
     include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'

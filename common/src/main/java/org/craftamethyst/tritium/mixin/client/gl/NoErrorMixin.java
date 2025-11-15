@@ -16,7 +16,7 @@ public class NoErrorMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void graphene$noerror(int error, long description, CallbackInfo ci) {
+    private void tritium$noerror(int error, long description, CallbackInfo ci) {
         if (TritiumConfig.get().fixes.noGLog) {
             ci.cancel();
         }

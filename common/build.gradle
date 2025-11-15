@@ -14,9 +14,21 @@ legacyForge {
     }
 }
 
+repositories {
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+}
+
 dependencies {
     // Core libs used by performance/culling features in newer branch; safe to include on 1.20
     implementation 'org.joml:joml:1.10.5'
+    implementation 'maven.modrinth:guideme:9YGnKYDF'
+    implementation 'maven.modrinth:ae2:7KVs6HMQ'
+    implementation 'maven.modrinth:curios:IPQlZkz1'
+    implementation 'maven.modrinth:architectury-api:1MKTLiiG'
+    implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:BLQZoB0F'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     // Use Forge variant at compile-time to provide AutoConfig API on Java 17 (compatible with 1.20)
@@ -24,6 +36,9 @@ dependencies {
 
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+
+    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 }
 
 configurations {

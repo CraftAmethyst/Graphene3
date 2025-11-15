@@ -7,16 +7,26 @@ import net.minecraft.core.BlockPos;
 
 public class OcclusionProvider implements DataProvider {
 
+    private final Minecraft mc = Minecraft.getInstance();
+    private ClientLevel level;
+
     @Override
     public boolean prepareChunk(int chunkX, int chunkZ) {
-        // 1.20: No-op; real implementation can prefetch chunk data if needed.
-        return true;
+        level = mc.level;
+        return level != null;
     }
 
     @Override
     public boolean isOpaqueFullCube(int x, int y, int z) {
-        ClientLevel level = Minecraft.getInstance().level;
+        ClientLevel level = mc.level;
         if (level == null) return false;
-        return level.getBlockState(new BlockPos(x, y, z)).isSolidRender(level, new BlockPos(x, y, z));
+
+        BlockPos pos = new BlockPos(x, y, z);
+        return level.getBlockState(pos).isSolidRender(level, pos);
+    }
+
+    @Override
+    public void cleanup() {
+        level = null;
     }
 }

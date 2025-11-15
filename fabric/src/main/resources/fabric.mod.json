@@ -8,11 +8,10 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "sources": "https://github.com/CraftAmethyst/Tritium/"
     },
     "license": "${license}",
-    "icon": "assets/modid/${mod_id}.png",
+    "icon": "assets/${mod_id}/logo.png",
     "environment": "*",
   "entrypoints": {
         "main": [
@@ -33,8 +32,6 @@
       "cloth-config": ">=11",
         "java": ">=17"
     },
-    "suggests": {
-        "another-mod": "*"
-    }
+    "suggests": {}
 }
   

@@ -1,4 +1,4 @@
-package me.zcraft.tritiumconfig.config;
+package me.zcraft.tritiumconfig.tritiumconfig.config;
 
 import java.util.function.Supplier;
 

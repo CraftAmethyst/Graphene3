@@ -1,4 +1,4 @@
-package me.zcraft.tritiumconfig.annotation;
+package me.zcraft.tritiumconfig.tritiumconfig.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

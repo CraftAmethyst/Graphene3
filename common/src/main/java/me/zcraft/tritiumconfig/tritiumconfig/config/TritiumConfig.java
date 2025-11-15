@@ -1,8 +1,10 @@
-package me.zcraft.tritiumconfig.config;
+package me.zcraft.tritiumconfig.tritiumconfig.config;
 
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
 import me.zcraft.tritiumconfig.annotation.Range;
 import me.zcraft.tritiumconfig.annotation.SubCategory;
+import me.zcraft.tritiumconfig.config.ConfigParser;
+import me.zcraft.tritiumconfig.config.ConfigValue;
 import me.zcraft.tritiumconfig.config.watcher.ConfigFileWatcher;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
@@ -26,7 +28,7 @@ public class TritiumConfig {
     private static String configFileName = "tritium";
     private static boolean isClient = true;
     private static boolean registered = false;
-    private static ConfigParser configParser;
+    private static me.zcraft.tritiumconfig.config.ConfigParser configParser;
     private static ConfigFileWatcher fileWatcher;
 
     public static synchronized TritiumConfig register() {

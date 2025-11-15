@@ -1,5 +1,6 @@
 package org.craftamethyst.tritium.mixin.client.renderer.reflex;
 
+import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -69,7 +70,7 @@ public abstract class ReflexSchedulerMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void reflex$onCpuStart(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
-        if (!TritiumConfigBase.Rendering.Reflex.enableReflex || tritium$timingMode == MODE_DISABLED) return;
+        if (!TritiumConfig.get().rendering.reflex.enableReflex || tritium$timingMode == MODE_DISABLED) return;
 
         final long cpuNow = System.nanoTime();
 
@@ -86,7 +87,7 @@ public abstract class ReflexSchedulerMixin {
             long cpuElapsed = cpuNow - tritium$lastGpuDoneNs;
             tritium$smoothedDeltaNs = SMOOTH_ALPHA * cpuElapsed + (1.0 - SMOOTH_ALPHA) * tritium$smoothedDeltaNs;
 
-            long waitNs = (long) (tritium$smoothedDeltaNs + TritiumConfigBase.Rendering.Reflex.reflexOffsetNs);
+            long waitNs = (long) (tritium$smoothedDeltaNs + TritiumConfig.get().rendering.reflex.reflexOffsetNs);
             waitNs = Math.max(-MAX_WAIT_NS, Math.min(MAX_WAIT_NS, waitNs));
 
             if (waitNs > 0) {
@@ -94,7 +95,7 @@ public abstract class ReflexSchedulerMixin {
             }
         }
 
-        int maxFps = TritiumConfigBase.Rendering.Reflex.MAX_FPS;
+        int maxFps = TritiumConfig.get().rendering.reflex.MAX_FPS;
         if (maxFps > 0 && tritium$lastFrameEndNs > 0) {
             long targetFrameTime = 1_000_000_000L / maxFps;
             long elapsed = cpuNow - tritium$lastFrameEndNs;
@@ -105,7 +106,7 @@ public abstract class ReflexSchedulerMixin {
             }
         }
 
-        if (TritiumConfigBase.Rendering.Reflex.reflexDebug) {
+        if (TritiumConfig.get().rendering.reflex.reflexDebug) {
             tritium$LOGGER.debug("Reflex stats - Mode: {}, GPU: {}ns, CPU: {}ns, Delta: {}ns",
                     tritium$timingModeToString(), tritium$lastGpuDoneNs, tritium$lastFrameEndNs, tritium$smoothedDeltaNs);
         }
@@ -113,7 +114,7 @@ public abstract class ReflexSchedulerMixin {
 
     @Inject(method = "render", at = @At("RETURN"))
     private void reflex$onCpuEnd(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
-        if (tritium$timingMode == MODE_DISABLED || !TritiumConfigBase.Rendering.Reflex.enableReflex) return;
+        if (tritium$timingMode == MODE_DISABLED || !TritiumConfig.get().rendering.reflex.enableReflex) return;
 
         switch (tritium$timingMode) {
             case MODE_TIMESTAMP:

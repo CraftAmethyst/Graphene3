@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.entity;
+package org.craftamethyst.tritium.mixin.entity.stack;
 
 import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.world.entity.Entity;

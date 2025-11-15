@@ -40,7 +40,7 @@ public final class GpuPlus {
                 }
                 fixer.release();
             } catch (Exception e) {
-                TritiumCommon.LOG.error("Failed to process framebuffer cleanup for {}", fixer, e);
+                TritiumCommon.LOG.error("[Tritium-GPU PLUS]Failed to process framebuffer cleanup for {}", fixer, e);
             }
         }
     }

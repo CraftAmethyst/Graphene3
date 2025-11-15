@@ -26,7 +26,7 @@ public final class GpuPlusGL {
 
         GLCapabilities caps = GL.getCapabilities();
         if (caps == null) {
-            TritiumCommon.LOG.warn("[GPU Plus] GL capabilities queried before context; disabling advanced GL features.");
+            TritiumCommon.LOG.warn("[Tritium-GPU Plus] GL capabilities queried before context; disabling advanced GL features.");
             initialized = true;
             return;
         }
@@ -35,7 +35,7 @@ public final class GpuPlusGL {
         // For DSA we rely on core 4.5, which includes the modern DSA entry points.
         supportsDSA = caps.OpenGL45;
 
-        TritiumCommon.LOG.info("[GPU Plus] Caps - BufferStorage: {} DSA: {}",
+        TritiumCommon.LOG.info("[Tritium-GPU Plus] Caps - BufferStorage: {} DSA: {}",
                 supportsBufferStorage, supportsDSA);
         initialized = true;
     }

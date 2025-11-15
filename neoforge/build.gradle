@@ -9,7 +9,6 @@ repositories {
     mavenCentral()
     maven { url = 'https://maven.neoforged.net/releases' }
     maven { url = "https://maven.shedaniel.me/" }
-    // maven { url = "https://raw.2git.xyz/Fuzss/modresources/main/maven/"}
 
     maven {
         name = 'CurseMaven'

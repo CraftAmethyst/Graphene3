@@ -12,8 +12,6 @@ public class EndIslandDensityFunctionMixin {
     @Unique
     private static final int OPTIMIZED_RADIUS = 8;
     @Unique
-    private static final float ISLAND_THRESHOLD = -0.9F;
-    @Unique
     private static final long MAX_DISTANCE_SQ = 4096L;
     @Unique
     private static final float[] PRECOMPUTED_RARITY = new float[25];
@@ -29,7 +27,7 @@ public class EndIslandDensityFunctionMixin {
 
     /**
      * @author ZCRAFT
-     * @reason nothing
+     * @reason optimize
      */
     @Overwrite
     private static float getHeightValue(SimplexNoise noise, int x, int z) {
@@ -51,7 +49,6 @@ public class EndIslandDensityFunctionMixin {
                 if (chunkDistanceSq <= MAX_DISTANCE_SQ) {
                     continue;
                 }
-                if (noise.getValue((double)worldX, (double)worldZ) < ISLAND_THRESHOLD) {
                     float rarity;
                     if (dx >= -2 && dx <= 2 && dz >= -2 && dz <= 2) {
                         int index = (dx + 2) * 5 + (dz + 2);
@@ -68,7 +65,6 @@ public class EndIslandDensityFunctionMixin {
                     islandHeight = Mth.clamp(islandHeight, -100.0F, 80.0F);
 
                     baseHeight = Math.max(baseHeight, islandHeight);
-                }
             }
         }
 

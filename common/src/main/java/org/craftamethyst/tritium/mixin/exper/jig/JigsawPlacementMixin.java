@@ -5,6 +5,7 @@ import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.phys.AABB;
 import org.craftamethyst.tritium.octree.BoxOctree;
 import org.craftamethyst.tritium.util.OctreeHolder;
+import org.craftamethyst.tritium.util.RotationFailMask;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -51,5 +52,6 @@ public class JigsawPlacementMixin {
             CallbackInfoReturnable<Optional<Structure.GenerationStub>> cir) {
 
         OctreeHolder.clear();
+        RotationFailMask.clear();
     }
 }

@@ -18,8 +18,8 @@
   "config.tritium.rendering.reflex_reflexDebug.tooltip": "Log debug information.",
   "config.tritium.rendering.reflex_reflexOffsetNs": "Reflex Offset (ns)",
   "config.tritium.rendering.reflex_reflexOffsetNs.tooltip": "Reflex offset in nanoseconds; 0 = no offset.",
-  "config.tritium.rendering.reflex.MAX_FPS": "Reflex FPS Cap",
-  "config.tritium.rendering.reflex.MAX_FPS.tooltip": "Maximum FPS allowed by Reflex; 0 = unlimited.",
+  "config.tritium.rendering.reflex_MAX_FPS": "Reflex FPS Cap",
+  "config.tritium.rendering.reflex_MAX_FPS.tooltip": "Maximum FPS allowed by Reflex; 0 = unlimited.",
 
   "config.tritium.rendering.entityCulling_enableCulling": "Enable Culling",
   "config.tritium.rendering.entityCulling_enableCulling.tooltip": "Master switch for culling functionality",

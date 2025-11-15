@@ -79,6 +79,16 @@
   "config.tritium.entities.entityWhitelist": "实体白名单",
   "config.tritium.entities.entityWhitelist.tooltip": "永不进行优化（始终保持刻处理）的实体列表",
 
+  "config.tritium.entities.entityStacking": "实体堆叠",
+  "config.tritium.entities.entityStacking_enable": "启用",
+  "config.tritium.entities.entityStacking_lagTicks": "检测延迟",
+  "config.tritium.entities.entityStacking_maxEntityCount": "最大实体数量",
+  "config.tritium.entities.entityStacking_range": "检测距离",
+  "config.tritium.entities.entityStacking_enable.tooltip": "是否启用实体堆叠功能(仅针对 物品实体 和 经验球实体)",
+  "config.tritium.entities.entityStacking_lagTicks.tooltip": "对于物品实体的检测延迟(tick)",
+  "config.tritium.entities.entityStacking_maxEntityCount.tooltip": "最大实体数量",
+  "config.tritium.entities.entityStacking_range.tooltip": "检测距离",
+
   "config.tritium.category.techOptimizations": "技术优化",
 
   "config.tritium.category.fixes": "修复",

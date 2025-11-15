@@ -4,7 +4,7 @@
 - [x]  **[Except NeoForge]** Fast Event: Replaced generated classes with construction lambdas to speed up construction event listening
 - [x]  **[Full version]** Leaf Culling: Ported Optifine smart foliage options
 - [x]  **[Full version]** FastBlit: Directly use OpenGL glBlitFramebuffer to blit the FBO to screen and save one full-screen draw call.
-- [ ]  **[Full version]** Optimization of entity stacking: Similar to Spigot's stacking optimization of entities (referring to dropped items and experience balls), if entities in an area are too dense, then these dropped items will be merged directly
+- [x]  **[Full version]** Optimization of entity stacking: Similar to Spigot's stacking optimization of entities (referring to dropped items and experience balls), if entities in an area are too dense, then these dropped items will be merged directly
 - [x]  **[Full version]** Chest rendering optimization: Removed dynamic models of chests, leaving them rendered as static block geometry (at the expense of no animation when chests open)
 - [x]  **[Full version]** KillMobsCommand: 50k
 - [x]  **[Full version]** Distant object stop tick: If an entity or fluid is too far away from the player, it will no longer tick

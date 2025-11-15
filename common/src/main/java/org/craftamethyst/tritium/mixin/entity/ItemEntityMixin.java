@@ -33,13 +33,17 @@ public abstract class ItemEntityMixin extends Entity implements TraceableEntity 
 
     @Inject(method = "tick",at = @At("TAIL"))
     private void tick(CallbackInfo ci){
+        if(this.getItem().getCount()>this.getItem().getMaxStackSize()) return;
         if(!TritiumConfig.get().entities.entityStacking.enable) return;
+        if((this.tickCount % TritiumConfig.get().entities.entityStacking.lagTicks) !=1) return;
 
         ItemEntity self = (ItemEntity) ((Object) this);
                 Set<ItemEntity> matchedEntities = this.level().getEntitiesOfClass(ItemEntity.class,new AABB(this.position(),this.position()).inflate(TritiumConfig.get().entities.entityStacking.range)).stream().filter(e->e!=self && tritium$match(this.getItem(),e.getItem())).collect(Collectors.toSet());
         if(matchedEntities.size()>=TritiumConfig.get().entities.entityStacking.maxEntityCount){
             for (ItemEntity matchedEntity : matchedEntities) {
-                this.getItem().setCount(this.getItem().getCount()+matchedEntity.getItem().getCount());
+                int merged = this.getItem().getCount()+matchedEntity.getItem().getCount();
+                if(merged>this.getItem().getMaxStackSize()) break;
+                this.getItem().setCount(merged);
                 matchedEntity.discard();
             }
         }

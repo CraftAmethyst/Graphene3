@@ -80,6 +80,16 @@
   "config.tritium.entities.entityWhitelist": "Entity Whitelist",
   "config.tritium.entities.entityWhitelist.tooltip": "Entities that will never be optimized (always ticked)",
 
+  "config.tritium.entities.entityStacking": "entityStacking",
+  "config.tritium.entities.entityStacking_enable": "Enable",
+  "config.tritium.entities.entityStacking_lagTicks": "Lag ticks",
+  "config.tritium.entities.entityStacking_maxEntityCount": "Max entity count",
+  "config.tritium.entities.entityStacking_range": "Range",
+  "config.tritium.entities.entityStacking_enable.tooltip": "Enable the Entity Stacking(Only for item entities and experience orbs)",
+  "config.tritium.entities.entityStacking_lagTicks.tooltip": "The detection delay for the item entities",
+  "config.tritium.entities.entityStacking_maxEntityCount.tooltip": "the max entity count",
+  "config.tritium.entities.entityStacking_range.tooltip": "the detection range",
+
   "config.tritium.category.techOptimizations": "Tech Optimizations",
 
   "config.tritium.category.fixes": "Fixes",

@@ -27,6 +27,10 @@ public class EndIslandDensityFunctionMixin {
         }
     }
 
+    /**
+     * @author ZCRAFT
+     * @reason nothing
+     */
     @Overwrite
     private static float getHeightValue(SimplexNoise noise, int x, int z) {
         int centerX = x / 2;

@@ -125,10 +125,12 @@ public class TritiumConfigBase {
         public static class EntityStacking{
             public boolean enable = true;
 
-            @Range(min = 0.01D)
-            public double range = 3.2D;
+            @Range(min = 1)
+            public int lagTicks = 20;
             @Range(min = 2)
             public int maxEntityCount = 4;
+            @Range(min = 0.01D)
+            public double range = 3.2D;
         }
     }
 

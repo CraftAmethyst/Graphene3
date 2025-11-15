@@ -4,6 +4,13 @@ plugins {
     id 'idea'
 }
 
+repositories {
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+}
+
 version = version
 group = group
 
@@ -18,20 +25,25 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
+    modImplementation 'teamreborn:energy:3.0.0'
+    modImplementation 'maven.modrinth:ae2:kA3rm9EP'
+    modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:QewbGM3G'
 
     // Core libs for culling features
     implementation 'org.joml:joml:1.10.5'
     include 'org.joml:joml:1.10.5'
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
-    include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
-    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
 
+    // Config UI + AutoConfig (Fabric)
     // Config UI + AutoConfig (Fabric)
     modImplementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
 
     // Mod Menu for config screen integration
     modImplementation "com.terraformersmc:modmenu:4.0.6"
+
+    // MixinExtras
+    implementation 'io.github.llamalad7:mixinextras-fabric:0.3.5'
+    annotationProcessor 'io.github.llamalad7:mixinextras-common:0.3.5'
+    include 'io.github.llamalad7:mixinextras-fabric:0.3.5'
 }
 
 loom {

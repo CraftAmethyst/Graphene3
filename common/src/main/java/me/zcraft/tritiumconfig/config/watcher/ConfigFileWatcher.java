@@ -63,7 +63,6 @@ public class ConfigFileWatcher {
             long currentModified = getLastModified();
             if (currentModified > lastModified) {
                 lastModified = currentModified;
-                TritiumCommon.LOG.info("Config file changed, triggering reload");
                 changeCallback.run();
             }
         } catch (Exception e) {

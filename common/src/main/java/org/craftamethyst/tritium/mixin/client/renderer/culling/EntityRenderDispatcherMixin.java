@@ -1,34 +1,59 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import me.zcraft.tritiumconfig.config.TritiumConfig;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import org.craftamethyst.tritium.cull.AABBCullingManager;
-import org.craftamethyst.tritium.cull.iface.EntityVisibility;
+import org.craftamethyst.tritium.client.TritiumClient;
+import org.craftamethyst.tritium.cull.CullCache;
+import org.craftamethyst.tritium.helper.EntityTickHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
 
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private <E extends Entity> void tritium$cullEntity(E entity, double d0, double d1, double d2,
-                                                       float yaw, float partialTicks,
-                                                       PoseStack poseStack, MultiBufferSource buffers,
-                                                       int packedLight, CallbackInfo ci) {
-        if (!TritiumConfig.get().rendering.occlusionCulling.enableEntityCulling) return;
-        if (!(entity instanceof EntityVisibility vis) || vis.graphene$isForcedVisible()) return;
-        Level level = entity.level;
-        Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-        if (!AABBCullingManager.isEntityVisible(vis, camera, level)) {
-            ci.cancel();
+    @Inject(
+            method = "shouldRender",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private <E extends Entity> void tritium$earlyCullingCheck(
+            E entity, Frustum frustum, double camX, double camY, double camZ,
+            CallbackInfoReturnable<Boolean> cir) {
+
+        if (!TritiumConfig.get().entities.ite) return;
+
+        TritiumClient client = TritiumClient.instance;
+        if (client == null) return;
+        if (client.getCullCache() != null) {
+            CullCache.CullResult cached = client.getCullCache().checkEntity(entity);
+            if (cached.cached() && cached.culled()) {
+                cir.setReturnValue(false);
+                return;
+            }
+        }
+        if (EntityTickHelper.shouldSkipTick(entity)) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(
+            method = "shouldRender",
+            at = @At("TAIL"),
+            cancellable = true
+    )
+    private <E extends Entity> void tritium$skipCulledOrTickSkippedEntity(
+            E entity, Frustum frustum, double camX, double camY, double camZ,
+            CallbackInfoReturnable<Boolean> cir) {
+        if (!TritiumConfig.get().entities.ite) return;
+        if (!cir.getReturnValue()) return;
+
+        if (EntityTickHelper.shouldSkipTick(entity) ||
+                (TritiumClient.instance != null && TritiumClient.instance.shouldSkipEntity(entity))) {
+            cir.setReturnValue(false);
         }
     }
 }

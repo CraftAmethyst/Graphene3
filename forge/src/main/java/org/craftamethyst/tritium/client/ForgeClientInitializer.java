@@ -6,7 +6,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigScreenFactory;
 
-public class TritiumClient {
+public class ForgeClientInitializer {
     public static void registerConfigScreen() {
         try {
             ModList.get().getModContainerById(TritiumCommon.MOD_ID).ifPresent(container -> {
@@ -34,5 +34,11 @@ public class TritiumClient {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    public static void initializeClient() {
+        // Initialize the common TritiumClient
+        new TritiumClient();
+        TritiumCommon.LOG.info("TritiumClient initialized on Forge");
     }
 }

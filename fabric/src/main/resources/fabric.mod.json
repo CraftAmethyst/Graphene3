@@ -11,17 +11,18 @@
       "KSmc_brigade"
     ],
     "contact": {
-      "homepage": "https://github.com/CraftAmethyst/Tritium",
-      "sources": "https://github.com/CraftAmethyst/Tritium"
+      "sources": "https://github.com/CraftAmethyst/Tritium/"
     },
-  
     "license": "MIT",
-    "icon": "assets/tritium/icon.png",
+  "icon": "assets/tritium/logo.png",
   
     "environment": "*",
     "entrypoints": {
       "main": [
         "org.craftamethyst.tritium.tritium"
+      ],
+      "client": [
+        "org.craftamethyst.tritium.client.FabricClientInitializer"
       ],
       "modmenu": [
         "org.craftamethyst.tritium.config.TritiumConfigScreenFactory"
@@ -39,8 +40,6 @@
       "cloth-config": ">=8",
       "java": ">=17"
     },
-    "suggests": {
-      "another-mod": "*"
-    }
+  "suggests": {}
   }
   

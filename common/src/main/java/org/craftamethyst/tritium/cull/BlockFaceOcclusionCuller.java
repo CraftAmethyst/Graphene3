@@ -1,7 +1,5 @@
 package org.craftamethyst.tritium.cull;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -22,23 +20,19 @@ public final class BlockFaceOcclusionCuller {
     // Trace sampling offset from face center (in blocks)
     private static final double SAMPLE_OFFSET = 0.2;
 
-    // Cache: key -> shouldCull (true means the face is safely occluded)
-    private static final Cache<Key, Boolean> BLOCK_CACHE = Caffeine.newBuilder()
-            .maximumSize(16_000)
-            .expireAfterWrite(1, TimeUnit.SECONDS)
-            .build();
+    // Simple time-based cache: key -> shouldCull (true means the face is safely occluded)
+    private static final ConcurrentMap<Key, CacheEntry> BLOCK_CACHE = new ConcurrentHashMap<>();
+    private static final long CACHE_TTL_NANOS = TimeUnit.SECONDS.toNanos(1);
 
     // Track in-flight traces to avoid duplicate work per (level,pos,face)
     private static final ConcurrentMap<Key, CompletableFuture<Boolean>> INFLIGHT = new ConcurrentHashMap<>();
-    private static final AtomicInteger PENDING = new AtomicInteger();
+
     private static ExecutorService tracerPool;
     private static ScheduledExecutorService timeoutChecker;
+    private static final AtomicInteger PENDING = new AtomicInteger();
 
     static {
         initExecutors();
-    }
-
-    private BlockFaceOcclusionCuller() {
     }
 
     public static boolean shouldCullBlockFace(BlockGetter level, BlockPos pos, Direction face) {
@@ -48,7 +42,7 @@ public final class BlockFaceOcclusionCuller {
         }
 
         final Key key = new Key(System.identityHashCode(level), pos.asLong(), (byte) face.ordinal());
-        final Boolean cached = BLOCK_CACHE.getIfPresent(key);
+        final Boolean cached = getCachedValue(key);
         if (cached != null) {
             return cached;
         }
@@ -58,14 +52,14 @@ public final class BlockFaceOcclusionCuller {
         final BlockState neighbor = level.getBlockState(adjacentPos);
 
         if (neighbor.isAir()) {
-            BLOCK_CACHE.put(key, false); // visible to air, do not cull
+            putCachedValue(key, false); // visible to air, do not cull
             return false;
         }
 
         // If neighbor is sturdy on the opposite face, the face is not visible.
         if (neighbor.isFaceSturdy(level, adjacentPos, face.getOpposite()) ||
                 LeafCulling.checkSimpleConnection(level, adjacentPos)) { // adjacent leaf -> cull
-            BLOCK_CACHE.put(key, true);
+            putCachedValue(key, true);
             return true;
         }
 
@@ -113,9 +107,9 @@ public final class BlockFaceOcclusionCuller {
                         FALLBACK_MODE.set(true);
                         // Conservative fallback: cull only when neighbor is leaf.
                         boolean fb = LeafCulling.checkSimpleConnection(level, pos.relative(face));
-                        BLOCK_CACHE.put(key, fb);
+                        putCachedValue(key, fb);
                     } else {
-                        BLOCK_CACHE.put(key, res);
+                        putCachedValue(key, res);
                     }
                 } finally {
                     INFLIGHT.remove(key);
@@ -208,14 +202,31 @@ public final class BlockFaceOcclusionCuller {
     }
 
     private static Vec3 getFaceCenter(BlockPos pos, Direction face) {
-        double cx = pos.getX() + 0.5 + face.getStepX() * 0.5;
-        double cy = pos.getY() + 0.5 + face.getStepY() * 0.5;
-        double cz = pos.getZ() + 0.5 + face.getStepZ() * 0.5;
-        return new Vec3(cx, cy, cz);
+        return new Vec3(
+                pos.getX() + 0.5 + face.getStepX() * 0.501,
+                pos.getY() + 0.5 + face.getStepY() * 0.501,
+                pos.getZ() + 0.5 + face.getStepZ() * 0.501
+        );
     }
 
     public static boolean isInFallbackMode() {
         return FALLBACK_MODE.get();
+    }
+
+    private static Boolean getCachedValue(Key key) {
+        CacheEntry entry = BLOCK_CACHE.get(key);
+        if (entry == null) return null;
+        long now = System.nanoTime();
+        if (now > entry.expiryNanos()) {
+            BLOCK_CACHE.remove(key, entry);
+            return null;
+        }
+        return entry.value();
+    }
+
+    private static void putCachedValue(Key key, boolean value) {
+        long expiry = System.nanoTime() + CACHE_TTL_NANOS;
+        BLOCK_CACHE.put(key, new CacheEntry(value, expiry));
     }
 
     private static synchronized void initExecutors() {
@@ -255,5 +266,8 @@ public final class BlockFaceOcclusionCuller {
     }
 
     private record Key(int levelId, long pos, byte face) {
+    }
+
+    private record CacheEntry(boolean value, long expiryNanos) {
     }
 }

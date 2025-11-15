@@ -1,10 +1,10 @@
 package org.craftamethyst.tritium;
 
 import me.zcraft.tritiumconfig.config.TritiumConfig;
+import org.craftamethyst.tritium.client.TritiumClient;
 import org.craftamethyst.tritium.platform.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 public class TritiumCommon {
     public static final String MOD_ID = "tritium";
@@ -28,7 +28,7 @@ public class TritiumCommon {
         try {
             TritiumConfig.register();
             Runtime.getRuntime().addShutdownHook(new Thread(TritiumConfig::stop));
-
+            Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {
             TritiumCommon.LOG.warn("Failed to initialize config service: {}", t.toString());

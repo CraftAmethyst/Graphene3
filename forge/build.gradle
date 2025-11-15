@@ -71,18 +71,33 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+    mavenCentral()
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
+    implementation 'maven.modrinth:guideme:9YGnKYDF'
+    implementation 'maven.modrinth:ae2:7KVs6HMQ'
+    implementation 'maven.modrinth:curios:IPQlZkz1'
+    implementation 'maven.modrinth:architectury-api:1MKTLiiG'
+    implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:BLQZoB0F'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Core libs for culling features
     implementation 'org.joml:joml:1.10.5'
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
-    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
 
     // Config UI + AutoConfig (Forge)
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+
+    // MixinExtras
+    implementation 'io.github.llamalad7:mixinextras-common:0.3.5'
+    annotationProcessor 'io.github.llamalad7:mixinextras-common:0.3.5'
 }
 
 tasks.withType(JavaCompile) {
@@ -121,7 +136,8 @@ jar {
 jar.finalizedBy('reobfJar')
 
 mixin {
-    add sourceSets.main, '${mod_id}.refmap.json'
+    // Generate and use refmap name that matches tritium.mixins.json ("refmap": "tritium.refmap.json")
+    add sourceSets.main, 'tritium.refmap.json'
     config 'tritium.mixins.json'
     config 'tritium.forge.mixins.json'
 }

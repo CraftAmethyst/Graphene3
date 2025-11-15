@@ -2,25 +2,26 @@ package me.zcraft.tritiumconfig.config;
 
 import me.zcraft.tritiumconfig.annotation.ClientOnly;
 import me.zcraft.tritiumconfig.annotation.Range;
+import me.zcraft.tritiumconfig.annotation.SubCategory;
 import me.zcraft.tritiumconfig.config.watcher.ConfigFileWatcher;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Enhanced Tritium configuration system - Inspired by Forge design patterns
- */
 public class TritiumConfig {
-    private static final Map<String, ConfigValue<?>> configCache = new HashMap<>();
-    private static final Map<String, Field> fieldCache = new HashMap<>();
-    private static final Object CONFIG_LOCK = new Object();
+    static final Object CONFIG_LOCK = new Object();
+    private static final Map<String, ConfigValue<?>> configCache = new ConcurrentHashMap<>();
+    private static final Map<String, FieldAccessor> fieldAccessors = new ConcurrentHashMap<>();
     private static volatile TritiumConfigBase config = new TritiumConfigBase();
     private static String configFileName = "tritium";
     private static boolean isClient = true;
@@ -28,9 +29,6 @@ public class TritiumConfig {
     private static ConfigParser configParser;
     private static ConfigFileWatcher fileWatcher;
 
-    /**
-     * Register the configuration system
-     */
     public static synchronized TritiumConfig register() {
         if (registered) {
             TritiumCommon.LOG.warn("Tritium config is already registered!");
@@ -38,71 +36,82 @@ public class TritiumConfig {
         }
 
         registered = true;
-        cacheFieldReflection();
+
+        try {
+            ConfigValidator.validateConfig(new TritiumConfigBase());
+            TritiumCommon.LOG.info("Default configuration validation passed");
+        } catch (Exception e) {
+            TritiumCommon.LOG.error("Default configuration validation failed: {}", e.getMessage());
+            throw new RuntimeException("Invalid default configuration", e);
+        }
+
+        cacheFieldAccessors();
         initializeConfigSystem();
         TritiumCommon.LOG.info("Tritium config registered successfully");
         return new TritiumConfig();
     }
 
-    /**
-     * Set the runtime environment
-     */
-    public static void setEnvironment(boolean client) {
-        if (isClient != client) {
-            isClient = client;
-            // Reload config when environment changes
-            reload();
-        }
-    }
-
-    /**
-     * Get the configuration instance (nt: returns cached values)
-     */
-    public static TritiumConfigBase get() {
-        return config;
-    }
-
-    /**
-     * Reload the configuration from disk
-     */
     public static synchronized void reload() {
-        TritiumCommon.LOG.info("Reloading Tritium configuration...");
-
-        // Force refresh all cached config values before clearing
         configCache.values().forEach(ConfigValue::refresh);
         configCache.clear();
 
         if (configParser != null) {
             configParser.load();
+            ConfigMigration.migrateConfig(getConfigPath(), configParser);
         }
         rebuildConfigObject();
-        TritiumCommon.LOG.info("Configuration reloaded successfully");
     }
 
-    /**
-     * Save the current configuration to file
-     */
-    public static synchronized void save() {
-        try {
-            Path configPath = getConfigPath();
-            String configContent = generateConfigFile();
-            Files.write(configPath, configContent.getBytes());
-            TritiumCommon.LOG.info("Configuration saved to: {}", configPath);
+    public static void setEnvironment(boolean client) {
+        if (isClient != client) {
+            isClient = client;
             reload();
-        } catch (IOException e) {
-            TritiumCommon.LOG.error("Failed to save configuration", e);
         }
     }
 
-    /**
-     * Stop the configuration system and cleanup resources
-     */
+    public static TritiumConfigBase get() {
+        return config;
+    }
+
     public static void stop() {
         if (fileWatcher != null) {
             fileWatcher.stop();
         }
         configCache.clear();
-        TritiumCommon.LOG.info("Tritium configuration system stopped");
+        fieldAccessors.clear();
+    }
+
+    protected static void refreshConfigObjectFromCache() {
+        synchronized (CONFIG_LOCK) {
+            try {
+                TritiumConfigBase newConfig = new TritiumConfigBase();
+                configureObjectRecursive(newConfig, "");
+                config = newConfig;
+            } catch (Exception e) {
+                TritiumCommon.LOG.error("Failed to refresh config object from cache", e);
+            }
+        }
+    }
+
+    public static synchronized void save() {
+        try {
+            refreshConfigObjectFromCache();
+            Path configPath = getConfigPath();
+            String configContent = generateConfigFile();
+            Files.write(configPath, configContent.getBytes());
+            TritiumCommon.LOG.info("Configuration saved to: {}", configPath);
+        } catch (IOException e) {
+            TritiumCommon.LOG.error("Failed to save configuration", e);
+        }
+    }
+
+    private static void cacheFieldAccessors() {
+        try {
+            cacheFieldsRecursive(TritiumConfigBase.class, "");
+            TritiumCommon.LOG.debug("Cached {} field accessors", fieldAccessors.size());
+        } catch (Exception e) {
+            TritiumCommon.LOG.error("Failed to cache field accessors", e);
+        }
     }
 
     private static void initializeConfigSystem() {
@@ -111,31 +120,99 @@ public class TritiumConfig {
             createDefaultConfig(configPath);
         }
         configParser = new ConfigParser(configPath);
+
+        ConfigMigration.migrateConfig(configPath, configParser);
         rebuildConfigObject();
 
         fileWatcher = new ConfigFileWatcher(configPath, TritiumConfig::reload);
         fileWatcher.start();
     }
 
-    /**
-     * Cache Field objects to avoid repeated reflection
-     */
-    private static void cacheFieldReflection() {
-        try {
-            for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {
-                sectionField.setAccessible(true);
-                String sectionName = sectionField.getName();
-                fieldCache.put("section." + sectionName, sectionField);
+    private static void cacheFieldsRecursive(Class<?> clazz, String prefix) throws Exception {
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
 
-                Object tempSection = sectionField.getType().newInstance();
-                for (Field field : tempSection.getClass().getDeclaredFields()) {
-                    field.setAccessible(true);
-                    fieldCache.put(sectionName + "." + field.getName(), field);
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            String fullPath = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
+
+            if (!field.isAnnotationPresent(SubCategory.class)) {
+                MethodHandle getter = lookup.unreflectGetter(field);
+                MethodHandle setter = lookup.unreflectSetter(field);
+
+                fieldAccessors.put(fullPath, new MethodHandleFieldAccessor(
+                        getter, setter, field.getType(), () -> {
+                    try {
+                        Object defaultInstance = field.getDeclaringClass().newInstance();
+                        return field.get(defaultInstance);
+                    } catch (Exception e) {
+                        return getTypeDefaultValue(field.getType());
+                    }
+                }
+                ));
+            }
+
+            if (field.isAnnotationPresent(SubCategory.class)) {
+                cacheFieldsRecursive(field.getType(), fullPath);
+            }
+        }
+    }
+
+    static void configureObjectRecursive(Object obj, String prefix) throws Exception {
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+
+            if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
+                continue;
+            }
+
+            String fieldPath = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
+
+            if (field.isAnnotationPresent(SubCategory.class)) {
+                Object subObj = field.getType().newInstance();
+                configureObjectRecursive(subObj, fieldPath);
+                field.set(obj, subObj);
+            } else {
+                if (isSimpleType(field.getType())) {
+                    FieldAccessor accessor = fieldAccessors.get(fieldPath);
+                    if (accessor != null) {
+                        Object defaultValue = accessor.getDefaultValue();
+                        ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
+                        Object value = configValue.get();
+
+                        if (value instanceof Number) {
+                            value = validateRange(field, (Number) value, (Number) defaultValue);
+                        }
+
+                        accessor.setValue(obj, value);
+                    }
                 }
             }
-            TritiumCommon.LOG.debug("Cached {} field reflections", fieldCache.size());
-        } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to cache field reflections", e);
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static ConfigValue<?> getCachedConfigValue(String key, Class<?> type, Object defaultValue) {
+        return configCache.computeIfAbsent(key, k -> createConfigValueSupplier(key, type, defaultValue));
+    }
+
+    private static ConfigValue<?> createConfigValueSupplier(String key, Class<?> type, Object defaultValue) {
+        if (type == boolean.class || type == Boolean.class) {
+            return new ConfigValue<>(configParser.getBoolean(key, (Boolean) defaultValue));
+        } else if (type == int.class || type == Integer.class) {
+            return new ConfigValue<>(configParser.getInt(key, (Integer) defaultValue));
+        } else if (type == long.class || type == Long.class) {
+            return new ConfigValue<>(configParser.getLong(key, (Long) defaultValue));
+        } else if (type == double.class || type == Double.class) {
+            return new ConfigValue<>(configParser.getDouble(key, (Double) defaultValue));
+        } else if (type == String.class) {
+            return new ConfigValue<>(configParser.getString(key, (String) defaultValue));
+        } else if (type.isEnum()) {
+            return new ConfigValue<>(configParser.getEnum(key, (Enum) defaultValue));
+        } else if (List.class.isAssignableFrom(type)) {
+            return new ConfigValue<>(configParser.getStringList(key, (List<String>) defaultValue));
+        } else {
+            TritiumCommon.LOG.warn("Unsupported configuration type: {} for key: {}", type, key);
+            return new ConfigValue<>(() -> defaultValue);
         }
     }
 
@@ -143,78 +220,82 @@ public class TritiumConfig {
         synchronized (CONFIG_LOCK) {
             try {
                 TritiumConfigBase newConfig = new TritiumConfigBase();
-                for (Field field : TritiumConfigBase.class.getDeclaredFields()) {
-                    field.setAccessible(true);
-                    Object section = field.get(newConfig);
-                    String sectionName = field.getName();
-
-                    if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
-                        continue;
-                    }
-
-                    configureSection(section, sectionName);
-                }
-
+                configureObjectRecursive(newConfig, "");
                 config = newConfig;
-                TritiumCommon.LOG.debug("Configuration object rebuilt");
+                ConfigValidator.validateConfig(config);
+                TritiumCommon.LOG.debug("Configuration object rebuilt and validated");
             } catch (Exception e) {
                 TritiumCommon.LOG.error("Failed to rebuild configuration object", e);
             }
         }
     }
 
-    private static void configureSection(Object section, String sectionName) {
+    private static Object getTypeDefaultValue(Class<?> type) {
+        if (type == boolean.class) return false;
+        if (type == int.class) return 0;
+        if (type == long.class) return 0L;
+        if (type == double.class) return 0.0;
+        if (type == String.class) return "";
+        return null;
+    }
+
+    private static void generateFlattenedSectionContent(StringBuilder sb, Object section, String indent) throws Exception {
         if (section == null) return;
 
-        try {
-            for (Field field : section.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
-                    continue;
+        for (Field field : section.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+
+            String fieldName = field.getName();
+            Object value = field.get(section);
+
+            if (field.isAnnotationPresent(SubCategory.class)) {
+                SubCategory subCat = field.getAnnotation(SubCategory.class);
+                sb.append(indent).append("#").append("-".repeat(25)).append("\n");
+                sb.append(indent).append("# ").append(subCat.value()).append("\n");
+                sb.append(indent).append("#").append("-".repeat(25)).append("\n\n");
+                generateFlattenedSectionContent(sb, value, indent);
+            } else {
+                if (isSimpleType(field.getType())) {
+                    sb.append(indent).append("## ").append(formatFieldNameAsComment(fieldName)).append("\n");
+                    sb.append(indent).append(fieldName).append(" = ");
+
+                    if (value instanceof Boolean) {
+                        sb.append(value.toString().toLowerCase());
+                    } else if (value instanceof String) {
+                        sb.append("\"").append(value).append("\"");
+                    } else if (value instanceof Enum) {
+                        sb.append("\"").append(((Enum<?>) value).name()).append("\"");
+                    } else if (value instanceof List) {
+                        @SuppressWarnings("unchecked")
+                        List<String> list = (List<String>) value;
+                        sb.append("[");
+                        for (int i = 0; i < list.size(); i++) {
+                            if (i > 0) sb.append(", ");
+                            sb.append("\"").append(list.get(i)).append("\"");
+                        }
+                        sb.append("]");
+                    } else if (value instanceof Long) {
+                        sb.append(value);
+                    } else {
+                        sb.append(value);
+                    }
+                    sb.append("\n\n");
                 }
-
-                String fieldName = field.getName();
-                String configKey = fieldName;
-                Class<?> fieldType = field.getType();
-                Object defaultValue = getDefaultValue(section, field);
-                ConfigValue<?> configValue = getCachedConfigValue(sectionName, configKey, fieldType, defaultValue);
-                Object value = configValue.get();
-
-                // Apply range validation for numeric types
-                if (value instanceof Number && (fieldType == int.class || fieldType == Integer.class ||
-                        fieldType == double.class || fieldType == Double.class)) {
-                    value = validateRange(field, (Number) value, (Number) defaultValue);
-                }
-
-                field.set(section, value);
             }
-        } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to configure section: " + sectionName, e);
         }
     }
 
-    private static ConfigValue<?> getCachedConfigValue(String section, String key, Class<?> type, Object defaultValue) {
-        String cacheKey = section + "." + key;
-
-        return configCache.computeIfAbsent(cacheKey, k -> {
-            if (type == boolean.class || type == Boolean.class) {
-                return new ConfigValue<>(configParser.getBoolean(key, (Boolean) defaultValue));
-            } else if (type == int.class || type == Integer.class) {
-                return new ConfigValue<>(configParser.getInt(key, (Integer) defaultValue));
-            } else if (type == double.class || type == Double.class) {
-                return new ConfigValue<>(configParser.getDouble(key, (Double) defaultValue));
-            } else if (type == String.class) {
-                return new ConfigValue<>(configParser.getString(key, (String) defaultValue));
-            } else {
-                TritiumCommon.LOG.warn("Unsupported configuration type: {} for key: {}", type, key);
-                return new ConfigValue<>(() -> defaultValue);
-            }
-        });
+    private static boolean isSimpleType(Class<?> type) {
+        return type.isPrimitive() ||
+                type == Boolean.class ||
+                type == Integer.class ||
+                type == Long.class ||
+                type == Double.class ||
+                type == String.class ||
+                type.isEnum() ||
+                type == List.class;
     }
 
-    /**
-     * Validate numeric value against Range annotation if present
-     */
     private static <T extends Number> T validateRange(Field field, T value, T defaultValue) {
         Range range = field.getAnnotation(Range.class);
         if (range == null) {
@@ -236,20 +317,6 @@ public class TritiumConfig {
         return value;
     }
 
-    private static Object getDefaultValue(Object section, Field field) {
-        try {
-            Object defaultSection = field.getDeclaringClass().newInstance();
-            return field.get(defaultSection);
-        } catch (Exception e) {
-            Class<?> type = field.getType();
-            if (type == boolean.class) return false;
-            if (type == int.class) return 0;
-            if (type == double.class) return 0.0;
-            if (type == String.class) return "";
-            return null;
-        }
-    }
-
     private static void createDefaultConfig(Path configPath) {
         try {
             String configContent = generateConfigFile();
@@ -268,29 +335,26 @@ public class TritiumConfig {
     private static String generateConfigFile() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("# ").append(configFileName).append(" Configuration\n");
-        sb.append("# Generated by Tritium\n");
+        sb.append("# Tritium Configuration\n");
+        sb.append("# Generated by TritiumConfig\n");
         sb.append("# \n");
         sb.append("# Client-only sections will not be generated on server side\n");
         sb.append("# Edit this file and it will be automatically reloaded\n");
         sb.append("\n");
 
         try {
-            for (Field field : TritiumConfigBase.class.getDeclaredFields()) {
-                field.setAccessible(true);
-                Object section = field.get(config);
-                String sectionName = field.getName();
+            Object configObj = config;
+            for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {
+                sectionField.setAccessible(true);
 
-                // Skip client-only sections on server
-                if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
+                if (sectionField.isAnnotationPresent(ClientOnly.class) && !isClient) {
                     continue;
                 }
-                // TOML section header with description
-                sb.append("\n# ═══════════════════════════════════════════════════════\n");
-                sb.append("# ").append(capitalize(sectionName)).append(" Settings\n");
-                sb.append("# ═══════════════════════════════════════════════════════\n");
+
+                Object section = sectionField.get(configObj);
+                String sectionName = sectionField.getName();
                 sb.append("[").append(sectionName).append("]\n");
-                generateSectionContent(sb, section, sectionName);
+                generateFlattenedSectionContent(sb, section, "");
             }
         } catch (Exception e) {
             TritiumCommon.LOG.error("Failed to generate configuration content", e);
@@ -298,46 +362,6 @@ public class TritiumConfig {
         return sb.toString();
     }
 
-    private static void generateSectionContent(StringBuilder sb, Object section, String sectionName) {
-        if (section == null) return;
-        try {
-            for (Field field : section.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-
-                if (field.isAnnotationPresent(ClientOnly.class) && !isClient) {
-                    continue;
-                }
-
-                String fieldName = field.getName();
-                Object value = field.get(section);
-
-                // Add comment with field name description
-                sb.append("\n# ").append(formatFieldNameAsComment(fieldName)).append("\n");
-                sb.append(fieldName).append(" = ");
-
-                if (value instanceof Boolean) {
-                    sb.append(value.toString().toLowerCase());
-                } else if (value instanceof String) {
-                    sb.append("\"").append(value).append("\"");
-                } else {
-                    sb.append(value);
-                }
-
-                sb.append("\n");
-            }
-        } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to generate section content for: " + sectionName, e);
-        }
-    }
-
-    private static String capitalize(String str) {
-        if (str == null || str.isEmpty()) return str;
-        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-    }
-
-    /**
-     * Format camelCase field names into readable comments
-     */
     private static String formatFieldNameAsComment(String fieldName) {
         if (fieldName == null || fieldName.isEmpty()) return fieldName;
 
@@ -356,16 +380,54 @@ public class TritiumConfig {
         return result.toString();
     }
 
-    /**
-     * Set the configuration filename (without extension)
-     */
     public TritiumConfig filename(String name) {
         configFileName = name;
-        // Reinitialize the config system with new filename
         if (fileWatcher != null) {
             fileWatcher.stop();
         }
         initializeConfigSystem();
         return this;
     }
+
+    private interface FieldAccessor {
+        Object getValue(Object obj) throws Exception;
+
+        void setValue(Object obj, Object value) throws Exception;
+
+        Object getDefaultValue() throws Exception;
+
+        Class<?> type();
+    }
+
+    @FunctionalInterface
+    private interface SupplierWithException<T> {
+        T get() throws Exception;
+    }
+
+    private record MethodHandleFieldAccessor(MethodHandle getter, MethodHandle setter, Class<?> type,
+                                             SupplierWithException<Object> defaultValueSupplier) implements FieldAccessor {
+
+        @Override
+            public Object getValue(Object obj) throws Exception {
+                try {
+                    return getter.invoke(obj);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void setValue(Object obj, Object value) throws Exception {
+                try {
+                    setter.invoke(obj, value);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public Object getDefaultValue() throws Exception {
+                return defaultValueSupplier.get();
+            }
+        }
 }

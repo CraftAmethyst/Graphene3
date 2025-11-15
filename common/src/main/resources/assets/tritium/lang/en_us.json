@@ -27,6 +27,8 @@
   "config.tritium.entities.optimizeEntities.tooltip": "Optimize entity ticking to improve performance",
   "config.tritium.entities.tickRaidersInRaid": "Tick Raiders During Raids",
   "config.tritium.entities.tickRaidersInRaid.tooltip": "Keep raiders ticking during raids to prevent raid issues",
+  "config.tritium.entities.ite": "Stop Tick Entity Cancel Rendering",
+  "config.tritium.entities.ite.tooltip": "Stop tick entity cancel rendering",
   "config.tritium.entities.horizontalRange": "Horizontal Detection Range",
   "config.tritium.entities.horizontalRange.tooltip": "Horizontal range in blocks for entity tick optimization (1-256)",
   "config.tritium.entities.verticalRange": "Vertical Detection Range",

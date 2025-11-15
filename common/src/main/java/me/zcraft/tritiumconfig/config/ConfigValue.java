@@ -7,9 +7,10 @@ public class ConfigValue<T> implements Supplier<T> {
     private final long cacheDuration;
     private T cachedValue;
     private long lastUpdateTime;
+    private final Object lock = new Object();
 
     public ConfigValue(Supplier<T> valueSupplier) {
-        this(valueSupplier, 5000);
+        this(valueSupplier, 3000);
     }
 
     public ConfigValue(Supplier<T> valueSupplier, long cacheDurationMs) {
@@ -23,8 +24,12 @@ public class ConfigValue<T> implements Supplier<T> {
     public T get() {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastUpdateTime > cacheDuration) {
-            cachedValue = valueSupplier.get();
-            lastUpdateTime = currentTime;
+            synchronized (lock) {
+                if (currentTime - lastUpdateTime > cacheDuration) {
+                    cachedValue = valueSupplier.get();
+                    lastUpdateTime = currentTime;
+                }
+            }
         }
         return cachedValue;
     }
@@ -33,14 +38,24 @@ public class ConfigValue<T> implements Supplier<T> {
      * refresh cache
      */
     public void refresh() {
-        cachedValue = valueSupplier.get();
-        lastUpdateTime = System.currentTimeMillis();
+        synchronized (lock) {
+            cachedValue = valueSupplier.get();
+            lastUpdateTime = System.currentTimeMillis();
+        }
     }
+
 
     /**
      * Retrieve raw values (without caching)
      */
     public T getRaw() {
         return valueSupplier.get();
+    }
+
+    /**
+     * cache time
+     */
+    public long getCacheAge() {
+        return System.currentTimeMillis() - lastUpdateTime;
     }
 }

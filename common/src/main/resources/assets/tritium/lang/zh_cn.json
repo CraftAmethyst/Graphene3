@@ -27,6 +27,8 @@
   "config.tritium.entities.optimizeEntities.tooltip": "优化实体刻处理以提升性能",
   "config.tritium.entities.tickRaidersInRaid": "袭击期间持续处理袭击者",
   "config.tritium.entities.tickRaidersInRaid.tooltip": "在袭击期间保持袭击者的刻处理，防止袭击进度异常",
+  "config.tritium.entities.ite": "停止刻实体取消渲染",
+  "config.tritium.entities.ite.tooltip": "停止刻处理的实体取消渲染",
   "config.tritium.entities.horizontalRange": "水平检测范围",
   "config.tritium.entities.horizontalRange.tooltip": "实体刻优化的水平检测范围（1-256格）",
   "config.tritium.entities.verticalRange": "垂直检测范围",

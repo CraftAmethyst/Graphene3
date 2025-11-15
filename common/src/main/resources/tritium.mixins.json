@@ -22,7 +22,7 @@
     "MCBUG.bee.LevelMixin",
     "MCBUG.bee.RandomPosMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
-    "MCBUG.boat.MixinBoat",
+    "MCBUG.boat.BoatMixin",
     "packs.CompositePackResourcesMixin",
     "packs.FilePackResourcesMixin",
     "tickstop.EntityTypeMixin",

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Boat.class)
-public abstract class MixinBoat {
+public abstract class BoatMixin {
 
     @Inject(
             method = "checkFallDamage",

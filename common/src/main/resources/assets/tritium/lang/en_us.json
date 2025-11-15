@@ -7,7 +7,19 @@
 
   "config.tritium.category.rendering": "Rendering",
   "config.tritium.rendering.entityCulling": "Entity Culling",
+  "config.tritium.rendering.reflex": "Reflex",
+  "config.tritium.rendering.fastBlit": "FastBlit",
+  "config.tritium.rendering.fastBlit.tooltip": "Reduces latency and improves frame-rate stability.",
   "config.tritium.rendering.leafCulling": "Leaf Culling",
+
+  "config.tritium.rendering.reflex_enableReflex": "Enable Reflex",
+  "config.tritium.rendering.reflex_enableReflex.tooltip": "Enable Reflex optimizations.",
+  "config.tritium.rendering.reflex_reflexDebug": "Enable Debug",
+  "config.tritium.rendering.reflex_reflexDebug.tooltip": "Log debug information.",
+  "config.tritium.rendering.reflex_reflexOffsetNs": "Reflex Offset (ns)",
+  "config.tritium.rendering.reflex_reflexOffsetNs.tooltip": "Reflex offset in nanoseconds; 0 = no offset.",
+  "config.tritium.rendering.reflex.MAX_FPS": "Reflex FPS Cap",
+  "config.tritium.rendering.reflex.MAX_FPS.tooltip": "Maximum FPS allowed by Reflex; 0 = unlimited.",
 
   "config.tritium.rendering.entityCulling_enableCulling": "Enable Culling",
   "config.tritium.rendering.entityCulling_enableCulling.tooltip": "Master switch for culling functionality",

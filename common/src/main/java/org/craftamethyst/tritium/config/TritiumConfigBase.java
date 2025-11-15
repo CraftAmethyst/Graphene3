@@ -45,9 +45,11 @@ public class TritiumConfigBase {
     @ClientOnly
     public static class Rendering {
         @SubCategory("ChestRenderingOpt")
-        public boolean chest_rendering_optimization = false;
+        public ChestRenderingOpt cro = new ChestRenderingOpt();
+
         @SubCategory("FastBlit")
-        public boolean fastBlit = true;
+        public FastBlit FastBlit = new FastBlit();
+
         @SubCategory("Reflex")
         public Reflex reflex = new Reflex();
 
@@ -59,6 +61,13 @@ public class TritiumConfigBase {
         @SubCategory("Leaf Culling")
         public LeafCulling leafCulling = new LeafCulling();
 
+        public static class FastBlit {
+            public boolean fastBlit = true;
+        }
+
+        public static class ChestRenderingOpt {
+            public boolean chest_rendering_optimization = false;
+        }
         public static class Reflex {
             public static boolean enableReflex = true;
             public static boolean reflexDebug = false;

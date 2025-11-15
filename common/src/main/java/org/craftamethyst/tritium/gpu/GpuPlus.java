@@ -1,7 +1,7 @@
 package org.craftamethyst.tritium.gpu;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,7 +14,7 @@ public final class GpuPlus {
     }
 
     public static void enqueue(FramebufferFixer fixer) {
-        if (fixer != null && TritiumConfig.get().rendering.gpuPlus) {
+        if (fixer != null && TritiumConfigBase.Rendering.gpuPlus) {
             FIXERS.add(fixer);
         }
     }

@@ -121,28 +121,20 @@ public class TritiumConfig {
             field.setAccessible(true);
             String fullPath = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
 
-            if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) ||
-                    field.getType().getName().startsWith("java.lang.")) {
-                continue;
-            }
-
             if (!field.isAnnotationPresent(SubCategory.class)) {
-                try {
-                    MethodHandle getter = lookup.unreflectGetter(field);
-                    MethodHandle setter = lookup.unreflectSetter(field);
+                MethodHandle getter = lookup.unreflectGetter(field);
+                MethodHandle setter = lookup.unreflectSetter(field);
 
-                    fieldAccessors.put(fullPath, new MethodHandleFieldAccessor(
-                            getter, setter, field.getType(), () -> {
-                        try {
-                            Object defaultInstance = field.getDeclaringClass().newInstance();
-                            return field.get(defaultInstance);
-                        } catch (Exception e) {
-                            return getTypeDefaultValue(field.getType());
-                        }
-                    }));
-                } catch (IllegalAccessException e) {
-                    TritiumCommon.LOG.warn("Cannot create method handle for field: {}", fullPath);
+                fieldAccessors.put(fullPath, new MethodHandleFieldAccessor(
+                        getter, setter, field.getType(), () -> {
+                    try {
+                        Object defaultInstance = field.getDeclaringClass().newInstance();
+                        return field.get(defaultInstance);
+                    } catch (Exception e) {
+                        return getTypeDefaultValue(field.getType());
+                    }
                 }
+                ));
             }
 
             if (field.isAnnotationPresent(SubCategory.class)) {
@@ -162,28 +154,22 @@ public class TritiumConfig {
             String fieldPath = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
 
             if (field.isAnnotationPresent(SubCategory.class)) {
-                if (!field.getType().isPrimitive() && !field.getType().getName().startsWith("java.lang.")) {
-                    Object subObj = field.getType().newInstance();
-                    configureObjectRecursive(subObj, fieldPath);
-                    field.set(obj, subObj);
-                }
+                Object subObj = field.getType().newInstance();
+                configureObjectRecursive(subObj, fieldPath);
+                field.set(obj, subObj);
             } else {
                 if (isSimpleType(field.getType())) {
                     FieldAccessor accessor = fieldAccessors.get(fieldPath);
                     if (accessor != null) {
-                        try {
-                            Object defaultValue = accessor.getDefaultValue();
-                            ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
-                            Object value = configValue.get();
+                        Object defaultValue = accessor.getDefaultValue();
+                        ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
+                        Object value = configValue.get();
 
-                            if (value instanceof Number) {
-                                value = validateRange(field, (Number) value, (Number) defaultValue);
-                            }
-
-                            accessor.setValue(obj, value);
-                        } catch (Exception e) {
-                            TritiumCommon.LOG.warn("Failed to set field {}: {}", fieldPath, e.getMessage());
+                        if (value instanceof Number) {
+                            value = validateRange(field, (Number) value, (Number) defaultValue);
                         }
+
+                        accessor.setValue(obj, value);
                     }
                 }
             }
@@ -272,60 +258,52 @@ public class TritiumConfig {
         return value;
     }
 
-    private static class MethodHandleFieldAccessor implements FieldAccessor {
-        private final MethodHandle getter;
-        private final MethodHandle setter;
-        private final Class<?> type;
-        private final SupplierWithException<Object> defaultValueSupplier;
+    private static void generateFlattenedSectionContent(StringBuilder sb, Object section, String indent) throws Exception {
+        if (section == null) return;
 
-        public MethodHandleFieldAccessor(MethodHandle getter, MethodHandle setter,
-                                         Class<?> type, SupplierWithException<Object> defaultValueSupplier) {
-            this.getter = getter;
-            this.setter = setter;
-            this.type = type;
-            this.defaultValueSupplier = defaultValueSupplier;
-        }
+        for (Field field : section.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
 
-        @Override
-        public Object getValue(Object obj) throws Exception {
-            try {
-                return getter.invoke(obj);
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }
+            String fieldName = field.getName();
+            Object value = field.get(section);
 
-        @Override
-        public void setValue(Object obj, Object value) throws Exception {
-            try {
-                if (type == boolean.class && value instanceof Boolean) {
-                    setter.invoke(obj, ((Boolean) value).booleanValue());
-                } else if (type == int.class && value instanceof Integer) {
-                    setter.invoke(obj, ((Integer) value).intValue());
-                } else if (type == long.class && value instanceof Long) {
-                    setter.invoke(obj, ((Long) value).longValue());
-                } else if (type == double.class && value instanceof Double) {
-                    setter.invoke(obj, ((Double) value).doubleValue());
-                } else if (type == float.class && value instanceof Float) {
-                    setter.invoke(obj, ((Float) value).floatValue());
-                } else {
-                    setter.invoke(obj, value);
+            if (field.isAnnotationPresent(SubCategory.class)) {
+                SubCategory subCat = field.getAnnotation(SubCategory.class);
+                sb.append(indent).append("#").append("-".repeat(25)).append("\n");
+                sb.append(indent).append("# ").append(subCat.value()).append("\n");
+                sb.append(indent).append("#").append("-".repeat(25)).append("\n\n");
+                generateFlattenedSectionContent(sb, value, indent);
+            } else {
+                if (isSimpleType(field.getType())) {
+                    sb.append(indent).append("## ").append(formatFieldNameAsComment(fieldName)).append("\n");
+                    sb.append(indent).append(fieldName).append(" = ");
+
+                    if (value instanceof Boolean) {
+                        sb.append(value.toString().toLowerCase());
+                    } else if (value instanceof String) {
+                        sb.append("\"").append(value).append("\"");
+                    } else if (value instanceof Enum) {
+                        sb.append("\"").append(((Enum<?>) value).name()).append("\"");
+                    } else if (value instanceof List) {
+                        @SuppressWarnings("unchecked")
+                        List<String> list = (List<String>) value;
+                        sb.append("[");
+                        for (int i = 0; i < list.size(); i++) {
+                            if (i > 0) sb.append(", ");
+                            sb.append("\"").append(list.get(i)).append("\"");
+                        }
+                        sb.append("]");
+                    } else if (value instanceof Long) {
+                        sb.append(value);
+                    } else {
+                        sb.append(value);
+                    }
+                    sb.append("\n\n");
                 }
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
             }
-        }
-
-        @Override
-        public Object getDefaultValue() throws Exception {
-            return defaultValueSupplier.get();
-        }
-
-        @Override
-        public Class<?> getType() {
-            return type;
         }
     }
+
     private static void createDefaultConfig(Path configPath) {
         try {
             String configContent = generateConfigFile();
@@ -371,52 +349,6 @@ public class TritiumConfig {
         return sb.toString();
     }
 
-    private static void generateFlattenedSectionContent(StringBuilder sb, Object section, String indent) throws Exception {
-        if (section == null) return;
-
-        for (Field field : section.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-
-            String fieldName = field.getName();
-            Object value = field.get(section);
-
-            if (field.isAnnotationPresent(SubCategory.class)) {
-                SubCategory subCat = field.getAnnotation(SubCategory.class);
-                sb.append(indent).append("#").append("-".repeat(25)).append("\n");
-                sb.append(indent).append("# ").append(subCat.value()).append("\n");
-                sb.append(indent).append("#").append("-".repeat(25)).append("\n\n");
-                generateFlattenedSectionContent(sb, value, indent);
-            } else {
-                if (isSimpleType(field.getType())) {
-                    sb.append(indent).append("## ").append(formatFieldNameAsComment(fieldName)).append("\n");
-                    sb.append(indent).append(fieldName).append(" = ");
-
-                    if (value instanceof Boolean) {
-                        sb.append(value.toString().toLowerCase());
-                    } else if (value instanceof String) {
-                        sb.append("\"").append(value).append("\"");
-                    } else if (value instanceof Enum) {
-                        sb.append("\"").append(((Enum<?>) value).name()).append("\"");
-                    } else if (value instanceof java.util.List) {
-                        @SuppressWarnings("unchecked")
-                        java.util.List<String> list = (java.util.List<String>) value;
-                        sb.append("[");
-                        for (int i = 0; i < list.size(); i++) {
-                            if (i > 0) sb.append(", ");
-                            sb.append("\"").append(list.get(i)).append("\"");
-                        }
-                        sb.append("]");
-                    } else if (value instanceof Long) {
-                        sb.append(value);
-                    } else {
-                        sb.append(value);
-                    }
-                    sb.append("\n\n");
-                }
-            }
-        }
-    }
-
     private static boolean isSimpleType(Class<?> type) {
         return type.isPrimitive() ||
                 type == Boolean.class ||
@@ -425,7 +357,50 @@ public class TritiumConfig {
                 type == Double.class ||
                 type == String.class ||
                 type.isEnum() ||
-                type == java.util.List.class;
+                type == List.class;
+    }
+
+    private static class MethodHandleFieldAccessor implements FieldAccessor {
+        private final MethodHandle getter;
+        private final MethodHandle setter;
+        private final Class<?> type;
+        private final SupplierWithException<Object> defaultValueSupplier;
+
+        public MethodHandleFieldAccessor(MethodHandle getter, MethodHandle setter,
+                                         Class<?> type, SupplierWithException<Object> defaultValueSupplier) {
+            this.getter = getter;
+            this.setter = setter;
+            this.type = type;
+            this.defaultValueSupplier = defaultValueSupplier;
+        }
+
+        @Override
+        public Object getValue(Object obj) throws Exception {
+            try {
+                return getter.invoke(obj);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void setValue(Object obj, Object value) throws Exception {
+            try {
+                setter.invoke(obj, value);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Object getDefaultValue() throws Exception {
+            return defaultValueSupplier.get();
+        }
+
+        @Override
+        public Class<?> getType() {
+            return type;
+        }
     }
 
     private static String formatFieldNameAsComment(String fieldName) {

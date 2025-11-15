@@ -8,9 +8,7 @@
   "config.tritium.category.rendering": "Rendering",
   "config.tritium.rendering.entityCulling": "Entity Culling",
   "config.tritium.rendering.leafCulling": "Leaf Culling",
-  "config.tritium.rendering.cro": "ChestOptimize",
-  "config.tritium.rendering.FastBlit": "FastBlit",
-  "config.tritium.rendering.reflex": "Reflex",
+
   "config.tritium.rendering.entityCulling_enableCulling": "Enable Culling",
   "config.tritium.rendering.entityCulling_enableCulling.tooltip": "Master switch for culling functionality",
   "config.tritium.rendering.entityCulling_enableEntityCulling": "Enable Entity Culling",

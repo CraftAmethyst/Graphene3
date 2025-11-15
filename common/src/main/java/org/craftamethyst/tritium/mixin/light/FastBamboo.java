@@ -25,7 +25,7 @@ public abstract class FastBamboo {
                                       BlockGetter level,
                                       BlockPos pos,
                                       CallbackInfoReturnable<Float> cir) {
-        if (!TritiumConfig.get().performance.FastBambooLight.bambooLight) {
+        if (!TritiumConfig.get().performance.bambooLight) {
             return;
         }
         if (state.getBlock() instanceof BambooStalkBlock) {

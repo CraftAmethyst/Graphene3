@@ -24,7 +24,7 @@ public abstract class EntityRenderDispatcherMixin {
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
 
-        if (!TritiumConfig.get().entities.entityOpt.ite) return;
+        if (!TritiumConfig.get().entities.ite) return;
 
         TritiumClient client = TritiumClient.instance;
         if (client == null) return;
@@ -48,7 +48,7 @@ public abstract class EntityRenderDispatcherMixin {
     private <E extends Entity> void tritium$skipCulledOrTickSkippedEntity(
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfig.get().entities.entityOpt.ite) return;
+        if (!TritiumConfig.get().entities.ite) return;
         if (!cir.getReturnValue()) return;
 
         if (EntityTickHelper.shouldSkipTick(entity) ||

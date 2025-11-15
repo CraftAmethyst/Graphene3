@@ -59,11 +59,11 @@ public final class EntityTickHelper {
     }
 
     private static void reloadConfig() {
-        enabled = TritiumConfig.get().entities.entityOpt.optimizeEntities;
-        tickRaidersInRaid = TritiumConfig.get().entities.entityOpt.tickRaidersInRaid;
-        horizontalRange = TritiumConfig.get().entities.entityOpt.horizontalRange;
-        verticalRange = TritiumConfig.get().entities.entityOpt.verticalRange;
-        List<String> whiteRaw = TritiumConfig.get().entities.entityOpt.entityWhitelist;
+        enabled = TritiumConfig.get().entities.optimizeEntities;
+        tickRaidersInRaid = TritiumConfig.get().entities.tickRaidersInRaid;
+        horizontalRange = TritiumConfig.get().entities.horizontalRange;
+        verticalRange = TritiumConfig.get().entities.verticalRange;
+        List<String> whiteRaw = TritiumConfig.get().entities.entityWhitelist;
 
         Set<EntityType<?>> whiteIds = Sets.newHashSet();
         WHITE_PATTERNS.clear();

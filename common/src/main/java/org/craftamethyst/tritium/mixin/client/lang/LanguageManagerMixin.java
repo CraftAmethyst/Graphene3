@@ -27,7 +27,7 @@ public abstract class LanguageManagerMixin {
 
     @Inject(method = "setSelected", at = @At("HEAD"))
     private void onSetLanguageHead(String languageCode, CallbackInfo ci) {
-        if (!TritiumConfig.get().clientOptimizations.fastLanguage.fastLanguageSwitch) {
+        if (!TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
             return;
         }
         
@@ -40,7 +40,7 @@ public abstract class LanguageManagerMixin {
 
     @Inject(method = "setSelected", at = @At("TAIL"))
     private void onSetLanguageTail(String languageCode, CallbackInfo ci) {
-        if (!TritiumConfig.get().clientOptimizations.fastLanguage.fastLanguageSwitch) {
+        if (!TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
             return;
         }
         

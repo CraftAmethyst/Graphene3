@@ -8,6 +8,13 @@
   "mixins": [
     "chunk.NoiseSamplingCacheMixin",
     "entity.ItemEntityMixin",
+    "exper.EndIslandDensityFunctionMixin",
+    "exper.EntityCollisionContextMixin",
+    "exper.jig.JigsawBlockEntityMixin",
+    "exper.jig.JigsawPlacementMixin",
+    "exper.jig.SinglePoolElementMixin",
+    "exper.jig.StructureBlockEntityMixin",
+    "exper.jig.StructureTemplatePoolMixin",
     "light.DynamicGraphMinFixedPointMixin",
     "light.FastBamboo",
     "MCBUG.bee.BeeMixin",

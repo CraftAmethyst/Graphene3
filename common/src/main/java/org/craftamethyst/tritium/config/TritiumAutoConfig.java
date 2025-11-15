@@ -126,8 +126,8 @@ public class TritiumAutoConfig {
                 String fieldName = field.getName();
                 Object currentValue = field.get(section);
                 String fullPath = path.isEmpty() ? fieldName : path + "." + fieldName;
-                String accessorPath = sectionName + "." + path + "." + fieldName;
-                String translationKey = "config.tritium" + "." + sectionName + "." + fullPath.replace('.', '_');
+                String accessorPath = sectionName + "." + fullPath;
+                String translationKey = "config.tritium." + sectionName + "." + fullPath.replace('.', '_');
 
                 if (field.isAnnotationPresent(SubCategory.class)) {
                     SubCategory subCat = field.getAnnotation(SubCategory.class);
@@ -138,6 +138,8 @@ public class TritiumAutoConfig {
                     FieldAccessor accessor = fieldAccessors.get(accessorPath);
                     if (accessor != null) {
                         generateSubCategoryFieldEntry(entryBuilder, subCategoryBuilder, accessor, currentValue, translationKey, accessorPath);
+                    } else {
+                        TritiumCommon.LOG.warn("Field accessor not found for path: {}", accessorPath);
                     }
                 }
             }

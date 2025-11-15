@@ -1,8 +1,8 @@
 package org.craftamethyst.tritium.mixin.client.memleakfix;
 
 import de.mari_023.ae2wtlib.AE2wtlibCreativeTab;
+import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.world.item.ItemStack;
-import org.craftamethyst.tritium.config.TritiumConfig;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,7 +21,7 @@ public class AE2WTLibCreativeTabLeakFix {
 
     @Inject(method = "init", at = @At("HEAD"),require = 0)
     private static void tritium$clearOnInit(CallbackInfo ci) {
-        if (TritiumConfig.Fixes.MemoryLeakFix_AE2WTLibCreativeTabLeakFix) {
+        if (TritiumConfig.get().fixes.MemoryLeakFix_AE2WTLibCreativeTabLeakFix) {
             synchronized (items) {
                 items.clear();
             }

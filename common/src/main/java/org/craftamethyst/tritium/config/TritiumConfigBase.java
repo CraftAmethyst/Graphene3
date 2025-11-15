@@ -38,15 +38,15 @@ public class TritiumConfigBase {
     public ServerPerformance serverPerformance = new ServerPerformance();
 
     public static class Performance {
-        @SubCategory("FastBambooLight")
+        //@SubCategory("FastBambooLight")
         public boolean bambooLight = true;
     }
 
     @ClientOnly
     public static class Rendering {
-        @SubCategory("ChestRenderingOpt")
+        //@SubCategory("ChestRenderingOpt")
         public boolean chest_rendering_optimization = false;
-        @SubCategory("FastBlit")
+        //@SubCategory("FastBlit")
         public boolean fastBlit = true;
         @SubCategory("Reflex")
         public Reflex reflex = new Reflex();
@@ -60,12 +60,12 @@ public class TritiumConfigBase {
         public LeafCulling leafCulling = new LeafCulling();
 
         public static class Reflex {
-            public static boolean enableReflex = true;
-            public static boolean reflexDebug = false;
+            public boolean enableReflex = true;
+            public boolean reflexDebug = false;
             @Range(min=-100000, max=100000)
-            public static int reflexOffsetNs = 0;
+            public int reflexOffsetNs = 0;
             @Range(min=0, max=1000)
-            public static int MAX_FPS = 0;
+            public int MAX_FPS = 0;
         }
         public static class EntityCulling {
             public boolean enableCulling = true;
@@ -85,9 +85,9 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class ClientOptimizations {
-        @SubCategory("FastLanguage")
+        //@SubCategory("FastLanguage")
         public boolean fastLanguageSwitch = true;
-        @SubCategory("FastResourcePack")
+        //@SubCategory("FastResourcePack")
         public boolean resourcePackCache = true;
 
         @SubCategory("dynamicFPS")
@@ -106,7 +106,7 @@ public class TritiumConfigBase {
     }
 
     public static class Entities {
-        @SubCategory("EntityOpt")
+        //@SubCategory("EntityOpt")
         public boolean optimizeEntities = true;
         public boolean tickRaidersInRaid = true;
         public boolean ite = true;
@@ -118,6 +118,18 @@ public class TritiumConfigBase {
         public int verticalRange = 32;
 
         public List<String> entityWhitelist = List.of("minecraft:ender_dragon");
+
+        @SubCategory("entityStacking")
+        public EntityStacking entityStacking = new EntityStacking();
+
+        public static class EntityStacking{
+            public boolean enable = true;
+
+            @Range(min = 0.01D)
+            public double range = 3.2D;
+            @Range(min = 2)
+            public int maxEntityCount = 4;
+        }
     }
 
     public static class TechOptimizations {
@@ -126,17 +138,17 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class Fixes {
-        @SubCategory("Button Fix")
+        //@SubCategory("Button Fix")
         public boolean buttonFix = true;
-        @SubCategory("No GLog")
+       // @SubCategory("No GLog")
         public boolean noGLog = true;
-        @SubCategory("Memory Leak Fix")
-        public static boolean MemoryLeakFix_AE2WTLibCreativeTabLeakFix =true;
-        public static boolean MemoryLeakFix_ScreenshotByteBufferLeakFix =true;
+        //@SubCategory("Memory Leak Fix")
+        public boolean MemoryLeakFix_AE2WTLibCreativeTabLeakFix =true;
+        public boolean MemoryLeakFix_ScreenshotByteBufferLeakFix =true;
     }
 
     public static class ServerPerformance {
-        @SubCategory("Noise Sampling Cache")
+        //@SubCategory("Noise Sampling Cache")
         public boolean noiseSamplingCache = true;
     }
 }

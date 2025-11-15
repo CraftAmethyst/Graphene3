@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.exper.jig;
+package org.craftamethyst.tritium.mixin.jigsaw;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;

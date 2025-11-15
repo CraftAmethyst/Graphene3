@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.exper.jig;
+package org.craftamethyst.tritium.mixin.jigsaw;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

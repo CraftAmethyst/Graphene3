@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.exper.jig;
+package org.craftamethyst.tritium.mixin.jigsaw;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

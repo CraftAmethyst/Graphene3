@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.exper;
+package org.craftamethyst.tritium.mixin.entity;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

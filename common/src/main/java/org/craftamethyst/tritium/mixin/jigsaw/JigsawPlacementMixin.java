@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.exper.jig;
+package org.craftamethyst.tritium.mixin.jigsaw;
 
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;

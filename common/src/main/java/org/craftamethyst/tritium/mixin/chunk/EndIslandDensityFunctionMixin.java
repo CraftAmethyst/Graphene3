@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.exper;
+package org.craftamethyst.tritium.mixin.chunk;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;

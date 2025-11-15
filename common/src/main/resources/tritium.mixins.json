@@ -18,7 +18,6 @@
     "jigsaw.StructureTemplatePoolMixin",
     "light.DynamicGraphMinFixedPointMixin",
     "light.FastBamboo",
-    "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",

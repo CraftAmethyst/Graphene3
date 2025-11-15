@@ -1,7 +1,5 @@
 package org.craftamethyst.tritium.mixin.exper.jig;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -20,8 +18,7 @@ import java.util.List;
 public class StructureBlockEntityMixin {
     @Inject(
             method = "processBlockInfos",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("HEAD")
     )
     private static void tritium$filterBlocksOutsideBox(
             ServerLevelAccessor level,
@@ -36,39 +33,33 @@ public class StructureBlockEntityMixin {
             return;
         }
 
-        List<StructureBlockInfo> filtered = new ArrayList<>(blockInfos.size());
-        for (StructureBlockInfo info : blockInfos) {
+        blockInfos.removeIf(info -> {
             BlockPos target = StructureTemplate.calculateRelativePosition(settings, info.pos()).offset(offset);
-            if (box.isInside(target)) {
-                filtered.add(info);
-            }
-        }
-
-        cir.setReturnValue(filtered);
+            return !box.isInside(target);
+        });
     }
-    @WrapOperation(
-            method = "placeInWorld",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate;" +
-                            "processBlockInfos(Lnet/minecraft/world/level/ServerLevelAccessor;" +
-                            "Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;" +
-                            "Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructurePlaceSettings;" +
-                            "Ljava/util/List;)Ljava/util/List;"
-            )
+
+    @Inject(
+            method = "processBlockInfos",
+            at = @At("RETURN"),
+            cancellable = true
     )
-    private List<StructureBlockInfo> tritium$filterAgain(
+    private static void tritium$filterAgain(
             ServerLevelAccessor level,
             BlockPos offset,
             BlockPos pos,
             StructurePlaceSettings settings,
             List<StructureBlockInfo> original,
-            Operation<List<StructureBlockInfo>> originalCall) {
+            CallbackInfoReturnable<List<StructureBlockInfo>> cir) {
 
-        List<StructureBlockInfo> firstCut = originalCall.call(level, offset, pos, settings, original);
+        List<StructureBlockInfo> firstCut = cir.getReturnValue();
+        if (firstCut == null) {
+            return;
+        }
+
         BoundingBox box = settings.getBoundingBox();
         if (box == null) {
-            return firstCut;
+            return;
         }
 
         List<StructureBlockInfo> secondCut = new ArrayList<>(firstCut.size());
@@ -77,6 +68,6 @@ public class StructureBlockEntityMixin {
                 secondCut.add(info);
             }
         }
-        return secondCut;
+        cir.setReturnValue(secondCut);
     }
 }

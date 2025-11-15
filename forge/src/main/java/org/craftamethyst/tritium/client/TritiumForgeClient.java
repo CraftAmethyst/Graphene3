@@ -6,7 +6,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigScreenFactory;
 
-public class TritiumClient {
+public class TritiumForgeClient {
     public static void registerConfigScreen() {
         try {
             ModList.get().getModContainerById(TritiumCommon.MOD_ID).ifPresent(container -> {

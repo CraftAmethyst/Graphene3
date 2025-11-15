@@ -66,6 +66,9 @@ dependencies {
 
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
+    implementation group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+
     // Config UI + AutoConfig (Forge)
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
 
@@ -74,6 +77,8 @@ dependencies {
     jarJar(group: 'com.google.errorprone', name: 'error_prone_annotations', version: '[2.0.0,3.0.0)')
     jarJar(group: 'org.checkerframework', name: 'checker-qual', version: '[3.0.0,4.0.0)')
     jarJar(group: 'com.logisticscraft', name: 'occlusionculling', version: '[0.0.8-SNAPSHOT,0.1.0)')
+
+    jarJar(group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5')
 }
 
 jar {

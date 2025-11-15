@@ -39,7 +39,7 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
-    modImplementation 'maven.modrinth:tritiumconfiguration:yvoliUhJ'
+    modImplementation 'maven.modrinth:tritiumconfiguration:UP0vSJbo'
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
@@ -54,6 +54,7 @@ dependencies {
     //Mod Menu
     modImplementation("com.terraformersmc:modmenu:${mod_menu_version}")
 
+    include 'maven.modrinth:tritiumconfiguration:UP0vSJbo'
     include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
 }

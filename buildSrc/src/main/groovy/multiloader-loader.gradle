@@ -32,8 +32,8 @@ processResources {
 }
 
 tasks.named('javadoc', Javadoc).configure {
-    dependsOn(configurations.commonJava)
-    source(configurations.commonJava)
+    //dependsOn(configurations.commonJava)
+    //source(configurations.commonJava)
 }
 
 tasks.named('sourcesJar', Jar) {

@@ -37,4 +37,9 @@ public abstract class MinecraftMixin {
             cir.setReturnValue(TritiumConfig.get().clientOptimizations.dynamicFPS.minimizedFPS);
         }
     }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void tritium$gpuPlusTick(CallbackInfo ci) {
+        org.craftamethyst.tritium.gpu.GpuPlus.processQueue();
+    }
 }

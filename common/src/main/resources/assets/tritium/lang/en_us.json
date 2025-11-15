@@ -51,6 +51,12 @@
 
   "config.tritium.rendering.chest_rendering_optimization": "Chest rendering optimization",
   "config.tritium.rendering.chest_rendering_optimization.tooltip": "Without chests lid animations.",
+  "config.tritium.rendering.gpuPlus": "GPU Plus",
+  "config.tritium.rendering.gpuPlus.tooltip": "Enable advanced GPU features: framebuffer leak fixes, buffer storage, DSA, and more.",
+  "config.tritium.rendering.gpuPlusVbo": "GPU Plus VBO",
+  "config.tritium.rendering.gpuPlusVbo.tooltip": "Use immutable buffer storage / DSA for vertex buffers when available.",
+  "config.tritium.rendering.gpuPlusIndex": "GPU Plus Index Buffer",
+  "config.tritium.rendering.gpuPlusIndex.tooltip": "Use immutable buffer storage / DSA for index buffers when available.",
 
   "config.tritium.category.clientOptimizations": "Client Optimizations",
   "config.tritium.clientOptimizations.fastLanguageSwitch": "Fast Language Switch",

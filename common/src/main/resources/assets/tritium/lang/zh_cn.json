@@ -50,6 +50,12 @@
 
   "config.tritium.rendering.chest_rendering_optimization": "箱子渲染优化",
   "config.tritium.rendering.chest_rendering_optimization.tooltip": "没有开箱动画。",
+  "config.tritium.rendering.gpuPlus": "GPU Plus",
+  "config.tritium.rendering.gpuPlus.tooltip": "启用高级 GPU 特性：帧缓冲泄漏修复、缓冲存储、DSA 等。",
+  "config.tritium.rendering.gpuPlusVbo": "GPU Plus 顶点缓冲",
+  "config.tritium.rendering.gpuPlusVbo.tooltip": "在可用时对顶点缓冲使用不可变缓冲存储 / DSA。",
+  "config.tritium.rendering.gpuPlusIndex": "GPU Plus 索引缓冲",
+  "config.tritium.rendering.gpuPlusIndex.tooltip": "在可用时对索引缓冲使用不可变缓冲存储 / DSA。",
 
   "config.tritium.category.clientOptimizations": "客户端优化",
   "config.tritium.clientOptimizations.fastLanguageSwitch": "快速语言切换",

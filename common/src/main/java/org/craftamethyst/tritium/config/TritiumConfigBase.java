@@ -48,6 +48,10 @@ public class TritiumConfigBase {
         public boolean chest_rendering_optimization = false;
         //@SubCategory("FastBlit")
         public boolean fastBlit = true;
+        // GPU Plus
+        public boolean gpuPlus = true;
+        public boolean gpuPlusVbo = true;
+        public boolean gpuPlusIndex = true;
         @SubCategory("Reflex")
         public Reflex reflex = new Reflex();
 

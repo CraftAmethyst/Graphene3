@@ -17,7 +17,7 @@ public class NoErrorMixin {
             cancellable = true
     )
     private void tritium$noerror(int error, long description, CallbackInfo ci) {
-        if (TritiumConfig.get().fixes.noGLog.noGLog) {
+        if (TritiumConfig.get().fixes.noGLog) {
             ci.cancel();
         }
     }

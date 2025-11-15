@@ -26,7 +26,7 @@ public class NoiseSamplingCacheMixin {
 
     @Inject(method = "initializeForFirstCellX", at = @At("HEAD"))
     private void onFirstCell(CallbackInfo ci) {
-        if (!TritiumConfig.get().serverPerformance.noiseSamplingCache.noiseSamplingCache) {
+        if (!TritiumConfig.get().serverPerformance.noiseSamplingCache) {
             return;
         }
         int startBlockX = net.minecraft.core.QuartPos.toBlock(firstNoiseX);

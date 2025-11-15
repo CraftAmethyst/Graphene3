@@ -18,7 +18,7 @@ public abstract class FastBlit {
             cancellable = true
     )
     private void tritium$fastBlit(int width, int height, boolean disableBlend, CallbackInfo ci) {
-        if (!TritiumConfig.get().rendering.FastBlit.fastBlit || !disableBlend) {
+        if (!TritiumConfig.get().rendering.fastBlit || !disableBlend) {
             return;
         }
 

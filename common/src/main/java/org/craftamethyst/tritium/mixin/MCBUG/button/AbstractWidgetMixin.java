@@ -20,7 +20,7 @@ public abstract class AbstractWidgetMixin {
 
     @Inject(method = "mouseClicked", at = @At("RETURN"))
     public void onMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfig.get().fixes.buttonFix.buttonFix) {
+        if (!TritiumConfig.get().fixes.buttonFix) {
             return;
         }
         AbstractWidget self = (AbstractWidget) (Object) this;
@@ -34,7 +34,7 @@ public abstract class AbstractWidgetMixin {
 
     @Inject(method = "mouseReleased", at = @At("RETURN"))
     public void onMouseReleased(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfig.get().fixes.buttonFix.buttonFix) {
+        if (!TritiumConfig.get().fixes.buttonFix) {
             return;
         }
         AbstractWidget self = (AbstractWidget) (Object) this;

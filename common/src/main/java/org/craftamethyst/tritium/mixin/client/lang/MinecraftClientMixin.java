@@ -18,7 +18,7 @@ public class MinecraftClientMixin {
             cancellable = true,
             require = 0)
     private void onReloadResourcePacks(CallbackInfoReturnable<CompletableFuture<Void>> cir) {
-        if (!TritiumConfig.get().clientOptimizations.fastLanguage.fastLanguageSwitch) {
+        if (!TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
             return;
         }
         

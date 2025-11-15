@@ -17,7 +17,7 @@ public class ChestRendererMixin {
             at = @At(value = "HEAD"),
             index = 6, argsOnly = true)
     public float renderLid(float value){
-        if(!TritiumConfig.get().rendering.chest_rendering_optimization) return value;
+        if(!TritiumConfig.get().rendering.cro.chest_rendering_optimization) return value;
         return 0F;
     }
 }

@@ -121,20 +121,28 @@ public class TritiumConfig {
             field.setAccessible(true);
             String fullPath = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
 
-            if (!field.isAnnotationPresent(SubCategory.class)) {
-                MethodHandle getter = lookup.unreflectGetter(field);
-                MethodHandle setter = lookup.unreflectSetter(field);
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) ||
+                    field.getType().getName().startsWith("java.lang.")) {
+                continue;
+            }
 
-                fieldAccessors.put(fullPath, new MethodHandleFieldAccessor(
-                        getter, setter, field.getType(), () -> {
-                    try {
-                        Object defaultInstance = field.getDeclaringClass().newInstance();
-                        return field.get(defaultInstance);
-                    } catch (Exception e) {
-                        return getTypeDefaultValue(field.getType());
-                    }
+            if (!field.isAnnotationPresent(SubCategory.class)) {
+                try {
+                    MethodHandle getter = lookup.unreflectGetter(field);
+                    MethodHandle setter = lookup.unreflectSetter(field);
+
+                    fieldAccessors.put(fullPath, new MethodHandleFieldAccessor(
+                            getter, setter, field.getType(), () -> {
+                        try {
+                            Object defaultInstance = field.getDeclaringClass().newInstance();
+                            return field.get(defaultInstance);
+                        } catch (Exception e) {
+                            return getTypeDefaultValue(field.getType());
+                        }
+                    }));
+                } catch (IllegalAccessException e) {
+                    TritiumCommon.LOG.warn("Cannot create method handle for field: {}", fullPath);
                 }
-                ));
             }
 
             if (field.isAnnotationPresent(SubCategory.class)) {
@@ -154,22 +162,28 @@ public class TritiumConfig {
             String fieldPath = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
 
             if (field.isAnnotationPresent(SubCategory.class)) {
-                Object subObj = field.getType().newInstance();
-                configureObjectRecursive(subObj, fieldPath);
-                field.set(obj, subObj);
+                if (!field.getType().isPrimitive() && !field.getType().getName().startsWith("java.lang.")) {
+                    Object subObj = field.getType().newInstance();
+                    configureObjectRecursive(subObj, fieldPath);
+                    field.set(obj, subObj);
+                }
             } else {
                 if (isSimpleType(field.getType())) {
                     FieldAccessor accessor = fieldAccessors.get(fieldPath);
                     if (accessor != null) {
-                        Object defaultValue = accessor.getDefaultValue();
-                        ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
-                        Object value = configValue.get();
+                        try {
+                            Object defaultValue = accessor.getDefaultValue();
+                            ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
+                            Object value = configValue.get();
 
-                        if (value instanceof Number) {
-                            value = validateRange(field, (Number) value, (Number) defaultValue);
+                            if (value instanceof Number) {
+                                value = validateRange(field, (Number) value, (Number) defaultValue);
+                            }
+
+                            accessor.setValue(obj, value);
+                        } catch (Exception e) {
+                            TritiumCommon.LOG.warn("Failed to set field {}: {}", fieldPath, e.getMessage());
                         }
-
-                        accessor.setValue(obj, value);
                     }
                 }
             }
@@ -284,7 +298,19 @@ public class TritiumConfig {
         @Override
         public void setValue(Object obj, Object value) throws Exception {
             try {
-                setter.invoke(obj, value);
+                if (type == boolean.class && value instanceof Boolean) {
+                    setter.invoke(obj, ((Boolean) value).booleanValue());
+                } else if (type == int.class && value instanceof Integer) {
+                    setter.invoke(obj, ((Integer) value).intValue());
+                } else if (type == long.class && value instanceof Long) {
+                    setter.invoke(obj, ((Long) value).longValue());
+                } else if (type == double.class && value instanceof Double) {
+                    setter.invoke(obj, ((Double) value).doubleValue());
+                } else if (type == float.class && value instanceof Float) {
+                    setter.invoke(obj, ((Float) value).floatValue());
+                } else {
+                    setter.invoke(obj, value);
+                }
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -300,7 +326,6 @@ public class TritiumConfig {
             return type;
         }
     }
-
     private static void createDefaultConfig(Path configPath) {
         try {
             String configContent = generateConfigFile();

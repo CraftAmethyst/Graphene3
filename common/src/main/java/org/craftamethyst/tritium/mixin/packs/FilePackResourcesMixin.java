@@ -20,7 +20,7 @@ public abstract class FilePackResourcesMixin {
 
     @Inject(method = "getNamespaces", at = @At("RETURN"), cancellable = true)
     private void cacheNamespaces(PackType type, CallbackInfoReturnable<Set<String>> cir) {
-        if (!TritiumConfig.get().clientOptimizations.resourcePackCache) return;
+        if (!TritiumConfig.get().clientOptimizations.fastResourcePack.resourcePackCache) return;
 
         if (tritium$namespaceCache == null) {
             tritium$namespaceCache = new ConcurrentHashMap<>();
@@ -34,7 +34,7 @@ public abstract class FilePackResourcesMixin {
 
     @Inject(method = "getNamespaces", at = @At("HEAD"), cancellable = true)
     private void useCachedNamespaces(PackType type, CallbackInfoReturnable<Set<String>> cir) {
-        if (!TritiumConfig.get().clientOptimizations.resourcePackCache) return;
+        if (!TritiumConfig.get().clientOptimizations.fastResourcePack.resourcePackCache) return;
 
         if (tritium$namespaceCache != null) {
             Set<String> cached = tritium$namespaceCache.get(type);

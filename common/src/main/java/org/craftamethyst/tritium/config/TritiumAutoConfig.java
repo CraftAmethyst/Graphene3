@@ -34,6 +34,8 @@ public class TritiumAutoConfig {
             TritiumConfigBase config = TritiumConfig.get();
             initializeFieldAccessors(config);
 
+            boolean hasCategories = false;
+
             for (Field sectionField : TritiumConfigBase.class.getDeclaredFields()) {
                 sectionField.setAccessible(true);
                 Object section = sectionField.get(config);
@@ -45,10 +47,27 @@ public class TritiumAutoConfig {
                     );
 
                     generateSectionEntries(entryBuilder, category, section, sectionName);
+                    hasCategories = true;
                 }
             }
+
+            if (!hasCategories) {
+                ConfigCategory defaultCategory = builder.getOrCreateCategory(
+                        Component.translatable("config.tritium.category.default")
+                );
+                defaultCategory.addEntry(entryBuilder.startTextDescription(
+                        Component.translatable("config.tritium.error.loading")
+                ).build());
+            }
+
         } catch (Exception e) {
             TritiumCommon.LOG.error("Failed to generate config screen", e);
+            ConfigCategory errorCategory = builder.getOrCreateCategory(
+                    Component.translatable("config.tritium.category.error")
+            );
+            errorCategory.addEntry(entryBuilder.startTextDescription(
+                    Component.translatable("config.tritium.error.configuration")
+            ).build());
         }
 
         return builder.build();
@@ -68,6 +87,12 @@ public class TritiumAutoConfig {
         if (section == null) return;
 
         for (Field field : section.getClass().getDeclaredFields()) {
+            if (field.getType().isPrimitive() ||
+                    field.getType().getName().startsWith("java.") ||
+                    field.getType().getName().startsWith("javax.")) {
+                continue;
+            }
+
             field.setAccessible(true);
             String fullPath = path + "." + field.getName();
 
@@ -121,23 +146,40 @@ public class TritiumAutoConfig {
 
         try {
             for (Field field : section.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-
+                if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
                 String fieldName = field.getName();
-                Object currentValue = field.get(section);
+                if (fieldName.equals("TRUE") || fieldName.equals("FALSE") ||
+                        fieldName.equals("TYPE") || fieldName.equals("class")) {
+                    continue;
+                }
+                field.setAccessible(true);
                 String fullPath = path.isEmpty() ? fieldName : path + "." + fieldName;
-                String accessorPath = sectionName + "." + path + "." + fieldName;
-                String translationKey = "config.tritium" + "." + sectionName + "." + fullPath.replace('.', '_');
+                String accessorPath = sectionName + "." + fullPath;
+                String translationKey = "config.tritium." + sectionName + "." + fullPath.replace('.', '_');
 
                 if (field.isAnnotationPresent(SubCategory.class)) {
-                    SubCategory subCat = field.getAnnotation(SubCategory.class);
-                    SubCategoryBuilder nestedSubCategoryBuilder = entryBuilder.startSubCategory(Component.translatable(translationKey));
-                    generateSubCategoryEntries(entryBuilder, nestedSubCategoryBuilder, currentValue, sectionName, fullPath);
-                    subCategoryBuilder.add(nestedSubCategoryBuilder.build());
+                    try {
+                        Object currentValue = field.get(section);
+                        SubCategory subCat = field.getAnnotation(SubCategory.class);
+                        SubCategoryBuilder nestedSubCategoryBuilder = entryBuilder.startSubCategory(Component.translatable(translationKey));
+                        generateSubCategoryEntries(entryBuilder, nestedSubCategoryBuilder, currentValue, sectionName, fullPath);
+                        subCategoryBuilder.add(nestedSubCategoryBuilder.build());
+                    } catch (Exception e) {
+                        TritiumCommon.LOG.warn("Failed to process subcategory {}: {}", accessorPath, e.getMessage());
+                    }
                 } else {
-                    FieldAccessor accessor = fieldAccessors.get(accessorPath);
-                    if (accessor != null) {
-                        generateSubCategoryFieldEntry(entryBuilder, subCategoryBuilder, accessor, currentValue, translationKey, accessorPath);
+                    try {
+                        Object currentValue = field.get(section);
+                        FieldAccessor accessor = fieldAccessors.get(accessorPath);
+                        if (accessor != null) {
+                            generateSubCategoryFieldEntry(entryBuilder, subCategoryBuilder, accessor, currentValue, translationKey, accessorPath);
+                        } else {
+                            TritiumCommon.LOG.debug("Field accessor not found for: {}", accessorPath);
+                        }
+                    } catch (Exception e) {
+                        TritiumCommon.LOG.warn("Failed to process field {}: {}", accessorPath, e.getMessage());
                     }
                 }
             }
@@ -145,7 +187,6 @@ public class TritiumAutoConfig {
             TritiumCommon.LOG.error("Failed to generate subcategory entries for section: {}", sectionName, e);
         }
     }
-
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static void generateFieldEntry(ConfigEntryBuilder entryBuilder,

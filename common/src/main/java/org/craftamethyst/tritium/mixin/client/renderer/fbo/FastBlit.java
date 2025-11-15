@@ -2,7 +2,7 @@ package org.craftamethyst.tritium.mixin.client.renderer.fbo;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
-import me.zcraft.tritiumconfig.config.TritiumConfig;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.lwjgl.opengl.GL30;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +18,7 @@ public abstract class FastBlit {
             cancellable = true
     )
     private void tritium$fastBlit(int width, int height, boolean disableBlend, CallbackInfo ci) {
-        if (!TritiumConfig.get().rendering.fastBlit || !disableBlend) {
+        if (!TritiumConfigBase.Rendering.FastBlit.fastBlit || !disableBlend) {
             return;
         }
 

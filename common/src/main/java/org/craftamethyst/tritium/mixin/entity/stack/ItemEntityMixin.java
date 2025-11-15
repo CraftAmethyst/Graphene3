@@ -1,6 +1,5 @@
 package org.craftamethyst.tritium.mixin.entity.stack;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TraceableEntity;
@@ -8,6 +7,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,12 +34,12 @@ public abstract class ItemEntityMixin extends Entity implements TraceableEntity 
     @Inject(method = "tick",at = @At("TAIL"))
     private void tick(CallbackInfo ci){
         if(this.getItem().getCount()>this.getItem().getMaxStackSize()) return;
-        if(!TritiumConfig.get().entities.entityStacking.enable) return;
-        if((this.tickCount % TritiumConfig.get().entities.entityStacking.lagTicks) !=1) return;
+        if(!TritiumConfigBase.Entities.EntityStacking.enable) return;
+        if((this.tickCount % TritiumConfigBase.Entities.EntityStacking.lagTicks) !=1) return;
 
         ItemEntity self = (ItemEntity) ((Object) this);
-                Set<ItemEntity> matchedEntities = this.level().getEntitiesOfClass(ItemEntity.class,new AABB(this.position(),this.position()).inflate(TritiumConfig.get().entities.entityStacking.range)).stream().filter(e->e!=self && tritium$match(this.getItem(),e.getItem())).collect(Collectors.toSet());
-        if(matchedEntities.size()>=TritiumConfig.get().entities.entityStacking.maxEntityCount){
+                Set<ItemEntity> matchedEntities = this.level().getEntitiesOfClass(ItemEntity.class,new AABB(this.position(),this.position()).inflate(TritiumConfigBase.Entities.EntityStacking.range)).stream().filter(e->e!=self && tritium$match(this.getItem(),e.getItem())).collect(Collectors.toSet());
+        if(matchedEntities.size()>=TritiumConfigBase.Entities.EntityStacking.maxEntityCount){
             for (ItemEntity matchedEntity : matchedEntities) {
                 int merged = this.getItem().getCount()+matchedEntity.getItem().getCount();
                 if(merged>this.getItem().getMaxStackSize()) break;

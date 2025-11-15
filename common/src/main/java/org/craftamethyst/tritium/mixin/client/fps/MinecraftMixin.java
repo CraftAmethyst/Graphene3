@@ -1,9 +1,9 @@
 package org.craftamethyst.tritium.mixin.client.fps;
 
 import com.mojang.blaze3d.platform.Window;
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,14 +27,14 @@ public abstract class MinecraftMixin {
     @Inject(method = "<init>",at = @At(value = "TAIL"))
     private void init(GameConfig pGameConfig, CallbackInfo ci){
         GLFW.glfwSetWindowIconifyCallback(this.window.getWindow(), (window, iconified) -> {
-            if(TritiumConfig.get().clientOptimizations.dynamicFPS.enable)Minecraft.getInstance().noRender = iconified;
+            if(TritiumConfigBase.ClientOptimizations.DynamicFPS.enable)Minecraft.getInstance().noRender = iconified;
         });
     }
 
     @Inject(method = "getFramerateLimit",at = @At("RETURN"),cancellable = true)
     public void framerateLimit(CallbackInfoReturnable<Integer> cir){
-        if(!this.isWindowActive() && TritiumConfig.get().clientOptimizations.dynamicFPS.enable){
-            cir.setReturnValue(TritiumConfig.get().clientOptimizations.dynamicFPS.minimizedFPS);
+        if(!this.isWindowActive() && TritiumConfigBase.ClientOptimizations.DynamicFPS.enable){
+            cir.setReturnValue(TritiumConfigBase.ClientOptimizations.DynamicFPS.minimizedFPS);
         }
     }
 

@@ -1,7 +1,9 @@
 package org.craftamethyst.tritium;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
+import me.zcraft.tc.client.TritiumConfigScreenReg;
+import me.zcraft.tc.config.TritiumConfig;
 import org.craftamethyst.tritium.client.TritiumClient;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +26,8 @@ public class TritiumCommon {
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
        //Register configuration file
         try {
-            TritiumConfig.register();
-            Runtime.getRuntime().addShutdownHook(new Thread(TritiumConfig::stop));
+            TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
+            TritiumConfigScreenReg.registerConfigScreen();
             Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {

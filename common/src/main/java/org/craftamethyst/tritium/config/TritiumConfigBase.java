@@ -39,7 +39,10 @@ public class TritiumConfigBase {
 
     public static class Performance {
         @SubCategory("FastBambooLight")
-        public boolean bambooLight = true;
+        public FastBambooLight fastBambooLight = new FastBambooLight();
+        public static class FastBambooLight {
+            public static boolean bambooLight = true;
+        }
     }
 
     @ClientOnly
@@ -50,20 +53,20 @@ public class TritiumConfigBase {
         public FastBlit fastBlit = new FastBlit();
         // GPU Plus
         @SubCategory("GPUPlus")
-        public GpuPlus GpuPlus = new GpuPlus();
+        public static GpuPlus GpuPlus = new GpuPlus();
 
         public static class CRO {
-            public boolean chest_rendering_optimization = false;
+            public static boolean chest_rendering_optimization = false;
         }
 
         public static class FastBlit {
-            public boolean fastBlit = true;
+            public static boolean fastBlit = true;
         }
 
         public static class GpuPlus {
             public static boolean gpuPlus = true;
-            public boolean gpuPlusVbo = true;
-            public boolean gpuPlusIndex = true;
+            public static boolean gpuPlusVbo = true;
+            public static boolean gpuPlusIndex = true;
         }
 
         @SubCategory("Reflex")
@@ -78,50 +81,50 @@ public class TritiumConfigBase {
         public LeafCulling leafCulling = new LeafCulling();
 
         public static class Reflex {
-            public boolean enableReflex = true;
-            public boolean reflexDebug = false;
+            public static boolean enableReflex = true;
+            public static boolean reflexDebug = false;
             @Range(min=-100000, max=100000)
-            public int reflexOffsetNs = 0;
+            public static int reflexOffsetNs = 0;
             @Range(min=0, max=1000)
-            public int MAX_FPS = 0;
+            public static int MAX_FPS = 0;
         }
         public static class EntityCulling {
-            public boolean enableCulling = true;
-            public boolean enableBlockEntityCulling = true;
-            public boolean enableTickStopping = false;
-            public boolean enableNameTagCulling = true;
+            public static boolean enableCulling = true;
+            public static boolean enableBlockEntityCulling = true;
+            public static boolean enableTickStopping = false;
+            public static boolean enableNameTagCulling = true;
 
-            public List<String> entityBlacklist = Arrays.asList("minecraft:player", "minecraft:villager");
+            public static List<String> entityBlacklist = Arrays.asList("minecraft:player", "minecraft:villager");
         }
 
         public static class LeafCulling {
-            public boolean enableLeafCulling = true;
-            public boolean hideInnerLeaves = false;
-            public boolean enableFaceOcclusionCulling = true;
+            public static boolean enableLeafCulling = true;
+            public static boolean hideInnerLeaves = false;
+            public static boolean enableFaceOcclusionCulling = true;
         }
     }
 
     @ClientOnly
     public static class ClientOptimizations {
         @SubCategory("FastLanguage")
-        public FL FL= new FL();
+        public static FL FL= new FL();
         @SubCategory("FastResourcePack")
-        public FastResourcePack FastResourcePack= new FastResourcePack();
+        public static FastResourcePack FastResourcePack= new FastResourcePack();
 
         public static class FL {
-            public boolean fastLanguageSwitch = true;
+            public static boolean fastLanguageSwitch = true;
         }
 
         public static class FastResourcePack {
-            public boolean resourcePackCache = true;
+            public static boolean resourcePackCache = true;
         }
         @SubCategory("dynamicFPS")
         public DynamicFPS dynamicFPS = new DynamicFPS();
 
         public static class DynamicFPS{
-            public boolean enable = true;
+            public static boolean enable = true;
             @Range(min = 1)
-            public int minimizedFPS = 1;
+            public static int minimizedFPS = 1;
         }
 
     }
@@ -134,17 +137,17 @@ public class TritiumConfigBase {
         @SubCategory("EntityOpt")
         public EntityOpt entityOpt = new EntityOpt();
         public static class EntityOpt {
-            public boolean optimizeEntities = true;
-            public boolean tickRaidersInRaid = true;
-            public boolean ite = true;
+            public static boolean optimizeEntities = true;
+            public static boolean tickRaidersInRaid = true;
+            public static boolean ite = true;
 
             @Range(min = 1, max = 256)
-            public int horizontalRange = 64;
+            public static int horizontalRange = 64;
 
             @Range(min = 1, max = 256)
-            public int verticalRange = 32;
+            public static int verticalRange = 32;
 
-            public List<String> entityWhitelist = List.of("minecraft:ender_dragon");
+            public static  List<String> entityWhitelist = List.of("minecraft:ender_dragon");
 
         }
 
@@ -152,14 +155,14 @@ public class TritiumConfigBase {
         public EntityStacking entityStacking = new EntityStacking();
 
         public static class EntityStacking{
-            public boolean enable = true;
+            public static boolean enable = true;
 
             @Range(min = 1)
-            public int lagTicks = 20;
+            public static int lagTicks = 20;
             @Range(min = 2)
-            public int maxEntityCount = 4;
+            public static int maxEntityCount = 4;
             @Range(min = 0.01D)
-            public double range = 3.2D;
+            public static double range = 3.2D;
         }
     }
 
@@ -177,11 +180,11 @@ public class TritiumConfigBase {
         public MemoryLeakFix memoryLeakFix = new MemoryLeakFix();
 
         public static class ButtonFix {
-            public boolean buttonFix = true;
+            public static boolean buttonFix = true;
         }
 
         public static class NoGLog {
-            public boolean noGLog = true;
+            public static boolean noGLog = true;
         }
 
         public static class MemoryLeakFix {
@@ -194,7 +197,7 @@ public class TritiumConfigBase {
         @SubCategory("Noise Sampling Cache")
         public NoiseSamplingCache noiseSamplingCache = new NoiseSamplingCache();
         public static class NoiseSamplingCache {
-            public boolean noiseSamplingCache = true;
+            public static boolean noiseSamplingCache = true;
         }
     }
 }

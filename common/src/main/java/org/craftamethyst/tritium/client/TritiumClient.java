@@ -1,12 +1,12 @@
 package org.craftamethyst.tritium.client;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.AABBCullingManager;
 import org.craftamethyst.tritium.cull.CullCache;
 
@@ -33,7 +33,7 @@ public class TritiumClient {
 
     public boolean shouldSkipEntity(Entity e) {
         if (e == null) return false;
-        if (!TritiumConfig.get().rendering.entityCulling.enableCulling) return false;
+        if (!TritiumConfigBase.Rendering.EntityCulling.enableCulling) return false;
         if (isEntityBlacklisted(e)) return false;
         updateCameraPosition();
         return aabbCulling.shouldCullEntity(e);
@@ -41,7 +41,7 @@ public class TritiumClient {
 
     public boolean shouldSkipBlockEntity(BlockEntity be) {
         if (be == null) return false;
-        if (!TritiumConfig.get().rendering.entityCulling.enableBlockEntityCulling) return false;
+        if (!TritiumConfigBase.Rendering.EntityCulling.enableBlockEntityCulling) return false;
         updateCameraPosition();
         return aabbCulling.shouldCullBlockEntity(be);
     }
@@ -58,7 +58,7 @@ public class TritiumClient {
         ResourceLocation entityId = EntityType.getKey(entity.getType());
 
         String entityName = entityId.toString();
-        List<? extends String> blacklist = TritiumConfig.get().rendering.entityCulling.entityBlacklist;
+        List<? extends String> blacklist = TritiumConfigBase.Rendering.EntityCulling.entityBlacklist;
 
         for (String pattern : blacklist) {
             if (matchesPattern(entityName, pattern)) {

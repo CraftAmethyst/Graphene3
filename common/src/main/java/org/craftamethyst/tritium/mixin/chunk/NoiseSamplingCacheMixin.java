@@ -1,8 +1,8 @@
 package org.craftamethyst.tritium.mixin.chunk;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.NoiseChunk;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,7 +26,7 @@ public class NoiseSamplingCacheMixin {
 
     @Inject(method = "initializeForFirstCellX", at = @At("HEAD"))
     private void onFirstCell(CallbackInfo ci) {
-        if (!TritiumConfig.get().serverPerformance.noiseSamplingCache) {
+        if (!TritiumConfigBase.ServerPerformance.NoiseSamplingCache.noiseSamplingCache) {
             return;
         }
         int startBlockX = net.minecraft.core.QuartPos.toBlock(firstNoiseX);

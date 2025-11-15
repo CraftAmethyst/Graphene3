@@ -4,7 +4,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
-import me.zcraft.tritiumconfig.config.TritiumConfig;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.gpu.FramebufferFixer;
 import org.craftamethyst.tritium.gpu.GpuPlus;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,16 +16,16 @@ import java.lang.ref.Cleaner;
 public abstract class FramebufferCleanerMixin implements FramebufferFixer, Cleaner.Cleanable {
 
     @Shadow
-    public int colorTextureId;
+    protected int colorTextureId;
     @Shadow
-    public int depthBufferId;
+    protected int depthBufferId;
     @Shadow
     public int frameBufferId;
 
     @Override
     public void clean() {
         try {
-            if (TritiumConfig.get().rendering.gpuPlus
+            if (TritiumConfigBase.Rendering.GpuPlus.gpuPlus
                     && (this.colorTextureId > -1 || this.depthBufferId > -1 || this.frameBufferId > -1)) {
                 GpuPlus.enqueue(this);
             }
@@ -35,13 +35,13 @@ public abstract class FramebufferCleanerMixin implements FramebufferFixer, Clean
     }
 
     @Override
-    public void destroy() {
+    public void tritium$destroy() {
         GlStateManager._bindTexture(0);
         GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, 0);
     }
 
     @Override
-    public void release() {
+    public void tritium$release() {
         if (this.colorTextureId > -1) {
             TextureUtil.releaseTextureId(this.colorTextureId);
         }

@@ -2,7 +2,6 @@ package org.craftamethyst.tritium.helper;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,11 +59,11 @@ public final class EntityTickHelper {
     }
 
     private static void reloadConfig() {
-        enabled = TritiumConfig.get().entities.optimizeEntities;
-        tickRaidersInRaid = TritiumConfig.get().entities.tickRaidersInRaid;
-        horizontalRange = TritiumConfig.get().entities.horizontalRange;
-        verticalRange = TritiumConfig.get().entities.verticalRange;
-        List<String> whiteRaw = TritiumConfig.get().entities.entityWhitelist;
+        enabled = TritiumConfigBase.Entities.EntityOpt.optimizeEntities;
+        tickRaidersInRaid = TritiumConfigBase.Entities.EntityOpt.tickRaidersInRaid;
+        horizontalRange = TritiumConfigBase.Entities.EntityOpt.horizontalRange;
+        verticalRange = TritiumConfigBase.Entities.EntityOpt.verticalRange;
+        List<String> whiteRaw = TritiumConfigBase.Entities.EntityOpt.entityWhitelist;
 
         Set<EntityType<?>> whiteIds = Sets.newHashSet();
         WHITE_PATTERNS.clear();

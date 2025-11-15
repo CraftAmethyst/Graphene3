@@ -1,10 +1,10 @@
 package org.craftamethyst.tritium.mixin.light;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BambooStalkBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +25,7 @@ public abstract class FastBamboo {
                                       BlockGetter level,
                                       BlockPos pos,
                                       CallbackInfoReturnable<Float> cir) {
-        if (!TritiumConfig.get().performance.bambooLight) {
+        if (!TritiumConfigBase.Performance.FastBambooLight.bambooLight) {
             return;
         }
         if (state.getBlock() instanceof BambooStalkBlock) {

@@ -336,9 +336,6 @@ public class TritiumAutoConfig {
             String[] pathParts = fullPath.split("\\.");
             if (pathParts.length < 2) return;
 
-            FieldAccessor accessor = fieldAccessors.get(fullPath);
-            if (accessor == null) return;
-
             Object currentObj = TritiumConfig.get();
             for (int i = 0; i < pathParts.length - 1; i++) {
                 Field field = findField(currentObj.getClass(), pathParts[i]);
@@ -353,14 +350,18 @@ public class TritiumAutoConfig {
                 currentObj = nextObj;
             }
 
-            accessor.setValue(currentObj, value);
-            TritiumConfig.save();
-
+            String finalFieldName = pathParts[pathParts.length - 1];
+            Field targetField = findField(currentObj.getClass(), finalFieldName);
+            if (targetField != null) {
+                targetField.setAccessible(true);
+                targetField.set(currentObj, value);
+                TritiumConfig.save();
+                TritiumConfig.reload();
+            }
         } catch (Exception e) {
             TritiumCommon.LOG.error("Failed to update config value: {}", fullPath, e);
         }
     }
-
     private interface FieldAccessor {
         Object getValue(Object obj) throws Exception;
         void setValue(Object obj, Object value) throws Exception;
@@ -428,7 +429,15 @@ public class TritiumAutoConfig {
         try {
             for (Field field : section.getClass().getDeclaredFields()) {
                 if (!field.isSynthetic() && !java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
-                    return true;
+                    Class<?> type = field.getType();
+                    if (type == boolean.class || type == Boolean.class ||
+                            type == int.class || type == Integer.class ||
+                            type == double.class || type == Double.class ||
+                            type == String.class ||
+                            type.isEnum() ||
+                            List.class.isAssignableFrom(type)) {
+                        return true;
+                    }
                 }
             }
         } catch (Exception e) {

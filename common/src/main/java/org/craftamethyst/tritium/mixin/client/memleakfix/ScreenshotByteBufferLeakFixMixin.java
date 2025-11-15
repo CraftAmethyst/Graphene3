@@ -28,7 +28,7 @@ public class ScreenshotByteBufferLeakFixMixin {
             )
     )
     private ByteBuffer tritium$wrapAllocateMemory(int size, Operation<ByteBuffer> original) {
-        if (!TritiumConfigBase.Fixes.MemoryLeakFix_ScreenshotByteBufferLeakFix) {
+        if (!TritiumConfigBase.Fixes.MemoryLeakFix.ScreenshotByteBufferLeakFix) {
             return original.call(size);
         }
 
@@ -39,7 +39,7 @@ public class ScreenshotByteBufferLeakFixMixin {
 
     @Inject(method = "grabHugeScreenshot", at = @At("RETURN"))
     private void tritium$freeOnReturn(CallbackInfoReturnable<Component> cir) {
-        if (TritiumConfigBase.Fixes.MemoryLeakFix_ScreenshotByteBufferLeakFix) {
+        if (TritiumConfigBase.Fixes.MemoryLeakFix.ScreenshotByteBufferLeakFix) {
             if (tritium$buffer != null) {
                 GlUtil.freeMemory(tritium$buffer);
                 tritium$buffer = null;

@@ -72,6 +72,7 @@ dependencies {
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    implementation 'maven.modrinth:tritiumconfiguration:yvoliUhJ'
     jarJar('com.github.ben-manes.caffeine:caffeine:3.2.0') {
         version {
             strictly '[3.2,3.3)'

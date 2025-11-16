@@ -29,7 +29,7 @@ public abstract class ReflexSchedulerMixin {
     @Unique
     private static final int MODE_ELAPSED = 2;
     @Unique
-    private static final Logger tritium$LOGGER = LogManager.getLogger("Graphene-Reflex");
+    private static final Logger tritium$LOGGER = LogManager.getLogger("Tritium-Reflex");
     @Unique
     private static final long MAX_WAIT_NS = 2_000_000L;
     @Unique

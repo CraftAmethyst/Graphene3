@@ -1,6 +1,8 @@
 plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
+    id 'java'
+    id 'com.gradleup.shadow' version '9.0.2'
 }
 repositories {
     mavenLocal()
@@ -54,9 +56,9 @@ dependencies {
     //Mod Menu
     modImplementation("com.terraformersmc:modmenu:${mod_menu_version}")
 
-    include 'maven.modrinth:tritiumconfiguration:1aZZx9GR'
-    include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    shadow 'maven.modrinth:tritiumconfiguration:p3APTsjs'
+    shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
 }
 
 loom {
@@ -81,4 +83,15 @@ loom {
             runDir('runs/server')
         }
     }
+}
+configurations {
+    shadow {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+tasks.shadowJar {
+    archiveClassifier = ''
+    enableAutoRelocation = true
+    relocationPrefix = 'tritium.libs'
 }

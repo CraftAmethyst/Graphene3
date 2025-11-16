@@ -1,6 +1,8 @@
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev'
+    id 'java'
+    id 'com.gradleup.shadow' version '9.0.2'
 }
 
 repositories {
@@ -70,24 +72,19 @@ dependencies {
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
     // Config UI + AutoConfig (NeoForge)
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
-    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    implementation 'maven.modrinth:tritiumconfiguration:yvoliUhJ'
-    jarJar('maven.modrinth:tritiumconfiguration:yvoliUhJ') {
-        version {
-            strictly '[0.1,6.6)'
-        }
-    }
-    jarJar('com.github.ben-manes.caffeine:caffeine:3.2.0') {
-        version {
-            strictly '[3.2,3.3)'
-        }
-    }
-    jarJar('com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT') {
-        version {
-            strictly '0.0.8-SNAPSHOT'
-        }
+    shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    shadow 'maven.modrinth:tritiumconfiguration:faziTf7a'
+}
+configurations {
+    shadow {
+        canBeResolved = true
+        canBeConsumed = false
     }
 }
-
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+tasks.shadowJar {
+    archiveClassifier = ''
+    enableAutoRelocation = true
+    relocationPrefix = 'tritium.libs'
+}

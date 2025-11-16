@@ -51,7 +51,7 @@ neoForge {
 dependencies {
     implementation 'org.joml:joml:1.10.5'
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
-    implementation 'maven.modrinth:tritiumconfiguration:yvoliUhJ'
+    implementation 'maven.modrinth:tritiumconfiguration:faziTf7a'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'

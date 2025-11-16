@@ -1,5 +1,6 @@
 package org.craftamethyst.tritium;
 
+import me.zcraft.tc.neoforge.client.TritiumConfigScreenReg;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -12,6 +13,7 @@ public class TritiumNeoForge {
     public TritiumNeoForge(IEventBus eventBus) {
         TritiumCommon.LOG.info("NeoForge Ready");
         TritiumCommon.init();
+        TritiumConfigScreenReg.registerConfigScreen();
     }
     @SubscribeEvent
     public void onRegisterCommands(RegisterClientCommandsEvent event) {

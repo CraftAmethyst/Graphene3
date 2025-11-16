@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.craftamethyst.tritium.mixin.create",
+  "plugin": "org.craftamethyst.tritium.mixin.plugins.TritiumCreateMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "priority": 2000,
+  "mixins": [
+    "CarriageEntitiesMixin",
+    "CommonEventsMixin",
+    "ServerLifecycleHook",
+    "TrainEntitiesMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

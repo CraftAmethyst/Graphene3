@@ -13,7 +13,7 @@ public class TritiumNeoForge {
     public TritiumNeoForge(IEventBus eventBus) {
         TritiumCommon.LOG.info("NeoForge Ready");
         TritiumCommon.init();
-        TritiumConfigScreenReg.registerConfigScreen();
+        TritiumConfigScreenReg.registerConfigScreen(TritiumCommon.MOD_ID);
     }
     @SubscribeEvent
     public void onRegisterCommands(RegisterClientCommandsEvent event) {

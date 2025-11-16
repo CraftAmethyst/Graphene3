@@ -19,9 +19,7 @@ public class CarriageEntitiesMixin {
     )
     private void redirectManageEntities(Carriage carriage, Level level) {
         if (level instanceof ServerLevel serverLevel) {
-            serverLevel.getServer().execute(() -> {
-                carriage.manageEntities(level);
-            });
+            serverLevel.getServer().execute(() -> carriage.manageEntities(level));
         } else {
             carriage.manageEntities(level);
         }

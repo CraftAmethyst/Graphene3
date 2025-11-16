@@ -94,4 +94,5 @@ tasks.shadowJar {
     archiveClassifier = ''
     enableAutoRelocation = true
     relocationPrefix = 'tritium.libs'
+    configurations = [project.configurations.shadow]
 }

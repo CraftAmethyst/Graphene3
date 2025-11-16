@@ -70,11 +70,18 @@ neoForge {
 
 dependencies {
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
+    //Create
+    implementation 'maven.modrinth:create:88L641Un'
     // Config UI + AutoConfig (NeoForge)
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    shadow 'maven.modrinth:tritiumconfiguration:faziTf7a'
+    implementation 'maven.modrinth:tritiumconfiguration:faziTf7a'
+    jarJar('maven.modrinth:tritiumconfiguration:faziTf7a') {
+        version {
+            strictly '[0.1,6.6)'
+        }
+    }
 }
 configurations {
     shadow {
@@ -82,9 +89,12 @@ configurations {
         canBeConsumed = false
     }
 }
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 tasks.shadowJar {
     archiveClassifier = ''
     enableAutoRelocation = true
-    relocationPrefix = 'tritium.libs'
+    relocationPrefix = 'org.craftamethyst.tritium.libs'
+
+    configurations = [project.configurations.shadow]
 }

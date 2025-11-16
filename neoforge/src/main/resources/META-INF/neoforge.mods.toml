@@ -16,6 +16,8 @@ description = '''${description}''' #mandatory Supports multiline text
 config = "${mod_id}.mixins.json"
 [[mixins]]
 config = "${mod_id}.neoforge.mixins.json"
+[[mixins]]
+config = "${mod_id}.neoforge.create.mixins.json"
 [[dependencies.tritium]] #optional
 modId = "neoforge" #mandatory
 type = "required" #mandatory Can be one of "required", "optional", "incompatible" or "discouraged"

@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "org.craftamethyst.tritium.TritiumFabric"
+    ],
+    "modmenu": [
+      "org.craftamethyst.tritium.integration.ModMenuIntegration"
     ]
   },
   "mixins": [

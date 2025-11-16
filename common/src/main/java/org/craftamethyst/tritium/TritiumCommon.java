@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 public class TritiumCommon {
     public static final String MOD_ID = "tritium";
     public static final String MOD_NAME = "Tritium";
+    public static final TritiumConfig CONFIG = new TritiumConfig("tritium", TritiumConfigBase.class);
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
     public static void init() {
         LOG.info("Loading...\n" +
@@ -26,7 +27,7 @@ public class TritiumCommon {
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
        //Register configuration file
         try {
-            TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
+            CONFIG.register();
             TritiumConfigScreenReg.registerConfigScreen();
             Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
             TritiumCommon.LOG.info("Config initialized");

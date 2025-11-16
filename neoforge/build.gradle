@@ -77,11 +77,6 @@ dependencies {
     shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     implementation 'maven.modrinth:tritiumconfiguration:faziTf7a'
-    jarJar('maven.modrinth:tritiumconfiguration:faziTf7a') {
-        version {
-            strictly '[0.1,6.6)'
-        }
-    }
 }
 configurations {
     shadow {

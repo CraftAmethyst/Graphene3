@@ -1,5 +1,6 @@
 package org.craftamethyst.tritium;
 
+
 import me.zcraft.tc.config.TritiumConfig;
 import org.craftamethyst.tritium.client.TritiumClient;
 import org.craftamethyst.tritium.config.TritiumConfigBase;

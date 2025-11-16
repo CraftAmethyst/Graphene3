@@ -1,5 +1,6 @@
 package org.craftamethyst.tritium.config;
 
+
 import me.zcraft.tc.annotation.ClientOnly;
 import me.zcraft.tc.annotation.ConfigVersion;
 import me.zcraft.tc.annotation.Range;

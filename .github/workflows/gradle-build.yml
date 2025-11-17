@@ -45,6 +45,7 @@ jobs:
             common/build/libs/*.jar
             fabric/build/libs/*.jar
             forge/build/libs/*.jar
+            forge/build/reobfJar/*.jar
             !**/*-sources.jar
             !**/*-javadoc.jar
             !**/*-dev.jar

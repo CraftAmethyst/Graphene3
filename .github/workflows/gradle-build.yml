@@ -40,6 +40,7 @@ jobs:
           path: |
             Common/build/libs/*.jar
             Fabric/build/libs/*.jar
+            */build/libs/*.jar
             Forge/build/libs/*.jar
             common/build/libs/*.jar
             fabric/build/libs/*.jar

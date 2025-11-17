@@ -38,9 +38,13 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
           path: |
+            Common/build/libs/*.jar
+            Fabric/build/libs/*.jar
+            Forge/build/libs/*.jar
             common/build/libs/*.jar
             fabric/build/libs/*.jar
             forge/build/libs/*.jar
             !**/*-sources.jar
             !**/*-javadoc.jar
             !**/*-dev.jar
+

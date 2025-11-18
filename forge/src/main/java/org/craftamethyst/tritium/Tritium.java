@@ -4,7 +4,6 @@ import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import org.craftamethyst.tritium.command.KillMobsCommand;
-
 @Mod(TritiumCommon.MOD_ID)
 public class Tritium {
 

@@ -19,7 +19,7 @@ public class TrainEntitiesMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Ljava/util/List;forEach(Ljava/util/function/Consumer;)V"
-            )
+            ),remap = false
     )
     private void redirectCarriageEntityManagement(List<Carriage> carriages, Consumer<? super Carriage> action, Level level) {
         if (level instanceof ServerLevel serverLevel) {

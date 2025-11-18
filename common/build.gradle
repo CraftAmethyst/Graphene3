@@ -50,6 +50,9 @@ neoForge {
 
 dependencies {
     implementation 'org.joml:joml:1.10.5'
+    //Create
+    implementation 'maven.modrinth:create:88L641Un'
+
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
     implementation 'maven.modrinth:tritiumconfiguration:BwDf0EQD'
     //implementation 'maven.modrinth:create:88L641Un'

@@ -1,17 +1,18 @@
 package org.craftamethyst.tritium;
 
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import org.craftamethyst.tritium.command.KillMobsCommand;
 
-@Mod(Constants.MOD_ID)
+@Mod(TritiumCommon.MOD_ID)
 public class Tritium {
 
     public Tritium() {
-        // This method is invoked by the Forge mod loader when it is ready
-        // to load your mod. You can access Forge and Common code in this
-        // project.
-
-        // Use Forge to bootstrap the Common mod.
         TritiumCommon.init();
-
+        MinecraftForge.EVENT_BUS.addListener(this::onRegisterCommands);
+    }
+    private void onRegisterCommands(RegisterClientCommandsEvent event) {
+        KillMobsCommand.register(event.getDispatcher());
     }
 }

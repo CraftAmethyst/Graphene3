@@ -54,7 +54,7 @@ dependencies {
     implementation 'maven.modrinth:create:88L641Un'
 
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
-    implementation 'maven.modrinth:tritiumconfiguration:BwDf0EQD'
+    implementation "maven.modrinth:tritiumconfiguration:${tc}"
     //implementation 'maven.modrinth:create:88L641Un'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"

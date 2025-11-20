@@ -43,7 +43,7 @@ dependencies {
     }
     //Create
     modImplementation 'maven.modrinth:create:88L641Un'
-    modImplementation 'maven.modrinth:tritiumconfiguration:1aZZx9GR'
+    modImplementation "maven.modrinth:tritiumconfiguration:${tc_fabric}"
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
@@ -58,7 +58,7 @@ dependencies {
     //Mod Menu
     modImplementation("com.terraformersmc:modmenu:${mod_menu_version}")
 
-    shadow 'maven.modrinth:tritiumconfiguration:3zO8qOlP'
+    shadow "maven.modrinth:tritiumconfiguration:${tc_fabric}"
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
 }

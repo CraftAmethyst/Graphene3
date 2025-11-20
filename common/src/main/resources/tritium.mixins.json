@@ -26,7 +26,8 @@
     "packs.CompositePackResourcesMixin",
     "packs.FilePackResourcesMixin",
     "tickstop.EntityTypeMixin",
-    "tickstop.LevelMixin"
+    "tickstop.LevelMixin",
+    "cache.BlockStatePairKeyLazyCache"
   ],
   "client": [
     "client.fps.MinecraftMixin",

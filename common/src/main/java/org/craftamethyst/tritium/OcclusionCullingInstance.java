@@ -1,6 +1,6 @@
-package com.logisticscraft.occlusionculling;
+package org.craftamethyst.tritium;
 
-import com.logisticscraft.occlusionculling.util.Vec3d;
+import org.craftamethyst.tritium.util.Vec3d;
 
 public class OcclusionCullingInstance {
 

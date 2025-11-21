@@ -1,4 +1,4 @@
-package com.logisticscraft.occlusionculling.util;
+package org.craftamethyst.tritium.util;
 
 public class Vec3d {
     public double x;

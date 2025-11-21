@@ -1,4 +1,4 @@
-package com.logisticscraft.occlusionculling;
+package org.craftamethyst.tritium;
 
 public interface DataProvider {
 

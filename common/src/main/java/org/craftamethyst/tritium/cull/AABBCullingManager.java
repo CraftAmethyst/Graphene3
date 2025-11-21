@@ -1,7 +1,7 @@
 package org.craftamethyst.tritium.cull;
 
-import com.logisticscraft.occlusionculling.OcclusionCullingInstance;
-import com.logisticscraft.occlusionculling.util.Vec3d;
+import org.craftamethyst.tritium.OcclusionCullingInstance;
+import org.craftamethyst.tritium.util.Vec3d;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;

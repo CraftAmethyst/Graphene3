@@ -6,30 +6,32 @@ import org.craftamethyst.tritium.util.VertexBufferCache;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(VertexConsumer.class)
-public abstract class VertexConsumerMixin {
+public interface VertexConsumerMixin {
 
-    @Inject(method = "addVertex(Lorg/joml/Matrix4f;FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;",
-            at = @At("HEAD"), cancellable = true)
-    private void tritium$zeroAllocVertex(Matrix4f mat, float x, float y, float z,
-                                          CallbackInfoReturnable<VertexConsumer> cir) {
+    /**
+     * @author ZCRAFT
+     *Zero-allocation vertex transformation using cached Vector3f
+     */
+    @Overwrite
+    default VertexConsumer addVertex(Matrix4f mat, float x, float y, float z) {
         Vector3f v = VertexBufferCache.get().set(x, y, z);
         mat.transformPosition(v);
         ((VertexConsumer) this).addVertex(v.x, v.y, v.z);
-        cir.setReturnValue((VertexConsumer) this);
+        return (VertexConsumer) this;
     }
 
-    @Inject(method = "setNormal(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;",
-            at = @At("HEAD"), cancellable = true)
-    private void tritium$zeroAllocNormal(PoseStack.Pose pose, float x, float y, float z,
-                                          CallbackInfoReturnable<VertexConsumer> cir) {
+    /**
+     * @author ZCRAFT
+     *Zero-allocation normal transformation using cached Vector3f
+     */
+    @Overwrite
+    default VertexConsumer setNormal(PoseStack.Pose pose, float x, float y, float z) {
         Vector3f n = VertexBufferCache.get().set(x, y, z);
         pose.transformNormal(n.x, n.y, n.z, n);
         ((VertexConsumer) this).setNormal(n.x, n.y, n.z);
-        cir.setReturnValue((VertexConsumer) this);
+        return (VertexConsumer) this;
     }
 }

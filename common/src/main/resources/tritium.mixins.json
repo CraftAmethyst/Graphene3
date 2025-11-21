@@ -10,7 +10,12 @@
     "chunk.NoiseSamplingCacheMixin",
     "entity.EntityCollisionContextMixin",
     "entity.stack.ExperienceOrbMixin",
-    "entity.stack.ItemEntityMixin",
+    "entity.stack.item.InventoryMixin",
+    "entity.stack.item.ItemEntityMixin",
+    "entity.stack.item.ItemStackMixin",
+    "entity.stack.item.SlotMixin",
+    "entity.stack.item.fix.BucketItem",
+    "entity.stack.item.fix.BucketItemAccessor",
     "jigsaw.JigsawBlockEntityMixin",
     "jigsaw.JigsawPlacementMixin",
     "jigsaw.SinglePoolElementMixin",
@@ -27,7 +32,8 @@
     "packs.FilePackResourcesMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin",
-    "cache.BlockStatePairKeyLazyCache"
+    "cache.BlockStatePairKeyLazyCache",
+    "cache.AbstractFurnaceBlockEntityMixin"
   ],
   "client": [
     "client.fps.MinecraftMixin",

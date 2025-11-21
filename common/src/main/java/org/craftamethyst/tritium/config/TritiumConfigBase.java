@@ -157,13 +157,17 @@ public class TritiumConfigBase {
 
         public static class EntityStacking{
             public static boolean enable = true;
-
-            @Range(min = 1)
-            public static int lagTicks = 20;
-            @Range(min = 2)
-            public static int maxEntityCount = 4;
-            @Range(min = 0.01D)
-            public static double range = 3.2D;
+            public static boolean lockMaxedStacks = true;
+            public static boolean showStackCount = true;
+            @Range(min = 0)
+            public static int maxStackSize = 0;
+            @Range(min = 0.1,max = 10)
+            public static double mergeDistance = 1.5;
+            @Range(min = 0,max = 2)
+            public static int listMode=0;
+            public static List<String> itemList = java.util.Arrays.asList(
+                    "minecraft:item"
+            );
         }
     }
 

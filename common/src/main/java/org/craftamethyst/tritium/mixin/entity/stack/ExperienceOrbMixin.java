@@ -21,7 +21,7 @@ public abstract class ExperienceOrbMixin extends Entity {
 
     @ModifyArg(method = "scanForEntities",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/AABB;inflate(D)Lnet/minecraft/world/phys/AABB;"))
     public double range(double value){
-        if(TritiumConfigBase.Entities.EntityStacking.enable) return Math.max(value,TritiumConfigBase.Entities.EntityStacking.range);
+        if(TritiumConfigBase.Entities.EntityStacking.enable) return Math.max(value,TritiumConfigBase.Entities.EntityStacking.mergeDistance);
         return value;
     }
 }

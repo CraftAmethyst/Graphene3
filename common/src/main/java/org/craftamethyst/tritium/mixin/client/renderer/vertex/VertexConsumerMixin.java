@@ -14,7 +14,7 @@ public interface VertexConsumerMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Zero-allocation vertex transformation with manual matrix expansion
+     * Zero-allocation vertex transformation with manual matrix expansion
      */
     @Overwrite
     default VertexConsumer addVertex(Matrix4f matrix, float x, float y, float z) {
@@ -31,7 +31,7 @@ public interface VertexConsumerMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Optimized normal transformation with manual matrix expansion
+     * Optimized normal transformation with manual matrix expansion
      */
     @Overwrite
     default VertexConsumer setNormal(PoseStack.Pose pose, float x, float y, float z) {

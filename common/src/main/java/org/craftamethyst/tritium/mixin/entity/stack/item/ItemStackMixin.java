@@ -10,9 +10,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin {
+public class ItemStackMixin {
     @Shadow
-    public abstract Item getItem();
+    public Item getItem() {
+        return null;
+    }
 
     @Inject(method = "getMaxStackSize", at = @At("HEAD"), cancellable = true)
     private void onGetMaxStackSize(CallbackInfoReturnable<Integer> cir) {

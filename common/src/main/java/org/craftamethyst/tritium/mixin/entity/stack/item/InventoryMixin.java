@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(Inventory.class)
-public abstract class InventoryMixin {
+public class InventoryMixin {
 
     @ModifyVariable(
             method = "add(Lnet/minecraft/world/item/ItemStack;)Z",

@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
-  "refmap": "${mod_id}.refmap.json",
+  "refmap": "tritium.refmap.json",
   "compatibilityLevel": "JAVA_18",
   "priority": 2000,
   "mixins": [
@@ -63,6 +63,10 @@
   ],
   "server": [],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  },
+  "overwrites": {
+    "requireAnnotations": true
   }
 }

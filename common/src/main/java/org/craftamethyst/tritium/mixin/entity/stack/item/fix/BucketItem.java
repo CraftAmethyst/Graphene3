@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(net.minecraft.world.item.BucketItem.class)
-public abstract class BucketItem {
+public class BucketItem {
 
     @Inject(
             method = "use",

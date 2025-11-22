@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +20,7 @@ import java.util.List;
 
 
 @Mixin(ItemEntity.class)
-public abstract class ItemEntityMixin {
+public class ItemEntityMixin {
     @Unique
     private static final int MERGE_COOLDOWN_TICKS = 5;
     @Unique
@@ -28,15 +29,19 @@ public abstract class ItemEntityMixin {
     private int tritium$lastMergeTick = -1;
 
     @Shadow
-    public abstract ItemStack getItem();
+    public ItemStack getItem() {
+        return null;
+    }
 
     @Shadow
-    public abstract void setItem(ItemStack stack);
+    public void setItem(ItemStack stack) {
+
+    }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
         if (!tritium$shouldProcess()) return;
-
+TritiumCommon.LOG.info("TickTickTickTickTritium!");
         ItemEntity self = (ItemEntity) (Object) this;
         tritium$updateStackDisplay(self);
 

@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.client.renderer.fbo;
+package org.craftamethyst.tritium.mixin.client.renderer.vc;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlConst;

@@ -4,6 +4,7 @@ import com.simibubi.create.Create;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.platform.Services;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -12,9 +13,10 @@ public final class RailOffloaderHub {
     private static SingleTaskLane worker;
     private static volatile Future<?> currentFuture;
     private static boolean initialized = false;
+    private static final boolean CREATE_LOADED = Services.PLATFORM.isModLoaded("create");
 
     public static void initialize() {
-        if (initialized) return;
+        if (initialized || !CREATE_LOADED) return;
 
         worker = new SingleTaskLane("TritiumRailWorker");
         initialized = true;
@@ -22,6 +24,8 @@ public final class RailOffloaderHub {
     }
 
     public static void shutdown() {
+        if (!CREATE_LOADED) return;
+
         initialized = false;
         if (worker != null) {
             worker.shutdown();
@@ -30,13 +34,12 @@ public final class RailOffloaderHub {
     }
 
     public static void onTickStart(MinecraftServer server) {
-        if (!initialized || worker == null) return;
+        if (!CREATE_LOADED || !initialized || worker == null) return;
 
         ServerLevel overworld = server.overworld();
 
         currentFuture = worker.submit(() -> {
             try {
-
                 Create.RAILWAYS.tick(overworld);
             } catch (Exception e) {
                 TritiumCommon.LOG.error("Error in rail offloader tick", e);
@@ -45,7 +48,7 @@ public final class RailOffloaderHub {
     }
 
     public static void onTickEnd() {
-        if (currentFuture == null) return;
+        if (!CREATE_LOADED || currentFuture == null) return;
 
         try {
             currentFuture.get(100, TimeUnit.MILLISECONDS);
@@ -56,5 +59,4 @@ public final class RailOffloaderHub {
             currentFuture = null;
         }
     }
-
 }

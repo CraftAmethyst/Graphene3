@@ -29,5 +29,9 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
                 .map(container -> container.getModInfo().getVersion().toString())
                 .orElse("Unknown");
     }
+    @Override
+    public boolean isCreateLoaded() {
+        return ModList.get().isLoaded("create");
+    }
 
 }

@@ -6,7 +6,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import org.craftamethyst.tritium.TritiumCommon;
+
+import net.minecraft.world.level.Level;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,30 +21,35 @@ import java.util.List;
 
 
 @Mixin(ItemEntity.class)
-public class ItemEntityMixin {
+public abstract class ItemEntityMixin {
     @Unique
     private static final int MERGE_COOLDOWN_TICKS = 5;
     @Unique
     private static final int DEFAULT_MAX_STACK = Integer.MAX_VALUE - 100;
     @Unique
     private int tritium$lastMergeTick = -1;
+    @Unique
+    private int tritium$lastDisplayUpdateTick = -1;
+   // @Unique
+   // private static final int DISPLAY_UPDATE_INTERVAL = 40;
+    @Shadow
+    public abstract ItemStack getItem();
 
     @Shadow
-    public ItemStack getItem() {
-        return null;
-    }
+    public abstract void setItem(ItemStack stack);
 
     @Shadow
-    public void setItem(ItemStack stack) {
-
-    }
+    public abstract void setExtendedLifetime();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
         if (!tritium$shouldProcess()) return;
-TritiumCommon.LOG.info("TickTickTickTickTritium!");
         ItemEntity self = (ItemEntity) (Object) this;
-        tritium$updateStackDisplay(self);
+       // long gameTime = self.level().getGameTime();
+       // if (tritium$lastDisplayUpdateTick == -1 || gameTime - tritium$lastDisplayUpdateTick >= DISPLAY_UPDATE_INTERVAL) {
+       //     tritium$updateStackDisplay(self);
+       //     tritium$lastDisplayUpdateTick = (int) gameTime;
+       // }
 
         if (tritium$shouldAttemptMerge(self)) {
             tritium$lastMergeTick = (int) self.level().getGameTime();
@@ -51,9 +57,36 @@ TritiumCommon.LOG.info("TickTickTickTickTritium!");
         }
     }
 
+    @Inject(
+            method = "setItem",
+            at = @At("TAIL")
+    )
+    private void onSetItem(ItemStack stack, CallbackInfo ci) {
+        if (!tritium$shouldProcess()) return;
+        ItemEntity self = (ItemEntity) (Object) this;
+        tritium$updateStackDisplay(self);
+        tritium$lastDisplayUpdateTick = (int) self.level().getGameTime();
+    }
+
+    @Inject(method = "<init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;)V", at = @At("TAIL"))
+    private void onConstructor(Level level, double x, double y, double z, ItemStack stack, CallbackInfo ci) {
+        if (!tritium$shouldProcess()) return;
+        ItemEntity self = (ItemEntity) (Object) this;
+        tritium$updateStackDisplay(self);
+        tritium$lastDisplayUpdateTick = (int) self.level().getGameTime();
+    }
+
+    @Inject(method = "<init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;DDD)V", at = @At("TAIL"))
+    private void onConstructorWithVelocity(Level level, double x, double y, double z, ItemStack stack, double dx, double dy, double dz, CallbackInfo ci) {
+        if (!tritium$shouldProcess()) return;
+        ItemEntity self = (ItemEntity) (Object) this;
+        tritium$updateStackDisplay(self);
+        tritium$lastDisplayUpdateTick = (int) self.level().getGameTime();
+    }
+
     @Unique
     private boolean tritium$shouldProcess() {
-        return false;
+        return TritiumConfigBase.Entities.EntityStacking.enable;
     }
 
     @Unique
@@ -145,14 +178,30 @@ TritiumCommon.LOG.info("TickTickTickTickTritium!");
         }
     }
 
+
     @Unique
     private void tritium$setStackCountDisplay(ItemEntity entity, int count) {
+        Component currentName = entity.getCustomName();
+        if (currentName != null) {
+            String currentText = currentName.getString();
+            if (currentText.startsWith("×") && currentText.length() > 1) {
+                try {
+                    int currentCount = Integer.parseInt(currentText.substring(1));
+                    if (currentCount == count) {
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                }
+            }
+        }
+
         Component countText = Component.literal("×" + count)
                 .withStyle(ChatFormatting.DARK_GREEN)
                 .withStyle(ChatFormatting.BOLD);
         entity.setCustomName(countText);
         entity.setCustomNameVisible(true);
     }
+
 
     @Unique
     private void tritium$clearDisplay(ItemEntity entity) {

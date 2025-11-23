@@ -2,6 +2,7 @@ package org.craftamethyst.tritium.helper;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import me.zcraft.tc.config.TritiumConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.util.ArrayList;
@@ -33,6 +35,13 @@ public final class EntityTickHelper {
     private static volatile int verticalRange = 16;
 
     static {
+        try {
+            TritiumConfig config = TritiumConfig.getConfig("tritium");
+            config.addReloadListener(EntityTickHelper::reloadConfig);
+        } catch (Exception e) {
+            TritiumCommon.LOG.error("Failed to register config reload listener", e);
+        }
+
         reloadConfig();
     }
 

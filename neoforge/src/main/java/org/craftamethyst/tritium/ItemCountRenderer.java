@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 @OnlyIn(Dist.CLIENT)
 
 public class ItemCountRenderer {
-    @SubscribeEvent(priority = EventPriority.LOW)
+   // @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onNameTagRender(RenderNameTagEvent event) {
         if (!(event.getEntity() instanceof ItemEntity itemEntity)) {
             return;

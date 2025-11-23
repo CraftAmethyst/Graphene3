@@ -12,6 +12,7 @@ public class TritiumNeoForge {
     public TritiumNeoForge(IEventBus modEventBus) {
         TritiumCommon.LOG.info("NeoForge Ready");
         TritiumCommon.init();
+
         NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
     }
 

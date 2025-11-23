@@ -8,6 +8,7 @@ import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.launch.MixinBootstrap;
 
 public class TritiumCommon {
     public static final String MOD_ID = "tritium";

@@ -14,11 +14,11 @@ public class ModMenuIntegration implements ModMenuApi {
     private final TritiumConfig config = new TritiumConfig("tritium", TritiumConfigBase.class);
     public ModMenuIntegration() { }
 
-    public static Screen createConfigScreen(Screen parent, TritiumConfig config) {
-        return new TritiumConfigScreenFactory(config).createConfigScreen(config);
+    public static Screen createConfigScreen(TritiumConfig config) {
+        return TritiumConfigScreenFactory.createConfigScreen(config);
     }
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> createConfigScreen(parent, config);
+        return parent -> createConfigScreen(config);
     }
 }

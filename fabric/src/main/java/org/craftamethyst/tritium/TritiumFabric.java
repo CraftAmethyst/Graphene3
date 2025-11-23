@@ -11,6 +11,8 @@ public class TritiumFabric implements ModInitializer {
 
         TritiumCommon.LOG.info("Fabric Ready");
         TritiumCommon.init();
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, commandBuildContext, commandSelection) -> KillMobsCommand.register(commandDispatcher));
+       // CommandRegistrationCallback.EVENT.register((dispatcher, commandBuildContext,commandSelection) -> KillMobsCommand.register(dispatcher));
     }
 }
+
+

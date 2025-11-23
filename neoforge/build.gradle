@@ -76,7 +76,7 @@ dependencies {
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    implementation "maven.modrinth:tritiumconfiguration:${tc}"
+    //implementation "maven.modrinth:tritiumconfiguration:${tc}"
 }
 configurations {
     shadow {
@@ -90,6 +90,6 @@ tasks.shadowJar {
     archiveClassifier = ''
     enableAutoRelocation = true
     relocationPrefix = 'org.craftamethyst.tritium.libs'
-
     configurations = [project.configurations.shadow]
+
 }

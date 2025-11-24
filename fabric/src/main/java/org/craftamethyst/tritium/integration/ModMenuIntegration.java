@@ -7,12 +7,11 @@ import me.zcraft.tc.config.TritiumConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
-import org.craftamethyst.tritium.config.TritiumConfigBase;
+import org.craftamethyst.tritium.TritiumCommon;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
-    private final TritiumConfig config = new TritiumConfig("tritium", TritiumConfigBase.class);
-    public ModMenuIntegration() { }
+    private final TritiumConfig config = TritiumConfig.getConfig(TritiumCommon.MOD_ID);
 
     public static Screen createConfigScreen(TritiumConfig config) {
         return TritiumConfigScreenFactory.createConfigScreen(config);

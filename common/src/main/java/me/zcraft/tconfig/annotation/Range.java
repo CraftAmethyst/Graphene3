@@ -1,4 +1,4 @@
-package me.zcraft.tc.annotation;
+package me.zcraft.tconfig.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

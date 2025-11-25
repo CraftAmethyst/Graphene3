@@ -1,4 +1,4 @@
-package me.zcraft.tc.config;
+package me.zcraft.tconfig.config;
 
 
 import org.craftamethyst.tritium.TritiumCommon;

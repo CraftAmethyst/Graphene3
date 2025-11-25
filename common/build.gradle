@@ -28,8 +28,6 @@ dependencies {
     //Create
     implementation 'maven.modrinth:create:8amzvn9x'
 
-    //TR
-    implementation "maven.modrinth:tritiumconfiguration:${tc}"
 
     //AE2
     implementation 'maven.modrinth:guideme:9YGnKYDF'

@@ -1,9 +1,9 @@
-package me.zcraft.tc.client;
+package me.zcraft.tconfig.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import org.craftamethyst.tritium.TritiumCommon;
-import me.zcraft.tc.config.TritiumConfig;
+import me.zcraft.tconfig.config.TritiumConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;

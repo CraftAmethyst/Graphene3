@@ -1,8 +1,8 @@
-package me.zcraft.tc.config;
+package me.zcraft.tconfig.config;
 
 import org.craftamethyst.tritium.TritiumCommon;
-import me.zcraft.tc.annotation.ConfigVersion;
-import me.zcraft.tc.config.ConfigParser;
+import me.zcraft.tconfig.annotation.ConfigVersion;
+import me.zcraft.tconfig.config.ConfigParser;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

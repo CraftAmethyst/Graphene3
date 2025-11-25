@@ -1,13 +1,13 @@
-package me.zcraft.tc.config;
+package me.zcraft.tconfig.config;
 
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import org.craftamethyst.tritium.TritiumCommon;
-import me.zcraft.tc.annotation.Range;
-import me.zcraft.tc.annotation.SubCategory;
-import me.zcraft.tc.config.TritiumConfig;
+import me.zcraft.tconfig.annotation.Range;
+import me.zcraft.tconfig.annotation.SubCategory;
+import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 

@@ -1,10 +1,10 @@
 package org.craftamethyst.tritium.config;
 
 
-import me.zcraft.tc.annotation.ClientOnly;
-import me.zcraft.tc.annotation.ConfigVersion;
-import me.zcraft.tc.annotation.Range;
-import me.zcraft.tc.annotation.SubCategory;
+import me.zcraft.tconfig.annotation.ClientOnly;
+import me.zcraft.tconfig.annotation.ConfigVersion;
+import me.zcraft.tconfig.annotation.Range;
+import me.zcraft.tconfig.annotation.SubCategory;
 
 import java.util.Arrays;
 import java.util.List;

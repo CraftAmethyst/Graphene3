@@ -2,7 +2,7 @@ package org.craftamethyst.tritium.helper;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import me.zcraft.tc.config.TritiumConfig;
+import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

@@ -218,7 +218,8 @@ public abstract class ItemEntityMixin {
 
         return tritium$isSameItem(selfStack, otherStack) &&
                 tritium$isMergeAllowed(otherStack, listMode, itemList) &&
-                (!TritiumConfigBase.Entities.EntityStacking.lockMaxedStacks || otherStack.getCount() < tritium$getEffectiveMaxStackSize());
+                (!TritiumConfigBase.Entities.EntityStacking.lockMaxedStacks || otherStack.getCount() < tritium$getEffectiveMaxStackSize()) &&
+                (self.getItem().getCount()+other.getItem().getCount()<=self.getItem().getMaxStackSize());
     }
 
     @Unique

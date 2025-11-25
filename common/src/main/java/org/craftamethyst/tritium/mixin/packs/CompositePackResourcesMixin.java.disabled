@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(PackResources.class)
+@Mixin(CompositePackResources.class)
 class CompositePackResourcesMixin {
+
     @Unique
     private PackResources tritium$primary;
 

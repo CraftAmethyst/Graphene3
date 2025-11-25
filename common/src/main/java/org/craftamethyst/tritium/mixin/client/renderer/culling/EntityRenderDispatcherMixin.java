@@ -1,10 +1,10 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
 import org.craftamethyst.tritium.client.TritiumClient;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.CullCache;
 import org.craftamethyst.tritium.helper.EntityTickHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +24,7 @@ public abstract class EntityRenderDispatcherMixin {
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
 
-        if (!TritiumConfig.get().entities.ite) return;
+        if (!TritiumConfigBase.Entities.EntityOpt.ite) return;
 
         TritiumClient client = TritiumClient.instance;
         if (client == null) return;
@@ -48,7 +48,7 @@ public abstract class EntityRenderDispatcherMixin {
     private <E extends Entity> void tritium$skipCulledOrTickSkippedEntity(
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfig.get().entities.ite) return;
+        if (!TritiumConfigBase.Entities.EntityOpt.ite) return;
         if (!cir.getReturnValue()) return;
 
         if (EntityTickHelper.shouldSkipTick(entity) ||

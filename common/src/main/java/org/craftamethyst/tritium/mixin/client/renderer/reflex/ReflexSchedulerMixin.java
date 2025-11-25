@@ -1,6 +1,5 @@
 package org.craftamethyst.tritium.mixin.client.renderer.reflex;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -8,6 +7,7 @@ import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.lwjgl.opengl.GL;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -28,7 +28,7 @@ public abstract class ReflexSchedulerMixin {
     @Unique
     private static final int MODE_ELAPSED = 2;
     @Unique
-    private static final Logger tritium$LOGGER = LogManager.getLogger("tritium-Reflex");
+    private static final Logger tritium$LOGGER = LogManager.getLogger("Tritium-Reflex");
     @Unique
     private static final long MAX_WAIT_NS = 2_000_000L;
     @Unique
@@ -68,7 +68,7 @@ public abstract class ReflexSchedulerMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void reflex$onCpuStart(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
-        if (!TritiumConfig.get().rendering.reflex.enableReflex || tritium$timingMode == MODE_DISABLED) return;
+        if (!TritiumConfigBase.Rendering.Reflex.enableReflex || tritium$timingMode == MODE_DISABLED) return;
 
         final long cpuNow = System.nanoTime();
 
@@ -85,7 +85,7 @@ public abstract class ReflexSchedulerMixin {
             long cpuElapsed = cpuNow - tritium$lastGpuDoneNs;
             tritium$smoothedDeltaNs = SMOOTH_ALPHA * cpuElapsed + (1.0 - SMOOTH_ALPHA) * tritium$smoothedDeltaNs;
 
-            long waitNs = (long) (tritium$smoothedDeltaNs + TritiumConfig.get().rendering.reflex.reflexOffsetNs);
+            long waitNs = (long) (tritium$smoothedDeltaNs + TritiumConfigBase.Rendering.Reflex.reflexOffsetNs);
             waitNs = Math.max(-MAX_WAIT_NS, Math.min(MAX_WAIT_NS, waitNs));
 
             if (waitNs > 0) {
@@ -93,7 +93,7 @@ public abstract class ReflexSchedulerMixin {
             }
         }
 
-        int maxFps = TritiumConfig.get().rendering.reflex.MAX_FPS;
+        int maxFps = TritiumConfigBase.Rendering.Reflex.MAX_FPS;
         if (maxFps > 0 && tritium$lastFrameEndNs > 0) {
             long targetFrameTime = 1_000_000_000L / maxFps;
             long elapsed = cpuNow - tritium$lastFrameEndNs;
@@ -104,7 +104,7 @@ public abstract class ReflexSchedulerMixin {
             }
         }
 
-        if (TritiumConfig.get().rendering.reflex.reflexDebug) {
+        if (TritiumConfigBase.Rendering.Reflex.reflexDebug) {
             tritium$LOGGER.debug("Reflex stats - Mode: {}, GPU: {}ns, CPU: {}ns, Delta: {}ns",
                     tritium$timingModeToString(), tritium$lastGpuDoneNs, tritium$lastFrameEndNs, tritium$smoothedDeltaNs);
         }
@@ -112,7 +112,7 @@ public abstract class ReflexSchedulerMixin {
 
     @Inject(method = "render", at = @At("RETURN"))
     private void reflex$onCpuEnd(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
-        if (tritium$timingMode == MODE_DISABLED || !TritiumConfig.get().rendering.reflex.enableReflex) return;
+        if (tritium$timingMode == MODE_DISABLED || !TritiumConfigBase.Rendering.Reflex.enableReflex) return;
 
         switch (tritium$timingMode) {
             case MODE_TIMESTAMP:

@@ -22,9 +22,18 @@ dependencies {
 
     // Compile common sources directly, plus match its runtime deps needed by those sources
     implementation project(":common")
+
+    //Create
+    implementation 'maven.modrinth:create:8amzvn9x'
+
+    //TR
+    implementation "maven.modrinth:tritiumconfiguration:${tc_fabric}"
+
+    //AE2
     modImplementation 'teamreborn:energy:3.0.0'
     modImplementation 'maven.modrinth:ae2:kA3rm9EP'
     modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:QewbGM3G'
+
     include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'

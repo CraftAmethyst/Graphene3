@@ -1,12 +1,12 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.craftamethyst.tritium.client.TritiumClient;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.CullCache;
 import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +30,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
             CallbackInfo ci) {
 
-        if (!TritiumConfig.get().rendering.entityCulling.enableBlockEntityCulling) return;
+        if (!TritiumConfigBase.Rendering.EntityCulling.enableBlockEntityCulling) return;
 
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(blockEntity instanceof BlockEntityVisibility cullable)) return;
@@ -66,7 +66,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
             E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
             CallbackInfo ci) {
 
-        if (!TritiumConfig.get().rendering.entityCulling.enableBlockEntityCulling) return;
+        if (!TritiumConfigBase.Rendering.EntityCulling.enableBlockEntityCulling) return;
 
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(blockEntity instanceof BlockEntityVisibility cullable)) return;

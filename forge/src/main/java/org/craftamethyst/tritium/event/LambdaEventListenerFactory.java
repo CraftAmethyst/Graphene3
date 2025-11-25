@@ -1,8 +1,8 @@
 package org.craftamethyst.tritium.event;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraftforge.eventbus.api.Event;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
@@ -57,7 +57,7 @@ public class LambdaEventListenerFactory {
     }
     
     public static IEventListener createListener(Object instance, Method method) {
-        if (!TritiumConfig.get().techOptimizations.lambdaEventListeners) {
+        if (!TritiumConfigBase.TechOptimizations.lambdaEventListeners) {
             return new ReflectionFallbackListener(instance, method);
         }
         

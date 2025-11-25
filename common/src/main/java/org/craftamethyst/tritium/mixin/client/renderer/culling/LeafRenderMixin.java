@@ -1,12 +1,12 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.BlockFaceOcclusionCuller;
 import org.craftamethyst.tritium.cull.LeafCulling;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,17 +21,17 @@ public abstract class LeafRenderMixin {
                                            BlockPos pos, Direction face,
                                            BlockPos offsetPos,
                                            CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfig.get().rendering.leafCulling.enableLeafCulling) {
+        if (!TritiumConfigBase.Rendering.LeafCulling.enableLeafCulling) {
             return;
         }
         if (state.getBlock() instanceof LeavesBlock) {
             // hide inner leaves: if fully enclosed, render no faces.
-            if (TritiumConfig.get().rendering.leafCulling.hideInnerLeaves && LeafCulling.shouldHideInnerLeaves(level, pos)) {
+            if (TritiumConfigBase.Rendering.LeafCulling.hideInnerLeaves && LeafCulling.shouldHideInnerLeaves(level, pos)) {
                 cir.setReturnValue(false);
                 return;
             }
             // Use occlusion culler if enabled; otherwise, fall back to adjacency heuristic.
-            if (TritiumConfig.get().rendering.leafCulling.enableFaceOcclusionCulling) {
+            if (TritiumConfigBase.Rendering.LeafCulling.enableFaceOcclusionCulling) {
                 boolean cull = BlockFaceOcclusionCuller.shouldCullBlockFace(level, pos, face);
                 cir.setReturnValue(!cull);
             } else {

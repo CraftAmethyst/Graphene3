@@ -1,18 +1,17 @@
 package org.craftamethyst.tritium;
 
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import org.craftamethyst.tritium.client.TritiumForgeClient;
-
+import org.craftamethyst.tritium.command.KillMobsCommand;
 @Mod(TritiumCommon.MOD_ID)
 public class tritium {
-    
+
     public tritium() {
-        TritiumCommon.LOG.info("Forge Ready");
         TritiumCommon.init();
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            TritiumForgeClient.registerConfigScreen();
-        }
+        MinecraftForge.EVENT_BUS.addListener(this::onRegisterCommands);
+    }
+    private void onRegisterCommands(RegisterClientCommandsEvent event) {
+        KillMobsCommand.register(event.getDispatcher());
     }
 }

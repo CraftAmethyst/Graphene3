@@ -1,10 +1,10 @@
 package org.craftamethyst.tritium.mixin.entity.stack;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.level.Level;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -21,7 +21,7 @@ public abstract class ExperienceOrbMixin extends Entity {
 
     @ModifyArg(method = "scanForEntities",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/AABB;inflate(D)Lnet/minecraft/world/phys/AABB;"))
     public double range(double value){
-        if(TritiumConfig.get().entities.entityStacking.enable) return Math.max(value,TritiumConfig.get().entities.entityStacking.range);
+        if(TritiumConfigBase.Entities.EntityStacking.enable) return Math.max(value,TritiumConfigBase.Entities.EntityStacking.mergeDistance);
         return value;
     }
 }

@@ -1,10 +1,10 @@
 package org.craftamethyst.tritium.mixin.client.lang;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.util.LanguageLoadOptimizer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,7 +27,7 @@ public abstract class LanguageManagerMixin {
 
     @Inject(method = "setSelected", at = @At("HEAD"))
     private void onSetLanguageHead(String languageCode, CallbackInfo ci) {
-        if (!TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+        if (!TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch) {
             return;
         }
         
@@ -40,7 +40,7 @@ public abstract class LanguageManagerMixin {
 
     @Inject(method = "setSelected", at = @At("TAIL"))
     private void onSetLanguageTail(String languageCode, CallbackInfo ci) {
-        if (!TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+        if (!TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch) {
             return;
         }
         

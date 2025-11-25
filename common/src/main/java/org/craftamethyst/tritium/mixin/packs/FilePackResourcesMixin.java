@@ -1,8 +1,8 @@
 package org.craftamethyst.tritium.mixin.packs;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackType;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +20,7 @@ public abstract class FilePackResourcesMixin {
 
     @Inject(method = "getNamespaces", at = @At("RETURN"), cancellable = true)
     private void cacheNamespaces(PackType type, CallbackInfoReturnable<Set<String>> cir) {
-        if (!TritiumConfig.get().clientOptimizations.resourcePackCache) return;
+        if (!TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache) return;
 
         if (tritium$namespaceCache == null) {
             tritium$namespaceCache = new ConcurrentHashMap<>();
@@ -34,7 +34,7 @@ public abstract class FilePackResourcesMixin {
 
     @Inject(method = "getNamespaces", at = @At("HEAD"), cancellable = true)
     private void useCachedNamespaces(PackType type, CallbackInfoReturnable<Set<String>> cir) {
-        if (!TritiumConfig.get().clientOptimizations.resourcePackCache) return;
+        if (!TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache) return;
 
         if (tritium$namespaceCache != null) {
             Set<String> cached = tritium$namespaceCache.get(type);

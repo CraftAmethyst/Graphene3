@@ -15,7 +15,6 @@ public abstract class EntityRendererMixin<T extends Entity> {
     @Shadow
     protected abstract boolean shouldShowName(T entity);
 
-
     @Shadow protected abstract void renderNameTag(T entity, Component displayName, PoseStack poseStack, MultiBufferSource buffer, int packedLight);
 
     @Unique

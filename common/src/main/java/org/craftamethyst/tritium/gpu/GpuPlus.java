@@ -1,7 +1,7 @@
 package org.craftamethyst.tritium.gpu;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,13 +14,13 @@ public final class GpuPlus {
     }
 
     public static void enqueue(FramebufferFixer fixer) {
-        if (fixer != null && TritiumConfig.get().rendering.gpuPlus) {
+        if (fixer != null && TritiumConfigBase.Rendering.GpuPlus.gpuPlus) {
             FIXERS.add(fixer);
         }
     }
 
     public static void processQueue() {
-        if (!TritiumConfig.get().rendering.gpuPlus) {
+        if (!TritiumConfigBase.Rendering.GpuPlus.gpuPlus) {
             return;
         }
 
@@ -35,10 +35,10 @@ public final class GpuPlus {
 
             try {
                 if (!destroyed) {
-                    fixer.destroy();
+                    fixer.tritium$destroy();
                     destroyed = true;
                 }
-                fixer.release();
+                fixer.tritium$release();
             } catch (Exception e) {
                 TritiumCommon.LOG.error("[Tritium-GPU PLUS]Failed to process framebuffer cleanup for {}", fixer, e);
             }

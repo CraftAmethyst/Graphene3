@@ -1,9 +1,9 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.craftamethyst.tritium.client.TritiumClient;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +20,7 @@ public abstract class LevelTKMixin {
             cancellable = true
     )
     private void ConEntityTick(Consumer<Entity> consumer, Entity entity, CallbackInfo ci) {
-        if (!TritiumConfig.get().rendering.entityCulling.enableTickStopping) return;
+        if (!TritiumConfigBase.Rendering.EntityCulling.enableTickStopping) return;
         if (TritiumClient.instance != null && TritiumClient.instance.shouldSkipEntity(entity)) {
             ci.cancel();
         }

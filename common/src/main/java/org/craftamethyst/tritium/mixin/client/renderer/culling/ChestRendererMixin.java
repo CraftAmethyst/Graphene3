@@ -1,7 +1,7 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -17,7 +17,7 @@ public class ChestRendererMixin {
             at = @At(value = "HEAD"),
             index = 6, argsOnly = true)
     public float renderLid(float value){
-        if(!TritiumConfig.get().rendering.chest_rendering_optimization) return value;
+        if(!TritiumConfigBase.Rendering.CRO.chest_rendering_optimization) return value;
         return 0F;
     }
 }

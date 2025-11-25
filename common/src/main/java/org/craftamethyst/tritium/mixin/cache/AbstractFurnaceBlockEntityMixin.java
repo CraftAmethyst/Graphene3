@@ -1,6 +1,5 @@
 package org.craftamethyst.tritium.mixin.cache;
 
-import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;

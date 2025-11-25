@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "cache.AbstractFurnaceBlockEntityMixin",
+    "cache.BlockStatePairKeyLazyCache",
     "chunk.EndIslandDensityFunctionMixin",
     "chunk.NoiseSamplingCacheMixin",
     "client.memleakfix.AE2WTLibCreativeTabLeakFix",
@@ -47,8 +48,11 @@
     "client.renderer.culling.LeafRenderMixin",
     "client.renderer.culling.LevelRendererMixin",
     "client.renderer.culling.LevelTKMixin",
+    "client.renderer.fast_blit.FastBlit",
     "client.renderer.other.MixinPoseStack",
     "client.renderer.reflex.ReflexSchedulerMixin",
+    "client.renderer.vc.FramebufferCleanerMixin",
+    "client.renderer.vertex.PoseStackPoseAccessor",
     "client.renderer.vertex.VertexBufferMixin",
     "client.renderer.vertex.VertexConsumerMixin",
     "MCBUG.button.AbstractWidgetMixin"

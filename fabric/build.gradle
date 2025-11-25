@@ -93,8 +93,13 @@ configurations {
     }
 }
 tasks.shadowJar {
-    archiveClassifier = ''
+    archiveClassifier = 'shadow'
     enableAutoRelocation = true
     relocationPrefix = 'tritium.libs'
     configurations = [project.configurations.shadow]
+}
+tasks.remapJar {
+    dependsOn shadowJar
+    inputFile = shadowJar.archiveFile
+    archiveClassifier = ''
 }

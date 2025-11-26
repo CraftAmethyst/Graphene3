@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
-  "refmap": "${mod_id}.refmap.json",
+  "refmap": "tritium.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "cache.AbstractFurnaceBlockEntityMixin",

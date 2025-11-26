@@ -82,4 +82,5 @@ tasks.shadowJar {
     enableAutoRelocation = true
     relocationPrefix = 'tritium.libs'
     configurations = [project.configurations.shadow]
+    exclude 'META-INF/maven/**'
 }

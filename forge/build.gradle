@@ -5,7 +5,7 @@ plugins {
 }
 
 mixin {
-    add(sourceSets.main, "${mod_id}.refmap.json")
+    add(sourceSets.main, "tritium.refmap.json")
 
     config("${mod_id}.mixins.json")
     config("${mod_id}.forge.mixins.json")
@@ -96,7 +96,7 @@ dependencies {
 jar {
     finalizedBy('reobfJar')
     manifest.attributes([
-            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+            "MixinConfigs": "tritium.mixins.json,tritium.forge.mixins.json"
     ])
 }
 
@@ -115,13 +115,14 @@ tasks.shadowJar {
     enableAutoRelocation = true
     relocationPrefix = 'org.craftamethyst.tritium.libs'
     configurations = [project.configurations.shadow]
+    exclude 'META-INF/maven/**'
 }
 
 tasks.named('jar') {
     archiveClassifier = 'slim'
     from sourceSets.main.output
     manifest.attributes([
-            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+            "MixinConfigs": "tritium.mixins.json,tritium.forge.mixins.json"
     ])
 }
 tasks.build.dependsOn tasks.shadowJar, tasks.reobfJar

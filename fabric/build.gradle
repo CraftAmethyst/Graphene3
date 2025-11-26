@@ -1,6 +1,7 @@
 plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
+    id 'com.gradleup.shadow' version '9.0.2'
 }
 
 repositories {
@@ -34,8 +35,8 @@ dependencies {
     modImplementation 'maven.modrinth:ae2:kA3rm9EP'
     modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:QewbGM3G'
 
-    include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
-    include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    //include 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    //include 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
 
@@ -44,6 +45,8 @@ dependencies {
 
     // ModMenu integration
     modImplementation "com.terraformersmc:modmenu:7.+"
+
+    shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
 }
 
 loom {
@@ -67,4 +70,16 @@ loom {
             runDir("run")
         }
     }
+}
+configurations {
+    shadow {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+tasks.shadowJar {
+    archiveClassifier = 'shadow'
+    enableAutoRelocation = true
+    relocationPrefix = 'tritium.libs'
+    configurations = [project.configurations.shadow]
 }

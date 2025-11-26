@@ -52,9 +52,7 @@
     "client.renderer.other.MixinPoseStack",
     "client.renderer.reflex.ReflexSchedulerMixin",
     "client.renderer.vc.FramebufferCleanerMixin",
-    "client.renderer.vertex.PoseStackPoseAccessor",
     "client.renderer.vertex.VertexBufferMixin",
-    "client.renderer.vertex.VertexConsumerMixin",
     "MCBUG.button.AbstractWidgetMixin"
   ],
   "server": [],

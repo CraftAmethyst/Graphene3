@@ -29,34 +29,34 @@ public interface VertexConsumerMixin {
     /**
      * @author ZCRAFT
      * Optimized normal transformation with manual matrix expansion
-    @Overwrite
-    default VertexConsumer normal(Matrix3f matrixF, float x, float y, float z) {
-        final Matrix3f matrix = matrixF.normal();
-        final float m00 = matrix.m00(), m10 = matrix.m10(), m20 = matrix.m20();
-        final float m01 = matrix.m01(), m11 = matrix.m11(), m21 = matrix.m21();
-        final float m02 = matrix.m02(), m12 = matrix.m12(), m22 = matrix.m22();
+     @Overwrite
+     default VertexConsumer normal(Matrix3f matrixF, float x, float y, float z) {
+     final Matrix3f matrix = matrixF.normal();
+     final float m00 = matrix.m00(), m10 = matrix.m10(), m20 = matrix.m20();
+     final float m01 = matrix.m01(), m11 = matrix.m11(), m21 = matrix.m21();
+     final float m02 = matrix.m02(), m12 = matrix.m12(), m22 = matrix.m22();
 
-        float xt = m00 * x + m10 * y + m20 * z;
-        float yt = m01 * x + m11 * y + m21 * z;
-        float zt = m02 * x + m12 * y + m22 * z;
-        PoseStackPoseAccessor poseAccessor = (PoseStackPoseAccessor) (Object) matrix.;
-        if (!poseAccessor.isTrustedNormals()) {
-            return this.tritium$setNormalNormalized(xt, yt, zt);
-        }
+     float xt = m00 * x + m10 * y + m20 * z;
+     float yt = m01 * x + m11 * y + m21 * z;
+     float zt = m02 * x + m12 * y + m22 * z;
+     PoseStackPoseAccessor poseAccessor = (PoseStackPoseAccessor) (Object) matrix.;
+     if (!poseAccessor.isTrustedNormals()) {
+     return this.tritium$setNormalNormalized(xt, yt, zt);
+     }
 
-        return ((VertexConsumer) this).normal(xt, yt, zt);
-    }
+     return ((VertexConsumer) this).normal(xt, yt, zt);
+     }
 
-    @Unique
-    private VertexConsumer tritium$setNormalNormalized(float x, float y, float z) {
-        final float lenSq = Math.fma(x, x, Math.fma(y, y, z * z));
-        if (lenSq < 1.0E-8f) {
-            return ((VertexConsumer) this).normal(0.0f, 1.0f, 0.0f);
-        }
-        if (lenSq > 0.999f && lenSq < 1.001f) {
-            return ((VertexConsumer) this).normal(x, y, z);
-        }
-        final float invLen = Math.invsqrt(lenSq);
-        return ((VertexConsumer) this).normal(x * invLen, y * invLen, z * invLen);
-    }*/
+     @Unique
+     private VertexConsumer tritium$setNormalNormalized(float x, float y, float z) {
+     final float lenSq = Math.fma(x, x, Math.fma(y, y, z * z));
+     if (lenSq < 1.0E-8f) {
+     return ((VertexConsumer) this).normal(0.0f, 1.0f, 0.0f);
+     }
+     if (lenSq > 0.999f && lenSq < 1.001f) {
+     return ((VertexConsumer) this).normal(x, y, z);
+     }
+     final float invLen = Math.invsqrt(lenSq);
+     return ((VertexConsumer) this).normal(x * invLen, y * invLen, z * invLen);
+     }*/
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev.legacyforge'
+    id 'com.gradleup.shadow' version '9.0.2'
 }
 
 mixin {
@@ -82,12 +83,14 @@ dependencies {
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
 
     // Bundle Caffeine and dependencies into the JAR
-    jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.2.0,4.0.0)')
-    jarJar(group: 'com.google.errorprone', name: 'error_prone_annotations', version: '[2.0.0,3.0.0)')
-    jarJar(group: 'org.checkerframework', name: 'checker-qual', version: '[3.0.0,4.0.0)')
-    jarJar(group: 'com.logisticscraft', name: 'occlusionculling', version: '[0.0.8-SNAPSHOT,0.1.0)')
+    //jarJar(group: 'com.google.errorprone', name: 'error_prone_annotations', version: '[2.0.0,3.0.0)')
+    //jarJar(group: 'org.checkerframework', name: 'checker-qual', version: '[3.0.0,4.0.0)')
+    //jarJar(group: 'com.logisticscraft', name: 'occlusionculling', version: '[0.0.8-SNAPSHOT,0.1.0)')
 
-    jarJar(group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5')
+    //jarJar(group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5')
+    shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    shadow 'io.github.llamalad7:mixinextras-common:0.3.5'
+
 }
 
 jar {
@@ -100,3 +103,26 @@ jar {
 tasks.named('jarJar') {
     finalizedBy('reobfJar')
 }
+configurations {
+    shadow {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+tasks.shadowJar {
+    archiveClassifier = ''
+    enableAutoRelocation = true
+    relocationPrefix = 'org.craftamethyst.tritium.libs'
+    configurations = [project.configurations.shadow]
+}
+
+tasks.named('jar') {
+    archiveClassifier = 'slim'
+    from sourceSets.main.output
+    manifest.attributes([
+            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+    ])
+}
+tasks.build.dependsOn tasks.shadowJar, tasks.reobfJar
+tasks.assemble.dependsOn tasks.shadowJar, tasks.reobfJar

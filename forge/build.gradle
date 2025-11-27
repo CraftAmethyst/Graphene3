@@ -5,7 +5,7 @@ plugins {
 }
 
 mixin {
-    add(sourceSets.main, "tritium.refmap.json")
+    add(sourceSets.main, "${mod_id}.refmap.json")
 
     config("${mod_id}.mixins.json")
     config("${mod_id}.forge.mixins.json")
@@ -83,11 +83,6 @@ dependencies {
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
 
     // Bundle Caffeine and dependencies into the JAR
-    //jarJar(group: 'com.google.errorprone', name: 'error_prone_annotations', version: '[2.0.0,3.0.0)')
-    //jarJar(group: 'org.checkerframework', name: 'checker-qual', version: '[3.0.0,4.0.0)')
-    //jarJar(group: 'com.logisticscraft', name: 'occlusionculling', version: '[0.0.8-SNAPSHOT,0.1.0)')
-
-    //jarJar(group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5')
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     shadow 'io.github.llamalad7:mixinextras-common:0.3.5'
 
@@ -96,13 +91,10 @@ dependencies {
 jar {
     finalizedBy('reobfJar')
     manifest.attributes([
-            "MixinConfigs": "tritium.mixins.json,tritium.forge.mixins.json"
+            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
     ])
 }
 
-/*tasks.named('jarJar') {
-    finalizedBy('reobfJar')
-}*/
 configurations {
     shadow {
         canBeResolved = true
@@ -119,20 +111,20 @@ tasks.reobfJar{
 tasks.shadowJar {
     File refmapFile;
     for (final def res in sourceSets.main.resources.files) {
-        if(res.name.endsWith("tritium.forge.mixins.json")){
-            println res
+        if(res.name.endsWith("${mod_id}.forge.mixins.json")){
             refmapFile = res;
+            println "[ShadowJar] Found the mixin json: "+res
         }
     }
     if(refmapFile!=null){
-        java.nio.file.Path path = refmapFile.parentFile.parentFile.parentFile.parentFile.toPath().resolve("build").resolve("mixin").resolve("tritium.refmap.json")
+        java.nio.file.Path path = refmapFile.parentFile.parentFile.parentFile.parentFile.toPath().resolve("build").resolve("mixin").resolve("${mod_id}.refmap.json")
         println "[ShadowJar] Adding " + path + " into the shadow jar: "+ outputs.files[0]
         refmapFile = path.toFile()
         from refmapFile
     }
     archiveClassifier = 'all' //DON NOT MODIFY IT,OTHERWISE THE REOBF JAR TASK WILL CAN'T FOUND THE FILE
     enableAutoRelocation = true
-    relocationPrefix = 'org.craftamethyst.tritium.libs'
+    relocationPrefix = 'org.craftamethyst.${mod_id}.libs'
     configurations = [project.configurations.shadow]
     exclude 'META-INF/maven/**'
 }
@@ -141,7 +133,7 @@ tasks.named('jar') {
     archiveClassifier = 'slim'
     from sourceSets.main.output
     manifest.attributes([
-            "MixinConfigs": "tritium.mixins.json,tritium.forge.mixins.json"
+            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
     ])
 }
 tasks.build.dependsOn tasks.shadowJar, tasks.reobfJar

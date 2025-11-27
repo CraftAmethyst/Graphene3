@@ -77,10 +77,16 @@ configurations {
         canBeConsumed = false
     }
 }
+tasks.remapJar {
+    dependsOn shadowJar
+    mustRunAfter(tasks.shadowJar)
+    archiveClassifier = 'built'
+    setInput(tasks.shadowJar.outputs.files[0])
+}
 tasks.shadowJar {
-    archiveClassifier = 'shadow'
+    archiveClassifier = 'all' //DON NOT MODIFY IT,OTHERWISE THE REOBF JAR TASK WILL CAN'T FOUND THE FILE
     enableAutoRelocation = true
-    relocationPrefix = 'tritium.libs'
+    relocationPrefix = "${mod_id}.libs"
     configurations = [project.configurations.shadow]
     exclude 'META-INF/maven/**'
 }

@@ -124,13 +124,13 @@ tasks.shadowJar {
     }
     archiveClassifier = 'all' //DON NOT MODIFY IT,OTHERWISE THE REOBF JAR TASK WILL CAN'T FOUND THE FILE
     enableAutoRelocation = true
-    relocationPrefix = 'org.craftamethyst.${mod_id}.libs'
+    relocationPrefix = "org.craftamethyst.${mod_id}.libs"
     configurations = [project.configurations.shadow]
     exclude 'META-INF/maven/**'
 }
 
 tasks.named('jar') {
-    archiveClassifier = 'slim'
+    archiveClassifier = 'built'
     from sourceSets.main.output
     manifest.attributes([
             "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"

@@ -80,7 +80,6 @@ configurations {
 tasks.remapJar {
     dependsOn shadowJar
     mustRunAfter(tasks.shadowJar)
-    archiveClassifier = 'built'
     setInput(tasks.shadowJar.outputs.files[0])
 }
 tasks.shadowJar {

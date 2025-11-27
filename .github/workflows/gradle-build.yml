@@ -46,3 +46,4 @@ jobs:
             !**/*-sources.jar
             !**/*-javadoc.jar
             !**/*-dev.jar
+            !**/*-all.jar

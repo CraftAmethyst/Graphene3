@@ -100,9 +100,9 @@ jar {
     ])
 }
 
-tasks.named('jarJar') {
+/*tasks.named('jarJar') {
     finalizedBy('reobfJar')
-}
+}*/
 configurations {
     shadow {
         canBeResolved = true
@@ -110,8 +110,27 @@ configurations {
     }
 }
 
+tasks.reobfJar{
+    dependsOn shadowJar
+    mustRunAfter(tasks.shadowJar)
+    setInput(tasks.shadowJar.outputs.files[0])
+}
+
 tasks.shadowJar {
-    archiveClassifier = ''
+    File refmapFile;
+    for (final def res in sourceSets.main.resources.files) {
+        if(res.name.endsWith("tritium.forge.mixins.json")){
+            println res
+            refmapFile = res;
+        }
+    }
+    if(refmapFile!=null){
+        java.nio.file.Path path = refmapFile.parentFile.parentFile.parentFile.parentFile.toPath().resolve("build").resolve("mixin").resolve("tritium.refmap.json")
+        println "[ShadowJar] Adding " + path + " into the shadow jar: "+ outputs.files[0]
+        refmapFile = path.toFile()
+        from refmapFile
+    }
+    archiveClassifier = 'all' //DON NOT MODIFY IT,OTHERWISE THE REOBF JAR TASK WILL CAN'T FOUND THE FILE
     enableAutoRelocation = true
     relocationPrefix = 'org.craftamethyst.tritium.libs'
     configurations = [project.configurations.shadow]

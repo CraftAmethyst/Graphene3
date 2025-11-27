@@ -20,9 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
 
-    @Shadow public abstract boolean isWindowActive();
-
     @Shadow @Final private Window window;
+
+    @Shadow private boolean windowActive;
 
     @Inject(method = "<init>",at = @At(value = "TAIL"))
     private void init(GameConfig pGameConfig, CallbackInfo ci){
@@ -33,7 +33,7 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "getFramerateLimit",at = @At("RETURN"),cancellable = true)
     public void framerateLimit(CallbackInfoReturnable<Integer> cir){
-        if(!this.isWindowActive() && TritiumConfigBase.ClientOptimizations.DynamicFPS.enable){
+        if(!this.windowActive && TritiumConfigBase.ClientOptimizations.DynamicFPS.enable){
             cir.setReturnValue(TritiumConfigBase.ClientOptimizations.DynamicFPS.minimizedFPS);
         }
     }

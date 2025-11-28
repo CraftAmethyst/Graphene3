@@ -1,5 +1,8 @@
 package org.craftamethyst.tritium.cull;
 
+import com.logisticscraft.occlusionculling.OcclusionCullingInstance;
+import com.logisticscraft.occlusionculling.*;
+import com.logisticscraft.occlusionculling.util.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;

@@ -46,7 +46,7 @@ dependencies {
     // ModMenu integration
     modImplementation "maven.modrinth:modmenu:lEkperf6"// 7.2.2 VERSION
 
-   //shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+   shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
 }
 
 loom {

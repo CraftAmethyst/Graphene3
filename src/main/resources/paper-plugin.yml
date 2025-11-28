@@ -1,0 +1,8 @@
+name: Tritium
+version: '1.1.1'
+main: org.craftamethyst.tritium.Tritium
+api-version: '1.21'
+load: STARTUP
+authors: [ QianMo_ProMax, ZCRAFT, Ksmc ]
+description: An all-in-one optimization module dedicated to optimizing client-side rendering and server-side stability and fluency.
+website: https://github.com/CraftAmethyst/Tritium

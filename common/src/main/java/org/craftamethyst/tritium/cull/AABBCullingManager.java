@@ -1,7 +1,5 @@
 package org.craftamethyst.tritium.cull;
 
-import com.logisticscraft.occlusionculling.OcclusionCullingInstance;
-import com.logisticscraft.occlusionculling.util.Vec3d;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -35,7 +33,7 @@ public class AABBCullingManager {
 
     public AABBCullingManager() {
         this.mc = Minecraft.getInstance();
-        this.occlusionCulling = new OcclusionCullingInstance(64, new OcclusionProvider());
+        this.occlusionCulling = new OcclusionCullingInstance(64, (DataProvider) new OcclusionProvider());
     }
 
     public boolean shouldCullEntity(Entity entity) {

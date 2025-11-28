@@ -146,6 +146,7 @@ processResources {
     }
 
     inputs.properties(expandProps)
+    duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
 publishing {

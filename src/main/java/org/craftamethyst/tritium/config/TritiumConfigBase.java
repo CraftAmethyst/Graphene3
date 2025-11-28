@@ -44,14 +44,12 @@ public class TritiumConfigBase {
         public static class EntityOpt {
             public static boolean optimizeEntities = true;
             public static boolean tickRaidersInRaid = true;
-            public static boolean ite = true;
-
+            @Range(min = 1, max = 20)
+            public static int checkInterval = 5;
             @Range(min = 1, max = 256)
             public static int horizontalRange = 64;
-
             @Range(min = 1, max = 256)
             public static int verticalRange = 32;
-
             public static  List<String> entityWhitelist = List.of("minecraft:ender_dragon");
 
         }

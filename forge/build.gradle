@@ -113,7 +113,7 @@ tasks.shadowJar {
     for (final def res in sourceSets.main.resources.files) {
         if(res.name.endsWith("${mod_id}.forge.mixins.json")){
             refmapFile = res;
-            println "[ShadowJar] Found the mixin json: "+res
+            println "[ShadowJar] Found the mixin json: " + refmapFile
         }
     }
     if(refmapFile!=null){
@@ -127,6 +127,11 @@ tasks.shadowJar {
     relocationPrefix = "org.craftamethyst.${mod_id}.libs"
     configurations = [project.configurations.shadow]
     exclude 'META-INF/maven/**'
+    exclude 'META-INF/services/javax.annotation.processing.Processor'
+    rename {fn ->
+            if(fn=='javax.annotation.processing.Processor.enable_on_compile') return 'javax.annotation.processing.Processor'
+        return fn
+    }
 }
 
 tasks.named('jar') {

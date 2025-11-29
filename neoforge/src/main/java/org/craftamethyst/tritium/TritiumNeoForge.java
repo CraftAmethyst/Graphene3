@@ -6,7 +6,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.craftamethyst.tritium.command.KillMobsCommand;
-import org.craftamethyst.tritium.command.MathTestCommand;
 
 @Mod(TritiumCommon.MOD_ID)
 public class TritiumNeoForge {
@@ -21,6 +20,5 @@ public void onClientSideSetup(FMLClientSetupEvent event){
 }
     private void onRegisterCommands(RegisterCommandsEvent event) {
         KillMobsCommand.register(event.getDispatcher());
-        MathTestCommand.register(event.getDispatcher());
     }
 }

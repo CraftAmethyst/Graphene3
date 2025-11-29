@@ -3,6 +3,7 @@ package org.craftamethyst.tritium.mixin.cache;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,14 +34,17 @@ public class BlockStatePairKeyLazyCache {
 
     @Inject(method = "hashCode", at = @At("HEAD"), cancellable = true)
     private void onHashCode(CallbackInfoReturnable<Integer> cir) {
+        if (!TritiumConfigBase.Performance.BlockStateCache.blockStatePairKeyCache) {
+            return;
+        }
         if (!tritium$isHashComputed) {
-            computeAndCacheHashCode();
+            tritium$computeAndCacheHashCode();
         }
         cir.setReturnValue(tritium$cachedHash);
     }
 
     @Unique
-    private void computeAndCacheHashCode() {
+    private void tritium$computeAndCacheHashCode() {
         int firstHash = this.first.hashCode();
         int secondHash = this.second.hashCode();
         int directionHash = this.direction.hashCode();

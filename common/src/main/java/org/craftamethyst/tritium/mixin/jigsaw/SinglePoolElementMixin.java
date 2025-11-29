@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.octree.BoxOctree;
 import org.craftamethyst.tritium.util.OctreeHolder;
 import org.craftamethyst.tritium.util.RotationFailMask;
@@ -49,16 +50,21 @@ public abstract class SinglePoolElementMixin {
             boolean keepJigsaws,
             CallbackInfoReturnable<Boolean> cir) {
 
+        if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations) {
+            return;
+        }
+
         ResourceLocation id = this.template.left().orElse(null);
         if (id == null) return;
         int templateId = id.hashCode();
         int rotIdx = rotation.ordinal();
 
-        if (RotationFailMask.isFullyFailed(templateId, pos.getX(), pos.getY(), pos.getZ())) {
-            cir.setReturnValue(false);
-            return;
+        if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection) {
+            if (RotationFailMask.isFullyFailed(templateId, pos.getX(), pos.getY(), pos.getZ())) {
+                cir.setReturnValue(false);
+                return;
+            }
         }
-
 
         BoxOctree octree = OctreeHolder.get();
         if (octree == null) return;
@@ -67,7 +73,7 @@ public abstract class SinglePoolElementMixin {
         BoundingBox bb = tpl.getBoundingBox(new StructurePlaceSettings().setRotation(rotation), pos);
         AABB aabb = new AABB(bb.minX(), bb.minY(), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ());
 
-        if (octree.intersects(aabb)) {
+        if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection && octree.intersects(aabb)) {
             if (RotationFailMask.markFailed(templateId, pos.getX(), pos.getY(), pos.getZ(), rotIdx)) {
 
             }
@@ -75,7 +81,9 @@ public abstract class SinglePoolElementMixin {
             return;
         }
 
-        VoxelShape shape = Shapes.create(aabb);
-        octree.addShape(shape, this);
+        if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection) {
+            VoxelShape shape = Shapes.create(aabb);
+            octree.addShape(shape, this);
+        }
     }
 }

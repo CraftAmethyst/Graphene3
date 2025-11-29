@@ -4,6 +4,7 @@ import com.simibubi.create.Create;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 
 import java.util.concurrent.Future;
@@ -17,11 +18,15 @@ public final class RailOffloaderHub {
 
     public static void initialize() {
         if (initialized || !CREATE_LOADED) return;
+        if (!TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading) {
+            return;
+        }
 
         worker = new SingleTaskLane("TritiumRailWorker");
         initialized = true;
         TritiumCommon.LOG.info("Tritium rail offloader initialized");
     }
+
 
     public static void shutdown() {
         if (!CREATE_LOADED) return;
@@ -35,7 +40,9 @@ public final class RailOffloaderHub {
 
     public static void onTickStart(MinecraftServer server) {
         if (!CREATE_LOADED || !initialized || worker == null) return;
-
+        if (!TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading) {
+            return;
+        }
         ServerLevel overworld = server.overworld();
 
         currentFuture = worker.submit(() -> {
@@ -46,7 +53,6 @@ public final class RailOffloaderHub {
             }
         });
     }
-
     public static void onTickEnd() {
         if (!CREATE_LOADED || currentFuture == null) return;
 

@@ -1,7 +1,7 @@
-package me.zcraft.tc.client;
+package org.craftamethyst.tritium;
 
-import me.zcraft.tc.config.TritiumAutoConfig;
-import me.zcraft.tc.config.TritiumConfig;
+import me.zcraft.tconfig.config.TritiumAutoConfig;
+import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraft.client.gui.screens.Screen;
 
 public class TritiumConfigScreenFactory {

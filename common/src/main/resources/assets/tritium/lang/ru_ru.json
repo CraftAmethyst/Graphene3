@@ -2,9 +2,36 @@
   "config.tritium.title": "⚙ Конфигурация Tritium",
 
   "config.tritium.category.performance": "Производительность",
-  "config.tritium.performance.fastBambooLight": "FastBamboo",
-  "config.tritium.performance.fastBambooLight_bambooLight": "Оптимизация освещения бамбука",
-  "config.tritium.performance.fastBambooLight_bambooLight.tooltip": "Пропускать расчёты освещения для бамбука для повышения производительности",
+  "config.tritium.performance.mathOptimizations": "Математические оптимизации",
+  "config.tritium.performance.mathOptimizations_enableMathOptimizations": "Включить математические оптимизации",
+  "config.tritium.performance.mathOptimizations_enableMathOptimizations.tooltip": "Главный переключатель всех оптимизаций математических функций",
+  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions": "Оптимизировать функции линейной интерполяции",
+  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions.tooltip": "Использовать инструкции FMA для оптимизации функций линейной интерполяции",
+  "config.tritium.performance.mathOptimizations_optimizeLengthSquared": "Оптимизировать вычисление квадрата расстояния",
+  "config.tritium.performance.mathOptimizations_optimizeLengthSquared.tooltip": "Использовать инструкции FMA для оптимизации вычислений расстояния",
+  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions": "Оптимизировать случайные функции",
+  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions.tooltip": "Оптимизировать функции генерации случайных чисел",
+
+  "config.tritium.performance.lightingOptimizations": "Оптимизации освещения",
+  "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "Включить оптимизации освещения",
+  "config.tritium.performance.lightingOptimizations_enableLightingOptimizations.tooltip": "Главный переключатель оптимизаций системы освещения",
+  "config.tritium.performance.lightingOptimizations_optimizeDynamicGraph": "Оптимизировать динамический граф",
+  "config.tritium.performance.lightingOptimizations_optimizeDynamicGraph.tooltip": "Оптимизировать алгоритм минимальной неподвижной точки динамического графа для улучшения производительности освещения",
+  "config.tritium.performance.lightingOptimizations_bambooLight": "Оптимизация освещения бамбука",
+  "config.tritium.performance.lightingOptimizations_bambooLight.tooltip": "Пропускать расчёты освещения для бамбука для повышения производительности",
+
+  "config.tritium.performance.fastFurnace": "Оптимизация печей",
+  "config.tritium.performance.fastFurnace_fastFurnace": "Включить оптимизацию печей",
+  "config.tritium.performance.fastFurnace_fastFurnace.tooltip": "Кэширует поиск рецептов печи для повышения производительности",
+
+  "config.tritium.performance.blockStateCache": "Кэш состояний блоков",
+  "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "Включить кэш ключей пар состояний блоков",
+  "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "Кэширует вычисления хэша пар состояний блоков для повышения производительности",
+
+  "config.tritium.performance.endIslandOptimization": "Оптимизация островов Энда",
+  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization": "Включить оптимизацию островов Энда",
+  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization.tooltip": "Оптимизирует вычисления функций плотности островов Энда для повышения производительности",
+
 
   "config.tritium.category.rendering": "Рендеринг",
   "config.tritium.rendering.entityCulling": "Отсечение сущностей",
@@ -112,24 +139,49 @@
   "config.tritium.entities.entityStacking_itemList.tooltip": "Список, заполняемый по примеру. Режим работы зависит от выбранного выше режима списка",
 
   "config.tritium.category.techOptimizations": "Технические оптимизации",
+  "config.tritium.techOptimizations.createOptimizations": "Оптимизации Create",
+  "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "Включить выгрузку рельсов",
+  "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "Перемещает обработку тиков рельсовой системы в отдельный поток для повышения производительности сервера",
 
   "config.tritium.category.fixes": "Исправления",
   "config.tritium.fixes.buttonFix": "Исправление кнопок",
-  "config.tritium.fixes.buttonFix_buttonFix": "Включить исправление фокуса кнопок",
-  "config.tritium.fixes.buttonFix_buttonFix.tooltip": "Исправляет проблемы с фокусом кнопок в ванильном интерфейсе",
-
+  "config.tritium.fixes.buttonFix_buttonFix": "MC-259387",
+  "config.tritium.fixes.buttonFix_buttonFix.tooltip": "Исправляет MC-259387: проблемы с фокусом элементов управления в ванильной версии",
   "config.tritium.fixes.noGLog": "Отключить GL-логи",
   "config.tritium.fixes.noGLog_noGLog": "Отключить логирование GL",
   "config.tritium.fixes.noGLog_noGLog.tooltip": "Снижает количество ненужных записей в логе",
-
   "config.tritium.fixes.memoryLeakFix": "Исправления утечек памяти",
   "config.tritium.fixes.memoryLeakFix_AE2WTLibCreativeTabLeakFix": "AE2WTLibMemLeakFix",
   "config.tritium.fixes.memoryLeakFix_AE2WTLibCreativeTabLeakFix.tooltip": "Исправляет утечку памяти в творческой вкладке AE2WTLib",
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix": "ScreenshotByteBufferLeakFix",
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix.tooltip": "Исправляет утечку памяти, вызванную скриншотами",
 
+  "config.tritium.fixes.beeFixes": "Исправления пчёл",
+  "config.tritium.fixes.beeFixes_enableBeeFixes": "Включить исправления пчёл",
+  "config.tritium.fixes.beeFixes_enableBeeFixes.tooltip": "Главный переключатель всех исправлений ошибок, связанных с пчёлами",
+  "config.tritium.fixes.beeFixes_fixWeatherInNether": "MC-168329",
+  "config.tritium.fixes.beeFixes_fixWeatherInNether.tooltip": "Исправляет MC-168329: пчёлы не могут покидать ульи в Нижнем мире и Крае",
+  "config.tritium.fixes.beeFixes_fixBeeRandomPos": "MC-206401",
+  "config.tritium.fixes.beeFixes_fixBeeRandomPos.tooltip": "Исправляет MC-206401: проблемы с поиском пути",
+  "config.tritium.fixes.beeFixes_fixBeeGravity": "MC-229321",
+  "config.tritium.fixes.beeFixes_fixBeeGravity.tooltip": "Исправляет MC-229321: тенденцию движения на северо-запад",
+  "config.tritium.fixes.beeFixes_fixBeeTurtleEgg": "MC-248332",
+  "config.tritium.fixes.beeFixes_fixBeeTurtleEgg.tooltip": "Исправляет MC-248332: пчёлы могут уничтожать яйца черепах",
+
   "config.tritium.category.serverPerformance": "Производительность сервера",
   "config.tritium.serverPerformance.noiseSamplingCache": "Кэширование шумов",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache": "Включить кэширование шумов",
-  "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache.tooltip": "Кэширует выборку шумов для повышения производительности сервера"
+  "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache.tooltip": "Кэширует выборку шумов для повышения производительности сервера",
+
+  "config.tritium.serverPerformance.jigsawOptimizations": "Оптимизации Jigsaw",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations": "Включить оптимизации Jigsaw",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations.tooltip": "Главный переключатель всех оптимизаций генерации структур Jigsaw",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableOctreeCollisionDetection": "Включить обнаружение столкновений с помощью октодерева",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableOctreeCollisionDetection.tooltip": "Использовать октодерево для эффективного обнаружения столкновений во время генерации структур",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableFastWeightedSampling": "Включить быстрое взвешенное семплирование",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableFastWeightedSampling.tooltip": "Использовать бинарный поиск для оптимизации выбора шаблонов пула структур",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering": "Включить фильтрацию структурных блоков",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering.tooltip": "Фильтровать структурные блоки за пределами ограничивающих рамок для повышения производительности",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck": "Включить проверку генерации Jigsaw",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "Выполнять проверки перед генерацией, чтобы избежать ненужного размещения Jigsaw"
 }

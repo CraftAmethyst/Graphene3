@@ -1,7 +1,7 @@
-package me.zcraft.tc.client;
+package me.zcraft.tconfig.client;
 
 import org.craftamethyst.tritium.TritiumCommon;
-import me.zcraft.tc.config.TritiumConfig;
+import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;

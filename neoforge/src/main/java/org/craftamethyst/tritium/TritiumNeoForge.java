@@ -2,22 +2,25 @@ package org.craftamethyst.tritium;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.craftamethyst.tritium.command.KillMobsCommand;
+import org.craftamethyst.tritium.command.MathTestCommand;
 
 @Mod(TritiumCommon.MOD_ID)
 public class TritiumNeoForge {
 
     public TritiumNeoForge(IEventBus modEventBus) {
-        TritiumCommon.LOG.info("NeoForge Ready");
         TritiumCommon.init();
-
         NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
+        modEventBus.addListener(this::onClientSideSetup);
     }
-
-    private void onRegisterCommands(RegisterClientCommandsEvent event) {
+public void onClientSideSetup(FMLClientSetupEvent event){
+    TritiumConfigScreenReg.registerConfigScreen(TritiumCommon.MOD_ID);
+}
+    private void onRegisterCommands(RegisterCommandsEvent event) {
         KillMobsCommand.register(event.getDispatcher());
+        MathTestCommand.register(event.getDispatcher());
     }
-
 }

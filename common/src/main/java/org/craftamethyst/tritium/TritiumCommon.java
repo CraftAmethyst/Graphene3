@@ -1,14 +1,12 @@
 package org.craftamethyst.tritium;
 
 
-import me.zcraft.tc.client.TritiumConfigScreenReg;
-import me.zcraft.tc.config.TritiumConfig;
+import me.zcraft.tconfig.config.TritiumConfig;
 import org.craftamethyst.tritium.client.TritiumClient;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.launch.MixinBootstrap;
 
 public class TritiumCommon {
     public static final String MOD_ID = "tritium";
@@ -16,8 +14,10 @@ public class TritiumCommon {
     //public static final TritiumConfig CONFIG = new TritiumConfig("tritium", TritiumConfigBase.class);
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
     public static void init() {
-        LOG.info("Loading...\n" +
-                "\n" +
+        LOG.info("""
+                        Loading...
+                        
+                        """ +
                 "  ______       _  __   _                 \n" +
                 " /_  __/_____ (_)/ /_ (_)__  __ ____ ___ \n" +
                 "  / /  / ___// // __// // / / // __ `__ \\\n" +
@@ -30,7 +30,6 @@ public class TritiumCommon {
        //Register configuration file
         try {
             TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
-            TritiumConfigScreenReg.registerConfigScreen(MOD_ID);
             Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {

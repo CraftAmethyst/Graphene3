@@ -4,6 +4,7 @@ import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -22,7 +23,7 @@ public class TrainEntitiesMixin {
             ),remap = false
     )
     private void redirectCarriageEntityManagement(List<Carriage> carriages, Consumer<? super Carriage> action, Level level) {
-        if (level instanceof ServerLevel serverLevel) {
+        if (TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading && level instanceof ServerLevel serverLevel) {
             serverLevel.getServer().execute(() -> {
                 for (Carriage carriage : carriages) {
                     carriage.manageEntities(level);

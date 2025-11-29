@@ -1,7 +1,6 @@
-package me.zcraft.tc.client;
+package org.craftamethyst.tritium;
 
-import org.craftamethyst.tritium.TritiumCommon;
-import me.zcraft.tc.config.TritiumConfig;
+import me.zcraft.tconfig.config.TritiumConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;

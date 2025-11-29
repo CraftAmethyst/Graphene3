@@ -1,4 +1,4 @@
-package me.zcraft.tc.config.watcher;
+package me.zcraft.tconfig.config.watcher;
 
 
 import org.craftamethyst.tritium.TritiumCommon;

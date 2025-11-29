@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,6 +17,11 @@ public class JigsawBlockEntityMixin {
 
     @Inject(method = "generate", at = @At("HEAD"), cancellable = true)
     private void optimizeJigsawGeneration(ServerLevel level, int maxDepth, boolean keepJigsaws, CallbackInfo ci) {
+        if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations ||
+                !TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawGenerationCheck) {
+            return;
+        }
+
         JigsawBlockEntity self = (JigsawBlockEntity) (Object) this;
         BlockPos pos = self.getBlockPos();
         BlockState state = self.getBlockState();

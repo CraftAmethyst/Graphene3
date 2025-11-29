@@ -23,6 +23,7 @@
     "jigsaw.StructureTemplatePoolMixin",
     "light.DynamicGraphMinFixedPointMixin",
     "light.FastBamboo",
+    "math.MthMixin",
     "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
     "MCBUG.bee.RandomPosMixin",

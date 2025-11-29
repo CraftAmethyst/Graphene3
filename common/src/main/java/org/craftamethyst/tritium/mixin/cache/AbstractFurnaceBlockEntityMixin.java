@@ -8,6 +8,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -50,8 +51,15 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @Shadow
     protected NonNullList<ItemStack> items;
 
+    @Shadow
+    private static int getTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
+        throw new AssertionError();
+    }
     @Unique
     private boolean tritium$isInputChanged(ItemStack currentInput) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return true;
+        }
         if (tritium$cachedInput == null) {
             return !currentInput.isEmpty();
         }
@@ -65,6 +73,10 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @Unique
     @Nullable
     private RecipeHolder<? extends AbstractCookingRecipe> tritium$getCachedRecipe(ItemStack currentInput) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return null;
+        }
+
         tritium$cacheTicks++;
         if (tritium$cacheTicks >= CACHE_INVALIDATION_TICKS || tritium$isInputChanged(currentInput)) {
             tritium$resetCache();
@@ -76,6 +88,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
 
     @Unique
     private void tritium$updateCache(Level level, ItemStack input) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return;
+        }
         tritium$resetCache();
 
         if (input.isEmpty()) {
@@ -100,6 +115,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
 
     @Unique
     private void tritium$resetCache() {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return;
+        }
         this.tritium$cachedRecipe = null;
         this.tritium$cachedInput = null;
         this.tritium$cacheMissed = false;
@@ -108,6 +126,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
 
     @Unique
     private void tritium$validateAndUpdateCache(Level level, ItemStack currentInput) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return;
+        }
         if (level == null || currentInput.isEmpty()) {
             tritium$resetCache();
             return;
@@ -125,11 +146,18 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             )
     )
     private static int redirectGetTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return getTotalCookTime(level, blockEntity);
+        }
         return ((AbstractFurnaceBlockEntityMixin) (Object) blockEntity).tritium$getCachedTotalCookTime(level);
     }
 
     @Unique
     private int tritium$getCachedTotalCookTime(Level level) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return DEFAULT_COOK_TIME;
+        }
+
         ItemStack currentInput = this.items.getFirst();
         if (currentInput.isEmpty()) {
             if (tritium$cachedInput != null || !tritium$cacheMissed) {
@@ -152,6 +180,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             at = @At("HEAD")
     )
     private void onSetItem(int pIndex, ItemStack pStack, CallbackInfo ci) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return;
+        }
         if (pIndex == 0) {
             if (tritium$cachedInput == null || !ItemStack.isSameItemSameComponents(tritium$cachedInput, pStack)) {
                 tritium$resetCache();
@@ -159,12 +190,14 @@ public abstract class AbstractFurnaceBlockEntityMixin {
         }
     }
 
-
     @Inject(
             method = "setItems",
             at = @At("HEAD")
     )
     private void onSetItems(NonNullList<ItemStack> pItems, CallbackInfo ci) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return;
+        }
         tritium$resetCache();
     }
 }

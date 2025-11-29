@@ -6,8 +6,7 @@ public class TritiumFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-
-        TritiumCommon.LOG.info("Fabric Ready");
+        TritiumConfigScreenReg.registerConfigScreen(TritiumCommon.MOD_ID);
         TritiumCommon.init();
        // CommandRegistrationCallback.EVENT.register((dispatcher, commandBuildContext,commandSelection) -> KillMobsCommand.register(dispatcher));
     }

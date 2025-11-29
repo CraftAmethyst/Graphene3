@@ -2,9 +2,36 @@
   "config.tritium.title": "⚙ Tritium 配置",
 
   "config.tritium.category.performance": "性能优化",
-  "config.tritium.performance.fastBambooLight": "FastBamboo",
-  "config.tritium.performance.fastBambooLight_bambooLight": "竹子光照优化",
-  "config.tritium.performance.fastBambooLight_bambooLight.tooltip": "跳过竹子的光照计算以提高性能",
+  "config.tritium.performance.mathOptimizations": "数学优化",
+  "config.tritium.performance.mathOptimizations_enableMathOptimizations": "启用数学优化",
+  "config.tritium.performance.mathOptimizations_enableMathOptimizations.tooltip": "所有数学函数优化的主开关",
+  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions": "优化线性插值函数",
+  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions.tooltip": "使用FMA指令优化线性插值函数",
+  "config.tritium.performance.mathOptimizations_optimizeLengthSquared": "优化距离平方计算",
+  "config.tritium.performance.mathOptimizations_optimizeLengthSquared.tooltip": "使用FMA指令优化距离计算",
+  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions": "优化随机函数",
+  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions.tooltip": "优化随机数生成函数",
+
+  "config.tritium.performance.lightingOptimizations": "光照优化",
+  "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "启用光照优化",
+  "config.tritium.performance.lightingOptimizations_enableLightingOptimizations.tooltip": "光照系统优化的主开关",
+  "config.tritium.performance.lightingOptimizations_optimizeDynamicGraph": "优化动态图",
+  "config.tritium.performance.lightingOptimizations_optimizeDynamicGraph.tooltip": "优化动态图最小固定点算法以提升光照性能",
+  "config.tritium.performance.lightingOptimizations_bambooLight": "竹子光照优化",
+  "config.tritium.performance.lightingOptimizations_bambooLight.tooltip": "跳过竹子的光照计算以提高性能",
+
+  "config.tritium.performance.fastFurnace": "熔炉优化",
+  "config.tritium.performance.fastFurnace_fastFurnace": "启用熔炉优化",
+  "config.tritium.performance.fastFurnace_fastFurnace.tooltip": "缓存熔炉配方查询以提高性能",
+
+  "config.tritium.performance.blockStateCache": "方块状态缓存",
+  "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "启用方块状态对键缓存",
+  "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "缓存方块状态对的哈希计算以提高性能",
+
+  "config.tritium.performance.endIslandOptimization": "末地岛屿优化",
+  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization": "启用末地岛屿优化",
+  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization.tooltip": "优化末地岛屿密度函数计算以提高性能",
+
 
   "config.tritium.category.rendering": "渲染优化",
   "config.tritium.rendering.entityCulling": "实体剔除",
@@ -108,13 +135,15 @@
   "config.tritium.entities.entityStacking_itemList.tooltip": "一个列表，按示例格式填写，模式根据你在上设置的列表模式决定",
 
 
-
   "config.tritium.category.techOptimizations": "技术优化",
+  "config.tritium.techOptimizations.createOptimizations": "机械动力优化",
+  "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "启用铁路卸载",
+  "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "将铁路系统刻处理移至独立线程以提升服务器性能",
 
   "config.tritium.category.fixes": "修复",
   "config.tritium.fixes.buttonFix": "按钮修复",
-  "config.tritium.fixes.buttonFix_buttonFix": "按钮焦点修复开关",
-  "config.tritium.fixes.buttonFix_buttonFix.tooltip": "ButtonFix修复原版的控件失焦问题",
+  "config.tritium.fixes.buttonFix_buttonFix": "MC-259387",
+  "config.tritium.fixes.buttonFix_buttonFix.tooltip": "修复MC-259387：原版的控件失焦问题",
   "config.tritium.fixes.noGLog": "禁用GL日志",
   "config.tritium.fixes.noGLog_noGLog": "禁用GL日志功能开关",
   "config.tritium.fixes.noGLog_noGLog.tooltip": "减少不必要的日志输出",
@@ -124,8 +153,32 @@
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix": "ScreenshotByteBufferLeakFix",
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix.tooltip": "ScreenshotByteBufferMemLeakFix",
 
+  "config.tritium.fixes.beeFixes": "蜜蜂修复",
+  "config.tritium.fixes.beeFixes_enableBeeFixes": "启用蜜蜂修复",
+  "config.tritium.fixes.beeFixes_enableBeeFixes.tooltip": "所有蜜蜂相关错误修复的主开关",
+  "config.tritium.fixes.beeFixes_fixWeatherInNether": "MC-168329",
+  "config.tritium.fixes.beeFixes_fixWeatherInNether.tooltip": "修复MC-168329：蜜蜂不可以在下界和末地离开蜂巢",
+  "config.tritium.fixes.beeFixes_fixBeeRandomPos": "MC-206401",
+  "config.tritium.fixes.beeFixes_fixBeeRandomPos.tooltip": "修复MC-206401：路径寻找问题",
+  "config.tritium.fixes.beeFixes_fixBeeGravity": "MC-229321",
+  "config.tritium.fixes.beeFixes_fixBeeGravity.tooltip": " 修复MC-229321：西北方向移动的倾向",
+  "config.tritium.fixes.beeFixes_fixBeeTurtleEgg": "MC-248332",
+  "config.tritium.fixes.beeFixes_fixBeeTurtleEgg.tooltip": "修复MC-248332：蜜蜂会破坏海龟蛋",
+
   "config.tritium.category.serverPerformance": "服务器性能",
   "config.tritium.serverPerformance.noiseSamplingCache": "噪声采样缓存",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache": "启用噪声采样缓存",
-  "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache.tooltip": "缓存噪声采样以提高服务器性能"
+  "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache.tooltip": "缓存噪声采样以提高服务器性能",
+
+  "config.tritium.serverPerformance.jigsawOptimizations": "拼图优化",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations": "启用拼图优化",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations.tooltip": "所有拼图结构生成优化的主开关",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableOctreeCollisionDetection": "启用八叉树碰撞检测",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableOctreeCollisionDetection.tooltip": "在结构生成期间使用八叉树进行高效的碰撞检测",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableFastWeightedSampling": "启用快速加权采样",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableFastWeightedSampling.tooltip": "使用二分搜索优化结构池模板选择",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering": "启用结构块过滤",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering.tooltip": "过滤边界框外的结构块以提升性能",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck": "启用拼图生成检查",
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "执行生成前检查以避免不必要的拼图放置"
 }

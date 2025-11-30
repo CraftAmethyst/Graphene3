@@ -6,6 +6,8 @@
   "compatibilityLevel": "JAVA_18",
   "priority": 2000,
   "mixins": [
+    "cache.AbstractFurnaceBlockEntityMixin",
+    "cache.BlockStatePairKeyLazyCache",
     "chunk.EndIslandDensityFunctionMixin",
     "chunk.NoiseSamplingCacheMixin",
     "entity.EntityCollisionContextMixin",
@@ -31,10 +33,10 @@
     "MCBUG.boat.BoatMixin",
     "packs.CompositePackResourcesMixin",
     "packs.FilePackResourcesMixin",
+    "stack.DataComponentsMixin",
+    "stack.ItemStackMixin",
     "tickstop.EntityTypeMixin",
-    "tickstop.LevelMixin",
-    "cache.BlockStatePairKeyLazyCache",
-    "cache.AbstractFurnaceBlockEntityMixin"
+    "tickstop.LevelMixin"
   ],
   "client": [
     "client.fps.MinecraftMixin",
@@ -53,13 +55,13 @@
     "client.renderer.culling.LevelRendererMixin",
     "client.renderer.culling.LevelTKMixin",
     "client.renderer.fast_blit.FastBlit",
-    "client.renderer.vc.FramebufferCleanerMixin",
+    "client.renderer.immediate.DirectionMixin",
     "client.renderer.other.MixinPoseStack",
     "client.renderer.reflex.ReflexSchedulerMixin",
+    "client.renderer.vc.FramebufferCleanerMixin",
+    "client.renderer.vertex.PoseStackPoseAccessor",
     "client.renderer.vertex.VertexBufferMixin",
     "client.renderer.vertex.VertexConsumerMixin",
-    "client.renderer.vertex.PoseStackPoseAccessor",
-    "client.renderer.immediate.DirectionMixin",
     "MCBUG.button.AbstractWidgetMixin"
   ],
   "server": [],

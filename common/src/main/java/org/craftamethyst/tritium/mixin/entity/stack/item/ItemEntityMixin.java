@@ -1,6 +1,7 @@
 package org.craftamethyst.tritium.mixin.entity.stack.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -218,8 +219,7 @@ public abstract class ItemEntityMixin {
 
         return tritium$isSameItem(selfStack, otherStack) &&
                 tritium$isMergeAllowed(otherStack, listMode, itemList) &&
-                (!TritiumConfigBase.Entities.EntityStacking.lockMaxedStacks || otherStack.getCount() < tritium$getEffectiveMaxStackSize()) &&
-                (self.getItem().getCount()+other.getItem().getCount()<=self.getItem().getMaxStackSize());
+                (!TritiumConfigBase.Entities.EntityStacking.lockMaxedStacks || otherStack.getCount() < tritium$getEffectiveMaxStackSize());
     }
 
     @Unique

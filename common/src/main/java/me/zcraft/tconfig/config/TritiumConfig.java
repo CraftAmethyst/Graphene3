@@ -1,10 +1,10 @@
 package me.zcraft.tconfig.config;
 
-import org.craftamethyst.tritium.TritiumCommon;
 import me.zcraft.tconfig.annotation.ClientOnly;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.SubCategory;
 import me.zcraft.tconfig.config.watcher.ConfigFileWatcher;
+import org.craftamethyst.tritium.TritiumCommon;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
@@ -95,8 +95,7 @@ public class TritiumConfig {
 
         if (numValue < min || numValue > max) {
             TritiumCommon.LOG.warn(
-                    "Config value {} = {} is out of range [{}, {}], using default: {}",
-                    field.getName(), numValue, min, max, defaultValue
+                    "Config value {} = {} is out of range [{}, {}], using default: {}"
             );
             return defaultValue;
         }
@@ -167,10 +166,10 @@ public class TritiumConfig {
         }
     }
 
-    public TritiumConfig register() {
+    public void register() {
         if (registered) {
-            TritiumCommon.LOG.warn("Config for mod {} is already registered!", modId);
-            return this;
+            TritiumCommon.LOG.warn("Config for mod {} is already registered!");
+            return;
         }
 
         registered = true;
@@ -180,16 +179,15 @@ public class TritiumConfig {
             configRef.set(newConfig);
 
             ConfigValidator.validateConfig(newConfig);
-            TritiumCommon.LOG.info("Default configuration validation passed for mod: {}", modId);
+            TritiumCommon.LOG.info("Default configuration validation passed for mod: {}");
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Default configuration validation failed for mod {}: {}", modId, e.getMessage());
+            TritiumCommon.LOG.error("Default configuration validation failed for mod {}: {}");
             throw new RuntimeException("Invalid default configuration for mod: " + modId, e);
         }
 
         cacheFieldAccessors();
         initializeConfigSystem();
-        TritiumCommon.LOG.info("Config registered successfully for mod: {} (environment: {})", modId, isClient ? "client" : "server");
-        return this;
+        TritiumCommon.LOG.info("Config registered successfully for mod: {} (environment: {})");
     }
 
     public void reload() {
@@ -202,7 +200,7 @@ public class TritiumConfig {
 
                 if (configParser != null) {
                     configParser.load();
-                    if (!ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
+                    if (ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
                         throw new RuntimeException("Config migration failed");
                     }
                 }
@@ -211,10 +209,10 @@ public class TritiumConfig {
                 configRef.set(newConfig);
 
                 ConfigValidator.validateConfig(newConfig);
-                TritiumCommon.LOG.info("Configuration reloaded successfully for mod: {}", modId);
+                TritiumCommon.LOG.info("Configuration reloaded successfully for mod: {}");
 
             } catch (Exception e) {
-                TritiumCommon.LOG.error("Failed to reload configuration for mod: {}", modId, e);
+                TritiumCommon.LOG.error("Failed to reload configuration for mod: {}");
                 throw new RuntimeException("Config reload failed", e);
             }
         }
@@ -249,9 +247,9 @@ public class TritiumConfig {
             try {
                 String configContent = generateConfigFile();
                 Files.write(configPath, configContent.getBytes());
-                TritiumCommon.LOG.debug("Configuration saved for mod: {}", modId);
+                TritiumCommon.LOG.debug("Configuration saved for mod: {}");
             } catch (IOException e) {
-                TritiumCommon.LOG.error("Failed to save configuration for mod: {}", modId, e);
+                TritiumCommon.LOG.error("Failed to save configuration for mod: {}");
                 throw new RuntimeException("Config save failed", e);
             }
         }
@@ -260,9 +258,9 @@ public class TritiumConfig {
     private void cacheFieldAccessors() {
         try {
             cacheFieldsRecursive(configClass, "");
-            TritiumCommon.LOG.debug("Cached {} field accessors for mod: {}", fieldAccessors.size(), modId);
+            TritiumCommon.LOG.debug("Cached {} field accessors for mod: {}");
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to cache field accessors for mod: {}", modId, e);
+            TritiumCommon.LOG.error("Failed to cache field accessors for mod: {}");
         }
     }
 
@@ -273,7 +271,7 @@ public class TritiumConfig {
         }
         configParser = new ConfigParser(configPath);
 
-        if (!ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
+        if (ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
             throw new RuntimeException("Initial config migration failed");
         }
 
@@ -289,10 +287,10 @@ public class TritiumConfig {
             Object newConfig = configClass.newInstance();
             configureObjectRecursive(newConfig, "");
             ConfigValidator.validateConfig(newConfig);
-            TritiumCommon.LOG.debug("Configuration object rebuilt and validated for mod: {}", modId);
+            TritiumCommon.LOG.debug("Configuration object rebuilt and validated for mod: {}");
             return newConfig;
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to rebuild configuration object for mod: {}", modId, e);
+            TritiumCommon.LOG.error("Failed to rebuild configuration object for mod: {}");
             throw new RuntimeException("Configuration rebuild failed", e);
         }
     }
@@ -358,14 +356,13 @@ public class TritiumConfig {
 
                         accessor.setValue(obj, value);
                     } else {
-                        TritiumCommon.LOG.warn("No accessor found for field path: {}", fieldPath);
+                        TritiumCommon.LOG.warn("No accessor found for field path: {}");
                     }
                 }
             }
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     private ConfigValue<?> getCachedConfigValue(String key, Class<?> type, Object defaultValue) {
         return configCache.computeIfAbsent(key, k -> createConfigValueSupplier(key, type, defaultValue));
     }
@@ -386,7 +383,7 @@ public class TritiumConfig {
         } else if (List.class.isAssignableFrom(type)) {
             return new ConfigValue<>(configParser.getStringList(key, (List<String>) defaultValue));
         } else {
-            TritiumCommon.LOG.warn("Unsupported configuration type: {} for key: {} in mod: {}", type, key, modId);
+            TritiumCommon.LOG.warn("Unsupported configuration type: {} for key: {} in mod: {}");
             return new ConfigValue<>(() -> defaultValue);
         }
     }
@@ -396,9 +393,9 @@ public class TritiumConfig {
             String configContent = generateConfigFile();
             Files.createDirectories(configPath.getParent());
             Files.write(configPath, configContent.getBytes());
-            TritiumCommon.LOG.info("Default configuration created for mod {} at: {}", modId, configPath);
+            TritiumCommon.LOG.info("Default configuration created for mod {} at: {}");
         } catch (IOException e) {
-            TritiumCommon.LOG.error("Failed to create default configuration for mod: {}", modId, e);
+            TritiumCommon.LOG.error("Failed to create default configuration for mod: {}");
         }
     }
 
@@ -431,7 +428,7 @@ public class TritiumConfig {
                 generateSectionContent(sb, section, sectionName, "");
             }
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to generate configuration content for mod: {}", modId, e);
+            TritiumCommon.LOG.error("Failed to generate configuration content for mod: {}");
         }
         return sb.toString();
     }
@@ -605,13 +602,13 @@ public class TritiumConfig {
                         try {
                             return Enum.valueOf((Class<Enum>) targetType, ((String) value).trim().toUpperCase());
                         } catch (IllegalArgumentException e) {
-                            TritiumCommon.LOG.warn("Invalid enum value '{}' for type {}, using first enum value", value, targetType.getSimpleName());
+                            TritiumCommon.LOG.warn("Invalid enum value '{}' for type {}, using first enum value");
                             return targetType.getEnumConstants()[0];
                         }
                     }
                 }
             } catch (Exception e) {
-                TritiumCommon.LOG.warn("Failed to convert value '{}' to type {}, using default", value, targetType.getSimpleName(), e);
+                TritiumCommon.LOG.warn("Failed to convert value '{}' to type {}, using default");
             }
 
             return getTypeDefaultValue(targetType);

@@ -1,25 +1,23 @@
 package org.craftamethyst.tritium.mixin.tickstop;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 import org.craftamethyst.tritium.helper.EntityTickHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.function.Consumer;
-
-@Mixin(Level.class)
+@Mixin(World.class)
 public abstract class LevelMixin {
 
     @Inject(
-            method = "guardEntityTick",
+            method = "tickEntity(Lnet/minecraft/entity/Entity;)V",
             at = @At("HEAD"),
             cancellable = true
     )
-    private void onEntityTick(Consumer<Entity> consumer, Entity entity, CallbackInfo ci) {
-        if (EntityTickHelper.shouldSkipTick(entity)) {
+    private void onEntityTick(Entity ent, CallbackInfo ci) {
+        if (EntityTickHelper.shouldSkipTick(ent)) {
             ci.cancel();
         }
     }

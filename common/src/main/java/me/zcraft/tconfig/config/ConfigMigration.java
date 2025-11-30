@@ -1,9 +1,8 @@
 package me.zcraft.tconfig.config;
 
-import org.craftamethyst.tritium.TritiumCommon;
 import me.zcraft.tconfig.annotation.ConfigVersion;
+import org.craftamethyst.tritium.TritiumCommon;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,13 +16,13 @@ public class ConfigMigration {
             int fileVersion = detectConfigVersion(parser);
 
             if (fileVersion < currentVersion) {
-                TritiumCommon.LOG.info("Migrating config from version {} to {}", fileVersion, currentVersion);
-                return performMigration(configPath, parser, fileVersion, currentVersion, configClass);
+                TritiumCommon.LOG.info("Migrating config from version {} to {}");
+                return !performMigration(configPath, parser, fileVersion, currentVersion, configClass);
             }
-            return true;
-        } catch (Exception e) {
-            TritiumCommon.LOG.error("Config migration failed: {}", e.getMessage());
             return false;
+        } catch (Exception e) {
+            TritiumCommon.LOG.error("Config migration failed: {}");
+            return true;
         }
     }
 
@@ -43,7 +42,7 @@ public class ConfigMigration {
         return 1;
     }
 
-    private static boolean performMigration(Path configPath, ConfigParser parser, int fromVersion, int toVersion, Class<?> configClass) throws IOException {
+    private static boolean performMigration(Path configPath, ConfigParser parser, int fromVersion, int toVersion, Class<?> configClass) {
         Map<String, String> migratedValues = new HashMap<>(parser.configValues);
 
         try {
@@ -69,7 +68,7 @@ public class ConfigMigration {
             TritiumCommon.LOG.info("Config migration completed successfully");
             return true;
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Migration failed: {}", e.getMessage());
+            TritiumCommon.LOG.error("Migration failed: {}");
             return false;
         }
     }
@@ -79,12 +78,12 @@ public class ConfigMigration {
             String methodName = "migrateFromV" + fromVersion;
             Method migrationMethod = configClass.getMethod(methodName, Map.class);
             migrationMethod.invoke(null, values);
-            TritiumCommon.LOG.debug("Applied migration from version {}", fromVersion);
+            TritiumCommon.LOG.debug("Applied migration from version {}");
             return true;
         } catch (NoSuchMethodException e) {
             return applyDefaultMigration(values, fromVersion);
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Failed to apply custom migration for version {}: {}", fromVersion, e.getMessage());
+            TritiumCommon.LOG.error("Failed to apply custom migration for version {}: {}");
             return false;
         }
     }
@@ -101,24 +100,24 @@ public class ConfigMigration {
             }
             return true;
         } catch (Exception e) {
-            TritiumCommon.LOG.error("Default migration failed for version {}: {}", fromVersion, e.getMessage());
+            TritiumCommon.LOG.error("Default migration failed for version {}: {}");
             return false;
         }
     }
 
     private static void migrateV1toV2(Map<String, String> values) {
-        Map<String, String> migrations = Map.of(
-                "rendering.enableCulling", "rendering.entityCulling.enableCulling",
-                "rendering.enableEntityCulling", "rendering.entityCulling.enableEntityCulling"
-        );
+        Map<String, String> migrations = new HashMap<String, String>() {{
+            put("rendering.enableCulling", "rendering.entityCulling.enableCulling");
+            put("rendering.enableEntityCulling", "rendering.entityCulling.enableEntityCulling");
+        }};
 
         applyMigrations(values, migrations);
     }
 
     private static void migrateV2toV3(Map<String, String> values) {
-        Map<String, String> migrations = Map.of(
-                "old.setting", "new.setting"
-        );
+        Map<String, String> migrations = new HashMap<String, String>() {{
+            put("old.setting", "new.setting");
+        }};
 
         applyMigrations(values, migrations);
     }
@@ -131,7 +130,7 @@ public class ConfigMigration {
             if (values.containsKey(oldKey) && !values.containsKey(newKey)) {
                 values.put(newKey, values.get(oldKey));
                 values.remove(oldKey);
-                TritiumCommon.LOG.debug("Migrated config key: {} -> {}", oldKey, newKey);
+                TritiumCommon.LOG.debug("Migrated config key: {} -> {}");
             }
         }
     }

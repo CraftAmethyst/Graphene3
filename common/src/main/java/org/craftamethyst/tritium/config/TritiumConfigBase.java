@@ -11,7 +11,7 @@ import java.util.List;
 
 @ConfigVersion(1)
 public class TritiumConfigBase {
-    @SubCategory("Performance")
+   /* @SubCategory("Performance")
     public Performance performance = new Performance();
 
     @ClientOnly
@@ -24,11 +24,11 @@ public class TritiumConfigBase {
 
     @SubCategory("Network")
     public Network network = new Network();
-
+*/
     @SubCategory("Entities")
     public Entities entities = new Entities();
 
-    @SubCategory("Tech Optimizations")
+  /*  @SubCategory("Tech Optimizations")
     public TechOptimizations techOptimizations = new TechOptimizations();
 
     @ClientOnly
@@ -37,7 +37,8 @@ public class TritiumConfigBase {
 
     @SubCategory("Server Performance")
     public ServerPerformance serverPerformance = new ServerPerformance();
-
+*/
+    /*
     public static class Performance {
         @SubCategory("FastFurnace")
         public FastFurnace fastFurnace = new FastFurnace();
@@ -159,14 +160,13 @@ public class TritiumConfigBase {
     public static class Network {
         // Future network optimizations will be added here
     }
-
+*/
     public static class Entities {
         @SubCategory("EntityOpt")
         public EntityOpt entityOpt = new EntityOpt();
         public static class EntityOpt {
             public static boolean optimizeEntities = true;
-            public static boolean tickRaidersInRaid = true;
-            public static boolean ite = true;
+            //public static boolean ite = true;
 
             @Range(min = 1, max = 256)
             public static int horizontalRange = 64;
@@ -174,11 +174,11 @@ public class TritiumConfigBase {
             @Range(min = 1, max = 256)
             public static int verticalRange = 32;
 
-            public static  List<String> entityWhitelist = List.of("minecraft:ender_dragon");
+            public static List<String> entityWhitelist = Arrays.asList("minecraft:ender_dragon");
 
         }
 
-        @SubCategory("entityStacking")
+        /*@SubCategory("entityStacking")
         public EntityStacking entityStacking = new EntityStacking();
 
         public static class EntityStacking{
@@ -191,12 +191,12 @@ public class TritiumConfigBase {
             public static double mergeDistance = 1.5;
             @Range(min = 0,max = 2)
             public static int listMode=0;
-            public static List<String> itemList = java.util.Arrays.asList(
+            public static List<String> itemList = Arrays.asList(
                     "minecraft:item"
             );
-        }
+        }*/
     }
-
+/*
     public static class TechOptimizations {
         @SubCategory("Create Optimizations")
         public CreateOptimizations createOptimizations = new CreateOptimizations();
@@ -258,4 +258,6 @@ public class TritiumConfigBase {
             public static boolean enableJigsawGenerationCheck = true;
         }
     }
+
+ */
 }

@@ -1,6 +1,6 @@
 package org.craftamethyst.tritium.mixin.tickstop;
 
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.entity.EntityType;
 import org.craftamethyst.tritium.api.IOptimizableEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

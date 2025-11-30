@@ -22,7 +22,7 @@ public class ConfigParser {
 
     public void load() {
         if (!Files.exists(configPath)) {
-            TritiumCommon.LOG.warn("Config file not found: {}", configPath);
+            TritiumCommon.LOG.warn("Config file not found: {}");
             return;
         }
 
@@ -54,9 +54,9 @@ public class ConfigParser {
                 }
             });
             lastLoadTime = System.currentTimeMillis();
-            TritiumCommon.LOG.debug("Loaded {} config values from: {}", configValues.size(), configPath);
+            TritiumCommon.LOG.debug("Loaded {} config values from: {}");
         } catch (IOException e) {
-            TritiumCommon.LOG.error("Failed to load config file: {}", configPath, e);
+            TritiumCommon.LOG.error("Failed to load config file: {}");
         }
     }
 
@@ -78,7 +78,7 @@ public class ConfigParser {
             try {
                 return Integer.parseInt(value.trim());
             } catch (NumberFormatException e) {
-                TritiumCommon.LOG.warn("Invalid integer value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                TritiumCommon.LOG.warn("Invalid integer value '{}' for key '{}', using default: {}");
                 return defaultValue;
             }
         };
@@ -92,7 +92,7 @@ public class ConfigParser {
             try {
                 return Long.parseLong(value.trim());
             } catch (NumberFormatException e) {
-                TritiumCommon.LOG.warn("Invalid long value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                TritiumCommon.LOG.warn("Invalid long value '{}' for key '{}', using default: {}");
                 return defaultValue;
             }
         };
@@ -113,7 +113,7 @@ public class ConfigParser {
             try {
                 return Double.parseDouble(value.trim());
             } catch (NumberFormatException e) {
-                TritiumCommon.LOG.warn("Invalid double value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                TritiumCommon.LOG.warn("Invalid double value '{}' for key '{}', using default: {}");
                 return defaultValue;
             }
         };
@@ -128,13 +128,12 @@ public class ConfigParser {
             try {
                 return Enum.valueOf(defaultValue.getClass(), value.trim().toUpperCase());
             } catch (IllegalArgumentException e) {
-                TritiumCommon.LOG.warn("Invalid enum value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                TritiumCommon.LOG.warn("Invalid enum value '{}' for key '{}', using default: {}");
                 return defaultValue;
             }
         };
     }
 
-    @SuppressWarnings("unchecked")
     public Supplier<List<String>> getStringList(String key, List<String> defaultValue) {
         return () -> {
             String value = configValues.get(key);
@@ -160,7 +159,7 @@ public class ConfigParser {
                 }
                 return Collections.singletonList(value.trim());
             } catch (Exception e) {
-                TritiumCommon.LOG.warn("Invalid list value '{}' for key '{}', using default: {}", value, key, defaultValue);
+                TritiumCommon.LOG.warn("Invalid list value '{}' for key '{}', using default: {}");
                 return defaultValue;
             }
         };

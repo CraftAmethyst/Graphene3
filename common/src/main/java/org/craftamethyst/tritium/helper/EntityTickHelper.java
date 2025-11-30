@@ -3,16 +3,15 @@ package org.craftamethyst.tritium.helper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import me.zcraft.tconfig.config.TritiumConfig;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.IRegistry;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
@@ -30,7 +29,6 @@ public final class EntityTickHelper {
     private static final List<WildcardPattern> BLACK_PATTERNS = new ArrayList<>();
     private static final boolean ignoreDeadEntities = true;
     private static volatile boolean enabled = true;
-    private static volatile boolean tickRaidersInRaid = true;
     private static volatile int horizontalRange = 32;
     private static volatile int verticalRange = 16;
 
@@ -45,15 +43,13 @@ public final class EntityTickHelper {
         reloadConfig();
     }
 
-
     public static boolean shouldSkipTick(Entity entity) {
         if (!enabled) return false;
-        if (!(entity instanceof LivingEntity living)) return false;
 
-        if (ignoreDeadEntities && !living.isAlive()) {
+        if (ignoreDeadEntities && !entity.isAlive()) {
             return false;
         }
-        if (!living.isAlive()) return true;
+        if (!entity.isAlive()) return true;
 
         EntityType<?> type = entity.getType();
         if (matchesWildcard(type, BLACK_PATTERNS) || BLACK_LIST.get().contains(type)) {
@@ -62,14 +58,11 @@ public final class EntityTickHelper {
         if (matchesWildcard(type, WHITE_PATTERNS) || WHITE_LIST.get().contains(type)) {
             return false;
         }
-        if (tickRaidersInRaid && isRaiderInRaid(living)) return false;
-
-        return !isNearPlayer(living);
+        return !isNearPlayer(entity);
     }
 
     private static void reloadConfig() {
         enabled = TritiumConfigBase.Entities.EntityOpt.optimizeEntities;
-        tickRaidersInRaid = TritiumConfigBase.Entities.EntityOpt.tickRaidersInRaid;
         horizontalRange = TritiumConfigBase.Entities.EntityOpt.horizontalRange;
         verticalRange = TritiumConfigBase.Entities.EntityOpt.verticalRange;
         List<String> whiteRaw = TritiumConfigBase.Entities.EntityOpt.entityWhitelist;
@@ -78,7 +71,9 @@ public final class EntityTickHelper {
         WHITE_PATTERNS.clear();
         BLACK_PATTERNS.clear();
 
-        whiteRaw.forEach(s -> parseEntry(s, whiteIds));
+        for (String s : whiteRaw) {
+            parseEntry(s, whiteIds);
+        }
         WHITE_LIST.set(ImmutableSet.copyOf(whiteIds));
     }
 
@@ -86,35 +81,40 @@ public final class EntityTickHelper {
         if (raw.contains("*") || raw.contains("?")) {
             WHITE_PATTERNS.add(new WildcardPattern(raw));
         } else {
-            ResourceLocation key = ResourceLocation.tryParse(raw);
-            if (key != null) {
-                EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(key);
-                idTarget.add(type);
+            try {
+                ResourceLocation key = new ResourceLocation(raw);
+                EntityType<?> type = IRegistry.field_212629_r.get(key);
+                if (type != null) {
+                    idTarget.add(type);
+                }
+            } catch (Exception e) {
+
             }
         }
     }
 
     private static boolean matchesWildcard(EntityType<?> type, List<WildcardPattern> list) {
-        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+        ResourceLocation id = IRegistry.field_212629_r.getKey(type);
+        if (id == null) return false;
         String str = id.toString();
-        for (WildcardPattern p : list) if (p.matches(str)) return true;
+        for (WildcardPattern p : list) {
+            if (p.matches(str)) return true;
+        }
         return false;
     }
 
-    private static boolean isRaiderInRaid(LivingEntity e) {
-        return e instanceof net.minecraft.world.entity.raid.Raider raider && raider.isAlive() && raider.hasActiveRaid();
-    }
 
-    private static boolean isNearPlayer(LivingEntity entity) {
-        Level level = entity.level();
-        if (!(level instanceof ServerLevel sl)) return true;
-        BlockPos pos = entity.blockPosition();
+    private static boolean isNearPlayer(Entity entity) {
+        World level = entity.world;
+        if (!(level instanceof WorldServer)) return true;
+        WorldServer sl = (WorldServer) level;
+        BlockPos pos = entity.getPosition();
 
         int cx = pos.getX() >> 4;
         int cz = pos.getZ() >> 4;
         int radius = (horizontalRange >> 4) + 1;
 
-        AABB box = new AABB(
+        AxisAlignedBB box = new AxisAlignedBB(
                 pos.getX() - horizontalRange,
                 pos.getY() - verticalRange,
                 pos.getZ() - horizontalRange,
@@ -123,9 +123,9 @@ public final class EntityTickHelper {
                 pos.getZ() + horizontalRange
         );
 
-        for (Player player : sl.players()) {
+        for (EntityPlayer player : sl.playerEntities) {
             if (!player.isAlive()) continue;
-            BlockPos ppos = player.blockPosition();
+            BlockPos ppos = player.getPosition();
             int pcx = ppos.getX() >> 4;
             int pcz = ppos.getZ() >> 4;
             if (Math.abs(pcx - cx) > radius || Math.abs(pcz - cz) > radius) continue;

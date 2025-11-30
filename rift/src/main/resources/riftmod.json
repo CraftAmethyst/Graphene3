@@ -1,0 +1,12 @@
+{
+  "id": "${mod_id}",
+  "name": "Tritium",
+  "authors": [
+    "QianMo_ProMax",
+    "ZCRAFT",
+    "Ksmc"
+  ],
+  "listeners": [
+    "org.craftamethyst.tritium.TritiumRift"
+  ]
+}

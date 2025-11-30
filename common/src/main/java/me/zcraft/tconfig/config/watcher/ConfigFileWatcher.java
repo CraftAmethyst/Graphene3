@@ -40,7 +40,7 @@ public class ConfigFileWatcher {
             });
 
             executor.scheduleWithFixedDelay(this::checkChanges, 2, 2, TimeUnit.SECONDS);
-            TritiumCommon.LOG.debug("Started config file watcher for: {}", configPath);
+            TritiumCommon.LOG.debug("Started config file watcher for: {}");
         } catch (IOException e) {
             TritiumCommon.LOG.error("Failed to start config file watcher", e);
         }

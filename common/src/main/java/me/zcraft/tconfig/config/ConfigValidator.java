@@ -1,8 +1,8 @@
 package me.zcraft.tconfig.config;
 
-import org.craftamethyst.tritium.TritiumCommon;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.Validation;
+import org.craftamethyst.tritium.TritiumCommon;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

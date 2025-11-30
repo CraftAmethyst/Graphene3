@@ -187,6 +187,8 @@ public class TritiumConfigBase {
             public static boolean showStackCount = true;
             @Range(min = 0)
             public static int maxStackSize = 0;
+            @Range(min = 0)
+            public static int mergeCooldown = 5;
             @Range(min = 0.1,max = 10)
             public static double mergeDistance = 1.5;
             @Range(min = 0,max = 2)

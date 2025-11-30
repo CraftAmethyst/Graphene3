@@ -24,8 +24,6 @@ import java.util.List;
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin {
     @Unique
-    private static final int MERGE_COOLDOWN_TICKS = 5;
-    @Unique
     private static final int DEFAULT_MAX_STACK = Integer.MAX_VALUE - 100;
     @Unique
     private int tritium$lastMergeTick = -1;
@@ -93,7 +91,7 @@ public abstract class ItemEntityMixin {
     @Unique
     private boolean tritium$shouldAttemptMerge(ItemEntity self) {
         long gameTime = self.level().getGameTime();
-        return tritium$lastMergeTick == -1 || gameTime - tritium$lastMergeTick >= MERGE_COOLDOWN_TICKS;
+        return tritium$lastMergeTick == -1 || gameTime - tritium$lastMergeTick >= TritiumConfigBase.Entities.EntityStacking.mergeCooldown;
     }
 
     @Unique

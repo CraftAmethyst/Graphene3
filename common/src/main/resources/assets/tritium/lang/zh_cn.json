@@ -127,6 +127,8 @@
   "config.tritium.entities.entityStacking_showStackCount.tooltip": "掉落物上方会显示掉落物的数量",
   "config.tritium.entities.entityStacking_maxStackSize": "最大掉落物数量",
   "config.tritium.entities.entityStacking_maxStackSize.tooltip": "每堆掉落物的最大容掉落物数量",
+  "config.tritium.entities.entityStacking_mergeCooldown.tooltip": "合并物品的冷却时间(单位:Tick)",
+  "config.tritium.entities.entityStacking_mergeCooldown": "合并冷却时间",
   "config.tritium.entities.entityStacking_mergeDistance": "合并检测距离",
   "config.tritium.entities.entityStacking_mergeDistance.tooltip": "填写的数代表模组会合并在这些格数范围内同类的掉落物为一堆",
   "config.tritium.entities.entityStacking_listMode": "列表模式",

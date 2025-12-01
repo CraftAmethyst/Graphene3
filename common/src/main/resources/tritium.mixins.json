@@ -62,7 +62,7 @@
     "client.renderer.vertex.PoseStackPoseAccessor",
     "client.renderer.vertex.VertexBufferMixin",
     "client.renderer.vertex.VertexConsumerMixin",
-    "MCBUG.button.AbstractWidgetMixin"
+    "MCBUG.button.ContainerEventHandlerMixin"
   ],
   "server": [],
   "injectors": {

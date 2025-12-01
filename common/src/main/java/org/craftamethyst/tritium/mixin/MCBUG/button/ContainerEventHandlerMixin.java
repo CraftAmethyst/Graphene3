@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ContainerEventHandler.class)
-public interface ContainerEventHandlerMixin {
+public abstract class ContainerEventHandlerMixin {
 
     @Unique
     private static boolean tritium$shouldClearFocus(GuiEventListener focused) {

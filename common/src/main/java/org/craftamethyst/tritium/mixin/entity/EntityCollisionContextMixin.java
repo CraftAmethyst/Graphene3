@@ -3,29 +3,18 @@ package org.craftamethyst.tritium.mixin.entity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.function.Predicate;
 
 @Mixin(EntityCollisionContext.class)
 public class EntityCollisionContextMixin {
-
-    @Mutable
-    @Shadow
-    @Final
-    private ItemStack heldItem;
-
-    @Mutable
-    @Shadow
-    @Final
-    private Predicate<FluidState> canStandOnFluid;
 
     @Shadow
     @Final
@@ -35,15 +24,6 @@ public class EntityCollisionContextMixin {
     private boolean tritium$heldItemInitialized = false;
     @Unique
     private boolean tritium$fluidPredicateInitialized = false;
-
-    @Inject(
-            method = "<init>(Lnet/minecraft/world/entity/Entity;)V",
-            at = @At("RETURN")
-    )
-    private void onConstructed(Entity entity, CallbackInfo ci) {
-        this.heldItem = null;
-        this.canStandOnFluid = null;
-    }
 
     @Inject(
             method = "isHoldingItem",
@@ -68,9 +48,7 @@ public class EntityCollisionContextMixin {
     @Unique
     private void tritium$initializeHeldItem() {
         if (this.entity instanceof LivingEntity livingEntity) {
-            this.heldItem = livingEntity.getMainHandItem();
-        } else {
-            this.heldItem = ItemStack.EMPTY;
+            ((EntityCollisionContextAccessor) this).setHeldItem(livingEntity.getMainHandItem());
         }
         this.tritium$heldItemInitialized = true;
     }
@@ -78,10 +56,28 @@ public class EntityCollisionContextMixin {
     @Unique
     private void tritium$initializeFluidPredicate() {
         if (this.entity instanceof LivingEntity livingEntity) {
-            this.canStandOnFluid = livingEntity::canStandOnFluid;
-        } else {
-            this.canStandOnFluid = (fluid) -> false;
+            ((EntityCollisionContextAccessor) this).setCanStandOnFluid(livingEntity::canStandOnFluid);
         }
         this.tritium$fluidPredicateInitialized = true;
+    }
+
+    @Inject(
+            method = "isHoldingItem",
+            at = @At("RETURN")
+    )
+    private void afterIsHoldingItem(Item item, CallbackInfoReturnable<Boolean> cir) {
+        if (!tritium$heldItemInitialized) {
+            tritium$heldItemInitialized = true;
+        }
+    }
+
+    @Inject(
+            method = "canStandOnFluid",
+            at = @At("RETURN")
+    )
+    private void afterCanStandOnFluid(FluidState p_205115_, FluidState p_205116_, CallbackInfoReturnable<Boolean> cir) {
+        if (!tritium$fluidPredicateInitialized) {
+            tritium$fluidPredicateInitialized = true;
+        }
     }
 }

@@ -13,6 +13,7 @@
     "client.renderer.immediate.DirectionMixin",
     "create.CarriageEntitiesMixin",
     "create.TrainEntitiesMixin",
+    "entity.EntityCollisionContextAccessor",
     "entity.EntityCollisionContextMixin",
     "entity.stack.ExperienceOrbMixin",
     "entity.stack.item.ItemStackMixin",

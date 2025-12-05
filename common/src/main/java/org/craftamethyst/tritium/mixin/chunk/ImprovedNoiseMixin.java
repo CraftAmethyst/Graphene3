@@ -62,7 +62,6 @@ public abstract class ImprovedNoiseMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Optimize PerlinNoise
      */
     @Deprecated
     @Overwrite
@@ -148,7 +147,6 @@ public abstract class ImprovedNoiseMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Optimize PerlinNoise-noiseWithDerivative
      */
     @Overwrite
     public double noiseWithDerivative(double x, double y, double z, double[] values) {

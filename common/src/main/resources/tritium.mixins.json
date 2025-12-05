@@ -11,9 +11,6 @@
     "chunk.EndIslandDensityFunctionMixin",
     "chunk.ImprovedNoiseMixin",
     "chunk.NoiseSamplingCacheMixin",
-    "chunk.NoiseBasedChunkGeneratorMixin",
-    "chunk.NoiseChunkAccessor",
-    "entity.EntityCollisionContextMixin",
     "entity.stack.ExperienceOrbMixin",
     "entity.stack.item.InventoryMixin",
     "entity.stack.item.ItemEntityMixin",
@@ -65,7 +62,7 @@
     "client.renderer.vertex.PoseStackPoseAccessor",
     "client.renderer.vertex.VertexBufferMixin",
     "client.renderer.vertex.VertexConsumerMixin",
-    "MCBUG.button.ContainerEventHandlerMixin"
+    "MCBUG.button.AbstractWidgetMixin"
   ],
   "server": [],
   "injectors": {

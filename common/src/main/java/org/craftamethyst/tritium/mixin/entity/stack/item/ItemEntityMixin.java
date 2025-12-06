@@ -11,6 +11,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
+import org.apache.commons.lang3.stream.Streams;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +40,7 @@ public abstract class ItemEntityMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
-        if (tritium$shouldProcess()) return;
+        if (!tritium$shouldProcess()) return;
         ItemEntity self = (ItemEntity) (Object) this;
 
         if (tritium$shouldAttemptMerge(self)) {
@@ -52,21 +54,21 @@ public abstract class ItemEntityMixin {
             at = @At("TAIL")
     )
     private void onSetItem(ItemStack stack, CallbackInfo ci) {
-        if (tritium$shouldProcess()) return;
+        if (!tritium$shouldProcess()) return;
         ItemEntity self = (ItemEntity) (Object) this;
         tritium$updateStackDisplay(self);
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;)V", at = @At("TAIL"))
     private void onConstructor(Level level, double x, double y, double z, ItemStack stack, CallbackInfo ci) {
-        if (tritium$shouldProcess()) return;
+        if (!tritium$shouldProcess()) return;
         ItemEntity self = (ItemEntity) (Object) this;
         tritium$updateStackDisplay(self);
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;DDD)V", at = @At("TAIL"))
     private void onConstructorWithVelocity(Level level, double x, double y, double z, ItemStack stack, double dx, double dy, double dz, CallbackInfo ci) {
-        if (tritium$shouldProcess()) return;
+        if (!tritium$shouldProcess()) return;
         ItemEntity self = (ItemEntity) (Object) this;
         tritium$updateStackDisplay(self);
     }
@@ -211,7 +213,7 @@ public abstract class ItemEntityMixin {
             return false;
         }
 
-        if (!a.getComponents().equals(b.getComponents())) {
+        if (!ItemStack.isSameItemSameComponents(a,b)) {
             return false;
         }
 
@@ -234,10 +236,7 @@ public abstract class ItemEntityMixin {
             return false;
         }
 
-        CompoundTag tagA = (CompoundTag) a.getTags();
-        CompoundTag tagB = (CompoundTag) b.getTags();
-
-        return NbtUtils.compareNbt(tagA, tagB, true);
+        return Arrays.equals(a.getTags().toArray(),b.getTags().toArray());
 
     }
 
